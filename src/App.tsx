@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Search } from "lucide-react";
+import { Paperclip } from "lucide-react";
+import Tooltip from "./components/Tooltip";
 
 interface NowPlayingItem {
   album: string;
@@ -297,9 +300,259 @@ const App = () => {
   };
 
   return (
-    <div className="w-screen flex items-center justify-center bg-gray-800 text-white">
+    <div className="lg:h-screen w-screen flex items-center justify-center bg-gray-800 text-white">
       {/* Bento box grid */}
-      <div className="relative grid grid-cols-2 grid-rows-3 w-full mx-1 gap-2 bg-gray-900 rounded-2xl p-1.5 border border-gray-700">
+      <div className="relative grid grid-cols-2 lg:grid-cols-3 w-full mx-1 gap-2 bg-gray-900 rounded-2xl p-1.5 border border-gray-700 max-w-5xl lg:justify-center">
+        {/* Main terminal window */}
+        <div
+          className={` bg-black rounded-xl col-span-2 flex border border-gray-700 flex-col ${
+            expandWindow ? "opacity-0" : ""
+          } transition-opacity duration-500`}
+          onClick={() => {
+            setSelectedWindow("me");
+            console.log(selectedWindow);
+          }}
+        >
+          <p
+            className={`text-black  rounded-t-xl text-sm text-center relative ${
+              selectedWindow === "me" ? "bg-white" : "bg-gray-400"
+            }`}
+          >
+            me - zsh
+            <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+            <button
+              className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+              onClick={() => setExpandWindow("")}
+            />
+            <button
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              onClick={() => setExpandWindow("me")}
+            />
+          </p>
+          <div className="my-auto flex">
+            <p className="text-[4px] text-blue-100 font-mono whitespace-pre min-w-1/2 text-center">
+              {selectedAscii}
+            </p>
+            <div className="mx-auto  min-w-1/2 mt-2">
+              <p className="text-blue-300 text-sm lg:text-lg">
+                daniel@MacbookPro
+              </p>
+              <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
+              <p className=" ml-4 text-xs lg:text-sm">CS @ SJSU</p>
+              <p className=" ml-4 text-xs lg:text-sm">San Jose, CA</p>
+              <p className=" ml-4 text-xs lg:text-sm">
+                {time.toLocaleTimeString()}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Experience */}
+        <div
+          className={` bg-black col-span-2 lg:col-span-1 border border-gray-700 rounded-xl ${
+            expandWindow ? "opacity-0" : ""
+          } transition-opacity duration-500`}
+          onClick={() => {
+            setSelectedWindow("experience");
+            console.log(selectedWindow);
+          }}
+        >
+          <p
+            className={`text-black rounded-t-xl text-sm text-center relative ${
+              selectedWindow === "experience" ? "bg-white" : "bg-gray-400"
+            }`}
+          >
+            experience - zsh
+            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <p
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              onClick={() => setExpandWindow("experience")}
+            />
+          </p>
+          <div className="mt-2 mx-4">
+            {experiencesData.map((experience, index) => (
+              <div
+                key={index}
+                className={` rounded-md transition-all duration-150 cursor-pointer ${
+                  index === experienceIndex
+                    ? " text-white"
+                    : "bg-transparent text-blue-300 hover:bg-gray-800"
+                }`}
+                onClick={() => {
+                  setExpandWindow("experience");
+                  setSelectExperience(experience.title);
+                }}
+              >
+                {experience.title} {index == experienceIndex ? " <" : ""}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Projects */}
+        <div
+          className={` bg-black col-span-2 lg:col-span-1 border border-gray-700 rounded-xl ${
+            expandWindow ? "opacity-0" : ""
+          } transition-opacity duration-500`}
+          onClick={() => {
+            setSelectedWindow("projects");
+            console.log(selectedWindow);
+          }}
+        >
+          <p
+            className={`text-black rounded-t-xl text-sm text-center relative ${
+              selectedWindow === "projects" ? "bg-white" : "bg-gray-400"
+            }`}
+          >
+            projects - zsh
+            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <p
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              onClick={() => setExpandWindow("projects")}
+            />
+          </p>
+          <div className="mt-2 mx-4">
+            {projectsData.map((project, index) => (
+              <div
+                key={index}
+                className={` rounded-md transition-all duration-150 cursor-pointer ${
+                  index === projectIndex
+                    ? " text-white"
+                    : "bg-transparent text-blue-300 hover:bg-gray-800"
+                }`}
+                onClick={() => {
+                  setExpandWindow("projects");
+                  setProjectIndex(index);
+                  setSelectProject(project.title);
+                }}
+              >
+                {project.title}
+                {index === projectIndex ? " <" : ""}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Music */}
+        <div
+          className={` bg-black col-span-2 border border-gray-700 rounded-xl ${
+            expandWindow ? "opacity-0" : ""
+          } transition-opacity duration-500`}
+          onClick={() => {
+            setSelectedWindow("music");
+            console.log(selectedWindow);
+          }}
+        >
+          <p
+            className={`text-black rounded-t-xl text-sm text-center relative ${
+              selectedWindow === "music" ? "bg-white" : "bg-gray-400"
+            }`}
+          >
+            music - zsh
+            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <p
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              onClick={() => setExpandWindow("music")}
+            />
+          </p>
+          <div className="mt-2 mx-4">
+            {nowPlaying && nowPlaying.item ? (
+              <div className="flex items-center">
+                <img
+                  src={nowPlaying.item.album_image}
+                  alt={nowPlaying.item.album}
+                  className="w-16 h-16 rounded-md mr-4"
+                />
+                <div>
+                  <p className="font-bold">{nowPlaying.item.name}</p>
+                  <p className="text-sm text-gray-400">
+                    {nowPlaying.item.artists.join(", ")}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {nowPlaying.item.album}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <p>I'm not currently listening to anymore!</p>
+            )}
+            {topTracks && topTracks.tracks ? (
+              <div className="flex flex-col mb-3">
+                <p className="text-sm text-gray-200 mt-4">Top Tracks</p>
+                {topTracks.tracks.map((track) => (
+                  <div key={track.id} className="flex items-center mt-1.5">
+                    <img
+                      src={track.album_image}
+                      alt={track.album}
+                      className="w-8 h-8 rounded-md mr-4"
+                    />
+                    <div className="text-sm text-gray-400">{track.name}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>I'm not currently listening to anymore!</p>
+            )}
+          </div>
+        </div>
+
+        {/* CLI LLM about me */}
+        <div
+          className={` bg-black col-span-2 lg:col-span-3 border border-gray-700 rounded-xl ${
+            expandWindow ? "opacity-0" : ""
+          } transition-opacity duration-500 pb-3 overflow-y-auto`}
+          onClick={() => {
+            setSelectedWindow("cli");
+            focusInput();
+          }}
+        >
+          <p
+            className={`text-black rounded-t-xl text-sm text-center relative top-0 ${
+              selectedWindow === "cli" ? "bg-white" : "bg-gray-400"
+            }`}
+          >
+            daniel-code - zsh
+            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <p
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              onClick={() => setExpandWindow("cli")}
+            />
+          </p>
+          <div className="mt-2 mx-4 font-mono text-sm" onClick={focusInput}>
+            {lastCommand && (
+              <>
+                <div className="flex items-center">
+                  <span className="text-blue-400">❯</span>
+                  <p className="ml-2 text-gray-200">{lastCommand}</p>
+                </div>
+                <p className="text-gray-200 whitespace-pre-wrap">{response}</p>
+              </>
+            )}
+            <div className="flex items-center">
+              <span className="text-blue-400">❯</span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={command}
+                onChange={(e) => setCommand(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleCommand(e);
+                    setResponse("...");
+                    setCommand("");
+                  }
+                }}
+                className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"
+                placeholder="ask me anything about myself!"
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Expanded overlay when user clicks */}
         {expandWindow && (
           <div className="absolute inset-0 z-20 transition-opacity duration-300">
@@ -326,6 +579,7 @@ const App = () => {
                     {/* <p className="ml-4">daniel's website</p> */}
                     <p className=" ml-4 text-xs">Full Stack</p>
                     <p className=" ml-4 text-xs">CS @ SJSU</p>
+                    <p className=" ml-4 text-xs">San Jose, CA</p>
                     <p className=" ml-4 text-xs">{time.toLocaleTimeString()}</p>
                   </div>
                 </div>
@@ -653,262 +907,55 @@ const App = () => {
             )}
           </div>
         )}
-        {/* Main terminal window */}
-        <div
-          className={` bg-black rounded-xl col-span-2 flex border border-gray-700 flex-col ${
-            expandWindow ? "opacity-0" : ""
-          } transition-opacity duration-500`}
-          onClick={() => {
-            setSelectedWindow("me");
-            console.log(selectedWindow);
-          }}
-        >
-          <p
-            className={`text-black  rounded-t-xl text-sm text-center relative ${
-              selectedWindow === "me" ? "bg-white" : "bg-gray-400"
-            }`}
-          >
-            me - zsh
-            <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-            <button
-              className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
-              onClick={() => setExpandWindow("")}
-            />
-            <button
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
-              onClick={() => setExpandWindow("me")}
-            />
-          </p>
-          <div className="my-auto flex">
-            <p className="text-[4px] text-blue-100 font-mono whitespace-pre min-w-1/2 text-center">
-              {selectedAscii}
-            </p>
-            <div className="mx-auto  min-w-1/2 mt-2">
-              <p className="text-blue-300 text-sm">daniel@MacbookPro</p>
-              {/* <p className="ml-4">daniel's website</p> */}
-              <p className=" ml-4 text-xs">Full-Stack</p>
-              <p className=" ml-4 text-xs">CS @ SJSU</p>
-              <p className=" ml-4 text-xs">San Jose, CA</p>
-              <p className=" ml-4 text-xs">{time.toLocaleTimeString()}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Experience */}
-        <div
-          className={` bg-black col-span-2 border border-gray-700 rounded-xl ${
-            expandWindow ? "opacity-0" : ""
-          } transition-opacity duration-500`}
-          onClick={() => {
-            setSelectedWindow("experience");
-            console.log(selectedWindow);
-          }}
-        >
-          <p
-            className={`text-black rounded-t-xl text-sm text-center relative ${
-              selectedWindow === "experience" ? "bg-white" : "bg-gray-400"
-            }`}
-          >
-            experience - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
-            <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
-              onClick={() => setExpandWindow("experience")}
-            />
-          </p>
-          <div className="mt-2 mx-4">
-            {experiencesData.map((experience, index) => (
-              <div
-                key={index}
-                className={` rounded-md transition-all duration-150 cursor-pointer ${
-                  index === experienceIndex
-                    ? " text-white"
-                    : "bg-transparent text-blue-300 hover:bg-gray-800"
-                }`}
-                onClick={() => {
-                  setExpandWindow("experience");
-                  setSelectExperience(experience.title);
-                }}
-              >
-                {experience.title} {index == experienceIndex ? " <" : ""}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Projects */}
-        <div
-          className={` bg-black col-span-2 border border-gray-700 rounded-xl ${
-            expandWindow ? "opacity-0" : ""
-          } transition-opacity duration-500`}
-          onClick={() => {
-            setSelectedWindow("projects");
-            console.log(selectedWindow);
-          }}
-        >
-          <p
-            className={`text-black rounded-t-xl text-sm text-center relative ${
-              selectedWindow === "projects" ? "bg-white" : "bg-gray-400"
-            }`}
-          >
-            projects - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
-            <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
-              onClick={() => setExpandWindow("projects")}
-            />
-          </p>
-          <div className="mt-2 mx-4">
-            {projectsData.map((project, index) => (
-              <div
-                key={index}
-                className={` rounded-md transition-all duration-150 cursor-pointer ${
-                  index === projectIndex
-                    ? " text-white"
-                    : "bg-transparent text-blue-300 hover:bg-gray-800"
-                }`}
-                onClick={() => {
-                  setExpandWindow("projects");
-                  setProjectIndex(index);
-                  setSelectProject(project.title);
-                }}
-              >
-                {project.title}
-                {index === projectIndex ? " <" : ""}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Music */}
-        <div
-          className={` bg-black col-span-2 border border-gray-700 rounded-xl ${
-            expandWindow ? "opacity-0" : ""
-          } transition-opacity duration-500`}
-          onClick={() => {
-            setSelectedWindow("music");
-            console.log(selectedWindow);
-          }}
-        >
-          <p
-            className={`text-black rounded-t-xl text-sm text-center relative ${
-              selectedWindow === "music" ? "bg-white" : "bg-gray-400"
-            }`}
-          >
-            music - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
-            <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
-              onClick={() => setExpandWindow("music")}
-            />
-          </p>
-          <div className="mt-2 mx-4">
-            {nowPlaying && nowPlaying.item ? (
-              <div className="flex items-center">
-                <img
-                  src={nowPlaying.item.album_image}
-                  alt={nowPlaying.item.album}
-                  className="w-16 h-16 rounded-md mr-4"
-                />
-                <div>
-                  <p className="font-bold">{nowPlaying.item.name}</p>
-                  <p className="text-sm text-gray-400">
-                    {nowPlaying.item.artists.join(", ")}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {nowPlaying.item.album}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <p>I'm not currently listening to anymore!</p>
-            )}
-            {topTracks && topTracks.tracks ? (
-              <div className="flex flex-col mb-3">
-                <p className="text-sm text-gray-200 mt-4">Top Tracks</p>
-                {topTracks.tracks.map((track) => (
-                  <div key={track.id} className="flex items-center mt-1.5">
-                    <img
-                      src={track.album_image}
-                      alt={track.album}
-                      className="w-8 h-8 rounded-md mr-4"
-                    />
-                    <div className="text-sm text-gray-400">{track.name}</div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p>I'm not currently listening to anymore!</p>
-            )}
-          </div>
-        </div>
-
-        {/* CLI LLM about me */}
-        <div
-          className={` bg-black col-span-2 border border-gray-700 rounded-xl ${
-            expandWindow ? "opacity-0" : ""
-          } transition-opacity duration-500 h-full overflow-y-auto`}
-          onClick={() => {
-            setSelectedWindow("cli");
-            focusInput();
-          }}
-        >
-          <p
-            className={`text-black rounded-t-xl text-sm text-center relative top-0 ${
-              selectedWindow === "cli" ? "bg-white" : "bg-gray-400"
-            }`}
-          >
-            daniel-code - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
-            <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
-              onClick={() => setExpandWindow("cli")}
-            />
-          </p>
-          <div className="mt-2 mx-4 font-mono text-sm" onClick={focusInput}>
-            {lastCommand && (
-              <>
-                <div className="flex items-center">
-                  <span className="text-blue-400">❯</span>
-                  <p className="ml-2 text-gray-200">{lastCommand}</p>
-                </div>
-                <p className="text-gray-200 whitespace-pre-wrap">{response}</p>
-              </>
-            )}
-            <div className="flex items-center">
-              <span className="text-blue-400">❯</span>
-              <input
-                ref={inputRef}
-                type="text"
-                value={command}
-                onChange={(e) => setCommand(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleCommand(e);
-                    setResponse("...");
-                    setCommand("");
-                  }
-                }}
-                className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"
-                placeholder="ask me anything about myself!"
-              />
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* App menu */}
-      {/* <div className="absolute flex justify-center items-center gap-2 bottom-0 left-2 right-2 bg-white p-2 rounded-t-xl">
-        <a href="https://github.com/deeedaniel">
-          <img src="github-sign.png" alt="GitHub" className="w-6 h-6" />
-        </a>
-        <a href="https://www.linkedin.com/in/daniel-nguyenn/">
-          <img src="linkedin.png" alt="LinkedIn" className="w-6 h-6" />
-        </a>
+      <div className="hidden lg:flex w-2xl absolute items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-1 rounded-xl justify-between px-4">
+        <p className="text-gray-200 bg-gray-800 p-1 px-3 rounded-lg flex items-center gap-2 border border-gray-700">
+          <Search className="w-4 h-4 " />
+          <p className="text-sm bg-gray-800 p-1 px-3">
+            nguyendaniel1312@gmail.com
+          </p>
+        </p>
+        <div className="flex justify-evenly gap-2 w-1/4">
+          <Tooltip text="GitHub">
+            <a href="https://github.com/deeedaniel">
+              <img
+                src="github_white.png"
+                alt="GitHub"
+                className="w-8 h-8 transition-all duration-300"
+              />
+            </a>
+          </Tooltip>
+          <Tooltip text="LinkedIn">
+            <a href="https://www.linkedin.com/in/daniel-nguyenn/">
+              <img
+                src="linkedin_white.png"
+                alt="LinkedIn"
+                className="w-9 h-9  transition-all duration-300"
+              />
+            </a>
+          </Tooltip>
+          <Tooltip text="Resume">
+            <a
+              href="/daniel_nguyen_resume.pdf"
+              className="border border-gray-700 rounded-full p-1 bg-white"
+            >
+              <Paperclip
+                className="w-5 h-5  transition-all duration-300"
+                color="black"
+              />
+            </a>
+          </Tooltip>
+        </div>
+      </div>
+
+      {/* <div className="lg:hidden flex flex-col items-center justify-center text-center text-white h-screen">
+        <p className="text-blue-300 text-sm">daniel@MacbookPro</p>
+        <p className=" ml-4 text-xs">Full Stack</p>
+        <p className=" ml-4 text-xs">CS @ SJSU</p>
+        <p className=" ml-4 text-xs">San Jose, CA</p>
+        <p className=" ml-4 text-xs">{time.toLocaleTimeString()}</p>
       </div> */}
     </div>
   );
