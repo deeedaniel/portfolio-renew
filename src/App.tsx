@@ -477,7 +477,7 @@ const App = () => {
                 </div>
               </div>
             ) : (
-              <p>I'm not currently listening to anymore!</p>
+              <p>i'm not currently listening to anymore!</p>
             )}
             {topTracks && topTracks.tracks ? (
               <div className="flex flex-col mb-3">
@@ -494,7 +494,7 @@ const App = () => {
                 ))}
               </div>
             ) : (
-              <p>I'm not currently listening to anymore!</p>
+              <p>i'm not currently listening to anymore!</p>
             )}
           </div>
         </div>
