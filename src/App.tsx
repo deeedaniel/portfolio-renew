@@ -539,6 +539,118 @@ const App = () => {
                 )}
               </>
             )}
+            {expandWindow === "music" && (
+              <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+                <p
+                  className={`text-black rounded-t-xl text-sm text-center relative ${
+                    selectedWindow === "music" ? "bg-white" : "bg-gray-400"
+                  }`}
+                >
+                  music - zsh
+                  <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+                  <button
+                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                    onClick={() => setExpandWindow("")}
+                  />
+                  <button className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+                </p>
+                <div className="mt-2 mx-4">
+                  {nowPlaying && nowPlaying.item ? (
+                    <div className="flex items-center">
+                      <img
+                        src={nowPlaying.item.album_image}
+                        alt={nowPlaying.item.album}
+                        className="w-16 h-16 rounded-md mr-4"
+                      />
+                      <div>
+                        <p className="font-bold">{nowPlaying.item.name}</p>
+                        <p className="text-sm text-gray-400">
+                          {nowPlaying.item.artists.join(", ")}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {nowPlaying.item.album}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p>I'm not currently listening to anymore!</p>
+                  )}
+                  {topTracks && topTracks.tracks ? (
+                    <div className="flex flex-col">
+                      <p className="text-sm text-gray-200 mt-4">Top Tracks</p>
+                      {topTracks.tracks.map((track) => (
+                        <div
+                          key={track.id}
+                          className="flex items-center mt-1.5"
+                        >
+                          <img
+                            src={track.album_image}
+                            alt={track.album}
+                            className="w-8 h-8 rounded-md mr-4"
+                          />
+                          <div className="text-sm text-gray-400">
+                            {track.name}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>I'm not currently listening to anymore!</p>
+                  )}
+                </div>
+              </div>
+            )}
+            {expandWindow === "cli" && (
+              <div className="w-full h-full bg-black border border-gray-700 rounded-xl flex flex-col">
+                <p
+                  className={`text-black rounded-t-xl text-sm text-center relative ${
+                    selectedWindow === "cli" ? "bg-white" : "bg-gray-400"
+                  }`}
+                >
+                  daniel-code - zsh
+                  <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+                  <button
+                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                    onClick={() => setExpandWindow("")}
+                  />
+                  <button className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+                </p>
+                <div
+                  className="mt-2 mx-4 font-mono text-sm flex-grow overflow-y-auto"
+                  onClick={focusInput}
+                >
+                  {lastCommand && (
+                    <>
+                      <div className="flex items-center">
+                        <span className="text-blue-400">❯</span>
+                        <p className="ml-2 text-gray-200">{lastCommand}</p>
+                      </div>
+                      <p className="text-gray-200 whitespace-pre-wrap">
+                        {response}
+                      </p>
+                    </>
+                  )}
+                  <div className="flex items-center">
+                    <span className="text-blue-400">❯</span>
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={command}
+                      onChange={(e) => setCommand(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleCommand(e);
+                          setResponse("...");
+                          setCommand("");
+                        }
+                      }}
+                      className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"
+                      placeholder="ask me anything about myself!"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
         {/* Main terminal window */}
@@ -715,7 +827,7 @@ const App = () => {
               <p>I'm not currently listening to anymore!</p>
             )}
             {topTracks && topTracks.tracks ? (
-              <div className="flex flex-col">
+              <div className="flex flex-col mb-3">
                 <p className="text-sm text-gray-200 mt-4">Top Tracks</p>
                 {topTracks.tracks.map((track) => (
                   <div key={track.id} className="flex items-center mt-1.5">
