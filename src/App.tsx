@@ -1,128 +1,32 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Search } from "lucide-react";
-import { Paperclip } from "lucide-react";
+import { Search, Paperclip } from "lucide-react";
 import Tooltip from "./components/Tooltip";
-
-interface NowPlayingItem {
-  album: string;
-  album_image: string;
-  artists: string[];
-  name: string;
-}
-
-interface NowPlayingData {
-  is_playing: boolean;
-  item: NowPlayingItem | null;
-}
-
-interface TopTracksData {
-  tracks: Track[];
-}
-
-interface Track {
-  id: string;
-  name: string;
-  artists: string[];
-  album: string;
-  album_image: string;
-  spotify_url: string;
-  preview_url: string;
-}
+import type { NowPlayingData, TopTracksData } from "./types/indexs";
+import { experiencesData, projectsData, asciiList } from "./data/info";
 
 const App = () => {
   const [time, setTime] = useState(new Date());
 
   // const [count, setCount] = useState(0);
-  const [selectedAscii, setSelectedAscii] = useState(String);
-  const [expandWindow, setExpandWindow] = useState(String);
-  const [selectedWindow, setSelectedWindow] = useState("me");
+  const [selectedAscii, setSelectedAscii] = useState(String); // picked ascii art
+  const [expandWindow, setExpandWindow] = useState(String); // which window is expanded
+  const [selectedWindow, setSelectedWindow] = useState("me"); // which window is selected
 
-  const [nowPlaying, setNowPlaying] = useState<NowPlayingData | null>(null);
-  const [topTracks, setTopTracks] = useState<TopTracksData | null>(null);
+  const [nowPlaying, setNowPlaying] = useState<NowPlayingData | null>(null); // now playing on spotify
+  const [topTracks, setTopTracks] = useState<TopTracksData | null>(null); // top tracks on spotify
 
   // const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [experienceIndex, setExperienceIndex] = useState(0);
-  const [projectIndex, setProjectIndex] = useState(0);
-  const [selectProject, setSelectProject] = useState("");
-  const [selectExperience, setSelectExperience] = useState("");
+  const [experienceIndex, setExperienceIndex] = useState(0); // index of experience
+  const [projectIndex, setProjectIndex] = useState(0); // index of project
+  const [selectProject, setSelectProject] = useState(""); // selected project
+  const [selectExperience, setSelectExperience] = useState(""); // selected experience
 
-  const experiencesData = [
-    {
-      title: "Full-Stack Intern @ TwinMind",
-      window: "TwinMind",
-      description:
-        "Last summer I interned as a full-stack developer at TwinMind in Menlo Park, CA. TwinMind is startup that builds an AI audio recorder that transcribes and summarizes important conversations. I built their web-app from the ground up using Next.js. In the web-app users can upload & record audio files, view past recordings, chat with their recordings, generate AI to-do lists, and more.",
-      image: "/twinmind_team.jpeg",
-      links: [{ name: "Website", url: "https://app.twinmind.com" }],
-    },
-    {
-      title: "Web Dev Intern @ cooledtured",
-      window: "cooledtured",
-      description:
-        "At cooledtured, an anime toy store, I worked on an engagement page to survey & quiz users about their favorite anime, shows, and movies. This engagement page was built using React and Firebase. I built the authentication system tracking user's progress with role-based access and implemented the UI for the quiz along with a leaderboard system for each quiz.",
-      image: "/cooledtured.jpeg",
-      links: [{ name: "Website", url: "https://cooledtured.com/engage" }],
-    },
-    {
-      title: "SWE Intern @ SCE",
-      description:
-        "This was my first ever Software Engineering internship, which was hosted by the Software and Computer Engineering Society at SJSU. Since this was my first internship, I worked alongside a mentor who guided me through basic full-stack development along with containerization using Docker. I worked on a web-app where users can find the best professors for their classes based on ratings from ratemyprofessors.com.",
-      image: "/sce.jpg",
-      links: [{ name: "Website", url: "https://sce.sjsu.edu/" }],
-    },
-  ];
-
-  const projectsData = [
-    {
-      title: "StudyBuddy | 1st @ SCE Hacks 1.0, SJSU",
-      window: "StudyBuddy",
-      description:
-        "At SCE Hacks 1.0 w/ Mintlify, my group and I created StudyBuddy, a web-app designed for students to receive friendly daily SMS reminders about their events and assignments. Created with React, Node.js, Express, OpenAI API, Canvas API, Google OAuth, Node-cron. We won first place overall!",
-      image: "/studybuddy.jpeg",
-      links: [
-        { name: "GitHub", url: "https://github.com/deeedaniel/studybuddy" },
-        {
-          name: "Devpost",
-          url: "https://devpost.com/software/studybuddy-g1hwqe",
-        },
-        // { name: "Live Demo", url: "#" },
-      ],
-    },
-    {
-      title: "Chillguy.ai | 2nd @ Hack for Humanity, SCU",
-      window: "Chillguy.ai",
-      description:
-        "My first hackathon experience was at Santa Clara University's annual Hack for Humanity. This hackathon was focused on creating solutions for social good. My team and I built a web-app where users can get proactive mental health calls from an AI assistant. We utilized Eleven Labs and Twilio to create a realistic voice call experience. We ended up winning 2nd place overall!",
-      image: "/chillguy.jpeg",
-      links: [
-        { name: "Devpost", url: "https://devpost.com/software/chillguy-ai" },
-        { name: "GitHub", url: "https://github.com/ibix16/ChillGuy.ai" },
-      ],
-    },
-    {
-      title: "VIVI | HackDavis",
-      window: "VIVI",
-      description:
-        "From December 2024 to April 2025, I tutored a young neurodivergent student in reading, writing, and math. One particular challenge we faced was that the student had difficulty reading, specifically understanding what he was reading and picturing it. \n\nThis gave me the idea to create an AI assistant to assist those having difficulty picturing what they read. At HackDavis, my team and I built this idea, calling it VIVI, visual interpretation for verbal input. We built it using React, Python, Computer Vision, and DALLE-3 image generation. In this web-app, we tracked user's gaze to track when they were reading and recorded their voice to generate images that help them visualize what they read.",
-
-      image: "/vivi.png",
-      links: [
-        { name: "Devpost", url: "https://devpost.com/software/vivi-qj6fug" },
-        { name: "GitHub", url: "https://github.com/armanbance/VIVI" },
-      ],
-    },
-    {
-      title: "OfficeTracker | CS151",
-      window: "OfficeTracker",
-      description:
-        "In my CS151 class, my group and I created OfficeTracker, a desktop app built for faculty members to track their office hour times and scheduled appointments. It follows the MVC design pattern and was built using Java, JavaFX, SceneBuilder, and CSV.",
-      image: "/officetracker.jpg",
-      links: [
-        { name: "GitHub", url: "https://github.com/NyiHtett/dev-08-0.2" },
-      ],
-    },
-  ];
+  // cli
+  const [command, setCommand] = useState("");
+  const [lastCommand, setLastCommand] = useState("");
+  const [response, setResponse] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // pick random ascii art
   useEffect(() => {
@@ -142,18 +46,7 @@ const App = () => {
     }, 1000);
   }, []);
 
-  // update time every second (with cleanup)
-  // useEffect(() => {
-  //   const id = setInterval(() => setTime(new Date()), 1000);
-  //   return () => clearInterval(id);
-  // }, []);
-
-  // // increment count every second using functional update (with cleanup)
-  // useEffect(() => {
-  //   const id = setInterval(() => setCount((c) => c + 1), 1000);
-  //   return () => clearInterval(id);
-  // }, []);
-
+  // handle keyboard navigation between list of exp & projs
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedWindow === "experience") {
@@ -186,69 +79,9 @@ const App = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedWindow, experienceIndex, projectIndex]);
 
-  // useEffect(() => {
-  //   (0);
-  // }, [selectedWindow]);
-
-  const asciiList = [
-    `⣶⣶⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠔⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤
-⠛⠛⠁⠀⠀⠀⣠⠔⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠐⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠿
-⠀⠀⠀⠀⠀⠀⢀⡤⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀
-⠢⣄⣀⡠⠄⠒⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠤⠀⠀⣠⠔⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠒⢄⡀⠀⠀
-⣀⣙⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⢚⡁⠤⡤⠒⠉⠁⠀⠀⠠⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠦⣀
-⠋⠉⠃⠀⠉⠐⢲⠤⠀⠀⠀⠀⠀⡠⠊⢁⡜⠋⠁⠀⠀⢇⠀⠀⢶⡤⣀⣀⠈⠉⢁⣐⣠⠤⠐⠀⠀⠑⠦⡀⠀⠀⠀⠀⠀⠀⠀⢀⣀⡬
-⠀⠀⡆⠀⢀⡜⣁⣀⠄⠀⠀⢠⠞⠁⢀⠞⠀⡀⠀⠀⠀⠀⡑⠤⣀⠙⠢⣀⠀⠉⠀⠀⠀⠀⠀⠀⢄⠀⠀⠈⢂⠀⠀⠀⠀⠈⠙⢧⠘⠇
-⠀⠀⡇⠐⠛⠛⡴⠁⠀⠀⢠⠃⠀⢠⠊⢠⠊⠀⡰⠀⢠⠎⠀⠀⠀⢀⠉⠈⠉⠁⠐⢆⠀⠘⢆⠀⠀⠱⡄⠀⠀⢣⠀⠀⠀⠐⣶⠤⣷⡄
-⣤⣤⡇⠀⣠⠞⠀⠀⠀⢀⡇⠀⢠⠇⢠⠃⠀⣴⠁⣰⡏⢀⡆⠀⠀⣾⠀⢰⣄⠀⠀⠈⢷⣄⠀⢣⠀⠀⠸⣦⡀⠈⡆⠀⠀⠀⠘⢆⢸⣷
-⣿⣿⣯⣉⡁⠀⠀⠀⡀⣸⠀⢰⡟⠀⡎⢀⣾⡏⠐⣿⠀⠺⡇⠀⢰⣿⣆⠘⣿⠑⣄⠀⠸⣿⣷⡀⢷⡀⠀⢻⣷⡀⢳⡐⣦⣀⠀⠈⠻⣿
-⣿⣿⣇⣠⣉⣉⣹⠏⣱⣿⢀⣿⠇⢸⡇⠈⣾⣇⢰⣹⡀⢸⣧⠀⢸⢀⣿⣆⣻⣾⡭⢷⡀⡿⠹⡇⢸⣷⡀⢸⡈⣧⣸⣷⠘⣷⣿⣷⣦⣾
-⣿⡿⡏⠀⠀⠀⣽⣴⢿⠉⣦⣇⣼⠉⣿⣶⣿⣿⣿⣿⣧⣼⣌⢧⡀⠘⣷⡟⠳⣼⣶⣾⣿⣷⣾⣇⢸⣹⣥⣼⣉⢻⡏⢹⣄⢹⠉⠉⢹⣿
-⣏⣀⡟⠀⠀⠀⠛⠁⡌⠀⢹⣡⢬⣦⣟⢿⠋⠁⠀⠠⣬⣟⠻⡄⠑⣄⠸⣤⢐⣿⠿⢭⣌⠁⠉⢻⡿⢻⣿⢯⠸⢻⠅⢸⣿⡾⠀⠀⢈⣿
-⣿⣿⣷⠀⠀⠀⢀⡼⢁⣀⣼⠛⢸⠻⣿⠀⠀⢀⢰⣶⣿⣿⠀⠁⠀⠀⠙⠻⠋⢰⣦⣾⣿⡇⠀⠈⠁⣾⠏⡸⠀⣼⠀⢸⠈⠀⠀⠀⠘⠿
-⢿⣏⣿⠘⣶⡶⠿⠻⠿⠶⠟⢦⣌⠓⢬⣇⠀⠈⠛⠿⠿⠛⠀⠀⢠⡀⠀⠀⠀⠐⠿⠿⠿⠖⠁⠀⢰⠓⠋⣤⣾⢿⣿⣿⡧⠤⠤⠤⠀⠀
-⣿⣿⡟⢿⣽⣿⣦⡸⣷⣼⣿⡏⣻⣷⣤⣼⡶⠋⢳⠀⠀⠀⠀⠀⢿⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⢶⣾⠉⠙⢾⠿⣿⣇⠀⠀⠀⠀⠀
-⡿⣾⣿⣟⢙⣿⣿⣥⣬⣼⣿⣿⣿⣿⣿⣃⣷⡀⠈⢆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⠖⠳⣀⡼⣿⣿⣿⣉⣿⣿⣀⡀⠈⠀⠀⠦⢀⣀
-⢷⣤⣿⢿⢹⣿⣿⣿⣿⣽⣿⣿⣠⣿⣯⠟⣿⢿⣷⣾⡀⠀⠀⠀⠀⡒⠀⠀⠀⠀⠀⣘⣴⣾⣿⣾⠷⢿⣬⣿⣿⡉⢙⣷⡖⡀⠀⠂⠈⠛
-⣿⣿⣿⡿⣿⣿⣿⣿⣿⡿⢶⣿⡿⠛⠻⠛⠁⢸⣾⣿⣿⣷⣦⣄⡀⠀⠀⠀⣠⠴⠋⠹⣿⣧⣿⣿⣠⠈⠳⣄⣽⣿⣿⠛⢛⡓⢤⠁⠀⠛
-⣿⣿⣷⣤⣼⣿⣿⣿⣿⡷⠾⠿⡇⠀⠀⠀⠀⠘⡌⢿⣿⡏⠈⠁⠉⠓⠒⠋⠀⠀⠀⢀⣼⣿⣿⣿⠏⠀⠀⠈⠀⠀⠈⢻⡋⢳⡀⠀⠀⠐
-⣿⣿⣿⣿⢿⣿⣿⠋⠁⠀⠀⠀⢳⡀⠀⠀⠀⠀⢱⡈⢻⣿⡀⠀⠀⠀⠀⠀⠀⢀⣴⢿⣵⠟⢁⡎⠀⠀⠀⠀⠀⠀⢀⡰⠟⠶⣧⣄⠈⠉
-⠉⣵⣶⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠱⣄⠀⠀⠀⠀⠱⣄⡙⢿⣶⢦⡀⠀⢀⣤⣿⣷⣟⣡⠴⠋⠀⠀⠀⠀⢀⣠⠖⠉⠀⠀⠀⠈⠻⣧⣀
-⣿⣿⣿⠟⠁⠀⠀⠀⣿⡀⢀⠀⠀⢀⡨⠷⣦⣀⣀⠀⠀⠉⠛⠻⡦⠭⠷⠏⡼⠛⠋⠁⠀⠀⠀⠀⠀⢀⡴⠋⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿
-⣩⡿⠋⠀⠀⠀⠀⠀⣹⠷⠼⡖⠚⠁⠀⠀⠀⠀⠀⠙⠲⢤⣶⣤⡘⡆⠀⡜⢁⣀⡄⠀⠀⢀⣀⣠⠖⠋⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠈⣿
-⠀⠀⠀⠀⠀⣀⣠⠾⠃⠀⠀⠈⠲⢴⡶⠟⠛⢻⡿⠶⠦⣴⡛⠀⠙⣻⣶⠗⠛⣻⡟⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⢹`,
-    `
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠀⠙⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠗⠀⠀⣀⣄⠀⢿⣿⣿⣿⠟⠁⢠⡆⠉⠙⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⣴⣿⡟⠀⠘⣿⣿⠋⠀⠀⠀⢠⣶⡀⠈⢻⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⢠⣿⠛⣶⠀⠀⣿⡟⠀⠀⠀⢠⣿⣿⡇⠀⠠⣽⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠅⠀⠀⣿⠏⠀⣿⠀⠀⣿⠁⠀⠀⢠⣿⠟⢻⡇⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⣼⣿⠀⢰⡟⠀⠀⠛⠀⠀⠀⣾⡇⠀⢸⡇⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠿⠃⠀⠈⠀⢀⠀⣀⣀⠀⠘⠟⠀⠀⡾⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀⠀⠀⢀⠂⠀⠈⠉⢴⣽⣿⠵⣿⡶⣂⣄⡀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⡟⠡⠆⢀⠀⠀⠀⠀⠄⠀⠈⠘⠏⢿⣶⣿⡿⢟⣱⣖⠒⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⡟⣻⠏⣠⠄⠀⢀⡀⠀⠀⠀⠀⠈⠀⠀⠀⢸⣿⢦⠄⠙⣿⡇⠩⣭⣅⠈⢿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣟⣼⡇⠈⢀⣴⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠁⠀⢀⠀⠈⠰⣶⡤⠿⠃⢸⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⡟⠉⢠⡶⠋⠀⠀⠀⠀⠀⠀⠀⢀⣤⣤⣴⣶⣤⣄⡀⠀⠀⠂⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿
-⣿⣿⣿⡏⢀⡠⠀⠀⠀⠀⠀⠀⠀⢀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣶⣦⣄⠀⠀⠂⠀⠈⣿⣿⣿⣿
-⣿⣿⣿⢃⠈⠀⢠⠀⠀⠀⠀⠀⢠⣿⣿⣿⠿⣩⣏⡙⣛⣛⣿⣿⣿⣿⣿⣿⣿⡿⢇⠀⠀⠄⠀⠘⣿⣿⣿
-⣿⣿⣿⡎⠀⠀⠀⠀⠀⠀⠀⠠⣿⣿⣿⡟⣰⣿⠁⢀⠈⢿⣿⣿⣿⣿⢁⣴⠖⢲⣾⡇⠀⠀⠄⠀⣿⣿⣿
-⣿⣿⣿⢀⠀⠀⠀⠀⠀⠀⠀⠀⣏⢿⣿⡇⣿⡇⠀⠀⠀⣼⣿⣿⣿⡇⣼⡏⠀⠀⣿⡇⠀⠀⠀⠀⣻⣿⣿
-⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⢸⣄⠻⣷⡘⣷⣀⣀⣴⣿⡟⠉⠛⠓⣿⡇⠀⢰⣿⡇⠀⠀⠀⣼⣿⣿⣿
-⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠀⠀⠙⢷⣌⠻⢿⣿⣿⣿⣿⣿⣦⣶⣿⣾⣧⣤⡾⠏⠀⠀⠀⠀⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣧⡀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⠶⢌⣉⣛⠛⠿⠿⠿⠿⠿⠛⠉⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣶⣄⠀⠀⠀⠀⠲⠀⠀⠀⠀⠀⠀⠉⠉⠉⠀⠀⠀⠈⠁⠀⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠻⠿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⡏⠛⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡘⡻⣿⣿
-⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⢨⡛⡛⣁⣿
-⣿⣿⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠂⠀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣿⣿
-⣿⣿⣿⣿⠇⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣄⣠⣴⣾⣿⣿⣿⣿
-
-`,
-  ];
-
   // Spotify functions
   async function fetchNowPlaying() {
-    const res = await fetch("/api/now-playing"); // on Vercel this resolves to your function
+    const res = await fetch("/api/now-playing");
     if (!res.ok) {
       console.error(await res.text());
       return null;
@@ -283,11 +116,7 @@ const App = () => {
     })();
   }, []);
 
-  const [command, setCommand] = useState("");
-  const [lastCommand, setLastCommand] = useState("");
-  const [response, setResponse] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
+  // ask question to Gemini
   async function askQuestion(q: String) {
     const res = await fetch("/api/ask", {
       method: "POST",
@@ -298,6 +127,7 @@ const App = () => {
     return j.answer;
   }
 
+  // handle command input
   const handleCommand = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && command) {
       setLastCommand(command);
@@ -317,6 +147,36 @@ const App = () => {
   const focusInput = () => {
     inputRef.current?.focus();
   };
+
+  // keyboard navigation between for windows using < and >
+  const windowOrder = ["me", "experience", "projects", "music", "cli"];
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (expandWindow) return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        const currentIndex = windowOrder.indexOf(selectedWindow);
+        let nextIndex;
+
+        if (e.key === "ArrowRight") {
+          nextIndex = (currentIndex + 1) % windowOrder.length;
+        } else {
+          // ArrowLeft
+          nextIndex =
+            (currentIndex - 1 + windowOrder.length) % windowOrder.length;
+        }
+
+        setSelectedWindow(windowOrder[nextIndex]);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedWindow, expandWindow]);
 
   return (
     <div className="lg:h-screen w-screen flex items-center justify-center bg-gray-800 text-white">
