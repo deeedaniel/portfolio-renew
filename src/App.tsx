@@ -919,7 +919,11 @@ const App = () => {
         </p>
         <div className="flex justify-evenly gap-2 w-1/4">
           <Tooltip text="GitHub">
-            <a href="https://github.com/deeedaniel">
+            <a
+              href="https://github.com/deeedaniel"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img
                 src="github_white.png"
                 alt="GitHub"
@@ -928,7 +932,11 @@ const App = () => {
             </a>
           </Tooltip>
           <Tooltip text="LinkedIn">
-            <a href="https://www.linkedin.com/in/daniel-nguyenn/">
+            <a
+              href="https://www.linkedin.com/in/daniel-nguyenn/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img
                 src="linkedin_white.png"
                 alt="LinkedIn"
@@ -939,6 +947,8 @@ const App = () => {
           <Tooltip text="Resume">
             <a
               href="/daniel_nguyen_resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="border border-gray-700 rounded-full p-1 bg-white"
             >
               <Paperclip
