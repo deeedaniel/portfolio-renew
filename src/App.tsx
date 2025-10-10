@@ -356,7 +356,20 @@ const App = () => {
                 </div>
               </div>
             ) : (
-              <p>i'm not currently listening to music anymore!</p>
+              <p>
+                i'm not currently listening to music,
+                <br />
+                but feel free to visit my{" "}
+                <a
+                  href="https://open.spotify.com/user/cringedlol"
+                  className="text-blue-400"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  spotify
+                </a>
+                !
+              </p>
             )}
             {topTracks && topTracks.tracks ? (
               <div className="flex flex-col mb-3">
@@ -373,7 +386,9 @@ const App = () => {
                 ))}
               </div>
             ) : (
-              <p>i'm not currently listening to music anymore!</p>
+              <p className="text-sm text-gray-200 mt-4">
+                fetching top tracks...
+              </p>
             )}
           </div>
         </div>
