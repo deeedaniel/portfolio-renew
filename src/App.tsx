@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Search, Paperclip } from "lucide-react";
-import Tooltip from "./components/Tooltip";
 import type { NowPlayingData, TopTracksData } from "./types/indexs";
 import { experiencesData, projectsData, asciiList } from "./data/info";
 import { Taskbar } from "./components/Taskbar";
