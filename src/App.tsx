@@ -13,6 +13,20 @@ interface NowPlayingData {
   item: NowPlayingItem | null;
 }
 
+interface TopTracksData {
+  tracks: Track[];
+}
+
+interface Track {
+  id: string;
+  name: string;
+  artists: string[];
+  album: string;
+  album_image: string;
+  spotify_url: string;
+  preview_url: string;
+}
+
 const App = () => {
   const [time, setTime] = useState(new Date());
 
@@ -20,7 +34,9 @@ const App = () => {
   const [selectedAscii, setSelectedAscii] = useState(String);
   const [expandWindow, setExpandWindow] = useState(String);
   const [selectedWindow, setSelectedWindow] = useState("me");
+
   const [nowPlaying, setNowPlaying] = useState<NowPlayingData | null>(null);
+  const [topTracks, setTopTracks] = useState<TopTracksData | null>(null);
 
   // const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -214,6 +230,7 @@ const App = () => {
 `,
   ];
 
+  // Spotify functions
   async function fetchNowPlaying() {
     const res = await fetch("/api/now-playing"); // on Vercel this resolves to your function
     if (!res.ok) {
@@ -227,6 +244,23 @@ const App = () => {
     const now = await fetchNowPlaying();
     setNowPlaying(now);
   }, 360000); // every 6 minutes
+
+  useEffect(() => {
+    async function fetchTopTracks() {
+      const res = await fetch("/api/top-tracks"); // on Vercel this resolves to your function
+      if (!res.ok) {
+        console.error(await res.text());
+        return null;
+      }
+      return await res.json();
+    }
+
+    // Wrap the async call in a function and invoke it
+    (async () => {
+      const top = await fetchTopTracks();
+      setTopTracks(top);
+    })();
+  }, []);
 
   return (
     <div className="w-screen flex items-center justify-center bg-gray-800 text-white">
@@ -642,6 +676,15 @@ const App = () => {
                     {nowPlaying.item.album}
                   </p>
                 </div>
+              </div>
+            ) : (
+              <p>I'm not currently listening to anymore!</p>
+            )}
+            {topTracks && topTracks.tracks ? (
+              <div className="flex items-center">
+                {topTracks.tracks.map((track) => (
+                  <div key={track.id}>{track.name}</div>
+                ))}
               </div>
             ) : (
               <p>I'm not currently listening to anymore!</p>

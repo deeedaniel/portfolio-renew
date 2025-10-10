@@ -4,6 +4,7 @@ export default function handler(req, res) {
   const scopes = [
     "user-read-currently-playing",
     "user-read-playback-state",
+    "user-top-read",
   ].join(" ");
   const state = Math.random().toString(36).slice(2);
 
