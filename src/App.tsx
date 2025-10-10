@@ -266,11 +266,22 @@ const App = () => {
   const [response, setResponse] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleCommand = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  async function askQuestion(q: String) {
+    const res = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: q }),
+    });
+    const j = await res.json();
+    return j.answer;
+  }
+
+  const handleCommand = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && command) {
       setLastCommand(command);
       // This is where you'll make your API call
-      setResponse("Thanks for asking! This is a placeholder response.");
+      const answer = await askQuestion(command);
+      setResponse(answer);
       setCommand("");
     }
   };
@@ -734,7 +745,7 @@ const App = () => {
           }}
         >
           <p
-            className={`text-black rounded-t-xl text-sm text-center top-0 ${
+            className={`text-black rounded-t-xl text-sm text-center relative top-0 ${
               selectedWindow === "cli" ? "bg-white" : "bg-gray-400"
             }`}
           >
@@ -763,7 +774,13 @@ const App = () => {
                 type="text"
                 value={command}
                 onChange={(e) => setCommand(e.target.value)}
-                onKeyDown={(e) => handleCommand(e)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleCommand(e);
+                    setResponse("...");
+                    setCommand("");
+                  }
+                }}
                 className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"
                 placeholder="ask me anything about myself!"
               />
