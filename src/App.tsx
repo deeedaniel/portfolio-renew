@@ -13,18 +13,70 @@ const App = () => {
 
   const [experienceIndex, setExperienceIndex] = useState(0);
   const [projectIndex, setProjectIndex] = useState(0);
+  const [selectProject, setSelectProject] = useState("");
+  const [selectExperience, setSelectExperience] = useState("");
 
-  const experiences = [
-    "Full-Stack Intern @ TwinMind",
-    "Web Dev Intern @ cooledtured",
-    "SWE Intern @ SCE",
+  const experiencesData = [
+    {
+      title: "Full-Stack Intern @ TwinMind",
+      window: "TwinMind",
+      description:
+        "Fully developed TwinMind Web-App utilizing Next.js, TailwindCSS.",
+      image: "/twinmind_team.jpeg",
+      links: [{ name: "Website", url: "#" }],
+    },
+    {
+      title: "Web Dev Intern @ cooledtured",
+      window: "cooledtured",
+      description: ".",
+      image: "/coding.png",
+      links: [{ name: "Website", url: "#" }],
+    },
+    {
+      title: "SWE Intern @ SCE",
+      description: ".",
+      image: "/coding.png",
+      links: [{ name: "Website", url: "#" }],
+    },
   ];
 
-  const projects = [
-    "StudyBuddy | 1st @ SCE Hacks 1.0, SJSU",
-    "Chillguy.ai | 2nd @ Hack for Humanity, SCU",
-    "VIVI | HackDavis",
-    "OfficeTracker | CS151 @ SJSU",
+  const projectsData = [
+    {
+      title: "StudyBuddy | 1st @ SCE Hacks 1.0, SJSU",
+      window: "StudyBuddy",
+      description:
+        "A web-app designed for students to receive friendly daily SMS reminders about their events and assignments. Created with React, Node.js, Express, OpenAI API, Canvas API, Google OAuth, Node-cron. Won first place overall at SCE Hacks 1.0 w/ Mintlify.",
+      image: "/studybuddy.jpeg",
+      links: [
+        { name: "GitHub", url: "#" },
+        { name: "Devpost", url: "#" },
+        // { name: "Live Demo", url: "#" },
+      ],
+    },
+    {
+      title: "Chillguy.ai | 2nd @ Hack for Humanity, SCU",
+      window: "Chillguy.ai",
+      description:
+        "An AI-powered mental wellness chatbot that provides a safe space for users to express their feelings and receive support. It uses sentiment analysis to offer appropriate responses and resources. Awarded second place for its social impact.",
+      image: "/chillguy.jpeg",
+      links: [{ name: "GitHub", url: "#" }],
+    },
+    {
+      title: "VIVI | HackDavis",
+      window: "VIVI",
+      description:
+        "A virtual companion application for the elderly, aimed at reducing loneliness and improving mental well-being. Features include voice-activated commands, daily check-ins, and connection to family members.",
+      image: "/coding.png",
+      links: [{ name: "Devpost", url: "#" }],
+    },
+    {
+      title: "OfficeTracker | CS151",
+      window: "OfficeTracker",
+      description:
+        "A desktop application for managing office resources and appointments, developed as a project for a software engineering course. It follows the MVC design pattern and was built using Java, JavaFX, CSV.",
+      image: "/officetracker.jpg",
+      links: [{ name: "GitHub", url: "#" }],
+    },
   ];
 
   // pick random ascii art
@@ -58,18 +110,18 @@ const App = () => {
       if (selectedWindow === "experience") {
         if (e.key === "ArrowUp") {
           setExperienceIndex((prev) =>
-            prev === 0 ? experiences.length - 1 : prev - 1
+            prev === 0 ? experiencesData.length - 1 : prev - 1
           );
         } else if (e.key === "ArrowDown") {
-          setExperienceIndex((prev) => (prev + 1) % experiences.length);
+          setExperienceIndex((prev) => (prev + 1) % experiencesData.length);
         }
       } else if (selectedWindow === "projects") {
         if (e.key === "ArrowUp") {
           setProjectIndex((prev) =>
-            prev === 0 ? projects.length - 1 : prev - 1
+            prev === 0 ? projectsData.length - 1 : prev - 1
           );
         } else if (e.key === "ArrowDown") {
-          setProjectIndex((prev) => (prev + 1) % projects.length);
+          setProjectIndex((prev) => (prev + 1) % projectsData.length);
         }
       }
     };
@@ -174,70 +226,212 @@ const App = () => {
               </div>
             )}
             {expandWindow === "experience" && (
-              <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
-                <p
-                  className={`text-black rounded-t-xl text-sm text-center relative ${
-                    selectedWindow === "experience" ? "bg-white" : "bg-gray-400"
-                  }`}
-                >
-                  experience - zsh
-                  <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-                  <p
-                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
-                    onClick={() => setExpandWindow("")}
-                  />
-                  <p className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
-                </p>
-                <div className="mt-2 mx-4">
-                  {experiences.map((experience, index) => (
-                    <div
-                      key={index}
-                      className={` rounded-md transition-all duration-150 cursor-pointer ${
-                        index === experienceIndex
-                          ? " text-white"
-                          : "bg-transparent text-blue-300 hover:bg-gray-800"
+              <>
+                {selectExperience !== "" ? (
+                  <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+                    <p
+                      className={`text-black rounded-t-xl text-sm text-center relative ${
+                        selectedWindow === "experience"
+                          ? "bg-white"
+                          : "bg-gray-400"
                       }`}
                     >
-                      {experience} {index == experienceIndex ? " <" : ""}
+                      {selectExperience}
+                      <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+                      <p
+                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                        onClick={() => {
+                          setExpandWindow("");
+                          setSelectExperience("");
+                        }}
+                      />
+                      <p className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+                    </p>
+                    <div className="m-4">
+                      {(() => {
+                        const selectedExperienceData = experiencesData.find(
+                          (p) => p.title === selectExperience
+                        );
+                        if (selectedExperienceData) {
+                          return (
+                            <div>
+                              <img
+                                src={selectedExperienceData.image}
+                                alt={selectedExperienceData.title}
+                                className="w-full h-48 object-cover rounded-lg mb-4"
+                              />
+                              <p className="text-gray-400 mt-2">
+                                {selectedExperienceData.description}
+                              </p>
+                              <div className="mt-4">
+                                {selectedExperienceData.links.map((link) => (
+                                  <a
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    key={link.name}
+                                    className="inline-block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2"
+                                  >
+                                    {link.name}
+                                  </a>
+                                ))}
+                              </div>
+                              <button
+                                className="mt-4 px-2 py-1 bg-gray-700 rounded"
+                                onClick={() => setSelectExperience("")}
+                              >
+                                Back to experiences
+                              </button>
+                            </div>
+                          );
+                        }
+                        return <p>Experience not found.</p>;
+                      })()}
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
+                ) : (
+                  <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+                    <p
+                      className={`text-black rounded-t-xl text-sm text-center relative ${
+                        selectedWindow === "experience"
+                          ? "bg-white"
+                          : "bg-gray-400"
+                      }`}
+                    >
+                      experience - zsh
+                      <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+                      <p
+                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                        onClick={() => setExpandWindow("")}
+                      />
+                      <p className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+                    </p>
+                    <div className="mt-2 mx-4">
+                      {experiencesData.map((experience, index) => (
+                        <div
+                          key={index}
+                          className={` rounded-md transition-all duration-150 cursor-pointer ${
+                            index === experienceIndex
+                              ? " text-white"
+                              : "bg-transparent text-blue-300 hover:bg-gray-800"
+                          }`}
+                          onClick={() => setSelectExperience(experience.title)}
+                        >
+                          {experience.title}{" "}
+                          {index == experienceIndex ? " <" : ""}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
             {expandWindow === "projects" && (
-              <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
-                <p
-                  className={`text-black rounded-t-xl text-sm text-center relative ${
-                    selectedWindow === "projects" ? "bg-white" : "bg-gray-400"
-                  }`}
-                >
-                  projects - zsh
-                  <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-                  <p
-                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
-                    onClick={() => setExpandWindow("")}
-                  />
-                  <p
-                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
-                    onClick={() => setExpandWindow("projects")}
-                  />
-                </p>
-                <div className="mt-2 mx-4">
-                  {projects.map((project, index) => (
-                    <div
-                      key={index}
-                      className={` rounded-md transition-all duration-150 cursor-pointer ${
-                        index === projectIndex
-                          ? " text-white"
-                          : "bg-transparent text-blue-300 hover:bg-gray-800"
+              <>
+                {selectProject !== "" ? (
+                  <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+                    <p
+                      className={`text-black rounded-t-xl text-sm text-center relative ${
+                        selectedWindow === "projects"
+                          ? "bg-white"
+                          : "bg-gray-400"
                       }`}
                     >
-                      {project}
-                      {index === projectIndex ? " <" : ""}
+                      {
+                        projectsData.find((p) => p.title === selectProject)
+                          ?.window
+                      }
+                      <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+                      <p
+                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                        onClick={() => {
+                          setExpandWindow("");
+                          setSelectProject("");
+                        }}
+                      />
+                      <p className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+                    </p>
+                    <div className="m-4">
+                      {(() => {
+                        const selectedProjectData = projectsData.find(
+                          (p) => p.title === selectProject
+                        );
+                        if (selectedProjectData) {
+                          return (
+                            <div>
+                              <img
+                                src={selectedProjectData.image}
+                                alt={selectedProjectData.title}
+                                className="w-full h-48 object-cover rounded-lg mb-4"
+                              />
+                              <p className="text-gray-400 mt-2">
+                                {selectedProjectData.description}
+                              </p>
+                              <div className="mt-4">
+                                {selectedProjectData.links.map((link) => (
+                                  <a
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    key={link.name}
+                                    className="inline-block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2"
+                                  >
+                                    {link.name}
+                                  </a>
+                                ))}
+                              </div>
+                              <button
+                                className="mt-4 px-2 py-1 bg-gray-700 rounded"
+                                onClick={() => setSelectProject("")}
+                              >
+                                Back to projects
+                              </button>
+                            </div>
+                          );
+                        }
+                        return <p>Project not found.</p>;
+                      })()}
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
+                ) : (
+                  <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+                    <p
+                      className={`text-black rounded-t-xl text-sm text-center relative ${
+                        selectedWindow === "projects"
+                          ? "bg-white"
+                          : "bg-gray-400"
+                      }`}
+                    >
+                      projects - zsh
+                      <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+                      <p
+                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                        onClick={() => setExpandWindow("")}
+                      />
+                      <p
+                        className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+                        onClick={() => setExpandWindow("projects")}
+                      />
+                    </p>
+                    <div className="mt-2 mx-4">
+                      {projectsData.map((project, index) => (
+                        <div
+                          key={index}
+                          className={` rounded-md transition-all duration-150 cursor-pointer ${
+                            index === projectIndex
+                              ? " text-white"
+                              : "bg-transparent text-blue-300 hover:bg-gray-800"
+                          }`}
+                          onClick={() => setSelectProject(project.title)}
+                        >
+                          {project.title}
+                          {index === projectIndex ? " <" : ""}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}
@@ -305,7 +499,7 @@ const App = () => {
             />
           </p>
           <div className="mt-2 mx-4">
-            {experiences.map((experience, index) => (
+            {experiencesData.map((experience, index) => (
               <div
                 key={index}
                 className={` rounded-md transition-all duration-150 cursor-pointer ${
@@ -313,8 +507,12 @@ const App = () => {
                     ? " text-white"
                     : "bg-transparent text-blue-300 hover:bg-gray-800"
                 }`}
+                onClick={() => {
+                  setExpandWindow("experience");
+                  setSelectExperience(experience.title);
+                }}
               >
-                {experience} {index == experienceIndex ? " <" : ""}
+                {experience.title} {index == experienceIndex ? " <" : ""}
               </div>
             ))}
           </div>
@@ -344,7 +542,7 @@ const App = () => {
             />
           </p>
           <div className="mt-2 mx-4">
-            {projects.map((project, index) => (
+            {projectsData.map((project, index) => (
               <div
                 key={index}
                 className={` rounded-md transition-all duration-150 cursor-pointer ${
@@ -352,8 +550,13 @@ const App = () => {
                     ? " text-white"
                     : "bg-transparent text-blue-300 hover:bg-gray-800"
                 }`}
+                onClick={() => {
+                  setExpandWindow("projects");
+                  setProjectIndex(index);
+                  setSelectProject(project.title);
+                }}
               >
-                {project}
+                {project.title}
                 {index === projectIndex ? " <" : ""}
               </div>
             ))}
