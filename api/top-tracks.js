@@ -4,7 +4,7 @@ let cachedTracks = null;
 let lastFetchTime = 0;
 
 export default async function handler(req, res) {
-  const CACHE_TTL = 1000 * 60 * 60; // 1 hour
+  const CACHE_TTL = 1000 * 60 * 1440; // 1 day since this is top tracks, wont change often
 
   // Step 1: Serve from cache if recent
   if (cachedTracks && Date.now() - lastFetchTime < CACHE_TTL) {

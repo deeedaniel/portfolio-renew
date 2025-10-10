@@ -52,22 +52,24 @@ const App = () => {
       title: "Full-Stack Intern @ TwinMind",
       window: "TwinMind",
       description:
-        "Fully developed TwinMind Web-App utilizing Next.js, TailwindCSS.",
+        "Last summer I interned as a full-stack developer at TwinMind in Menlo Park, CA. TwinMind is startup that builds an AI audio recorder that transcribes and summarizes important conversations. I built their web-app from the ground up using Next.js. In the web-app users can upload & record audio files, view past recordings, chat with their recordings, generate AI to-do lists, and more.",
       image: "/twinmind_team.jpeg",
-      links: [{ name: "Website", url: "#" }],
+      links: [{ name: "Website", url: "https://app.twinmind.com" }],
     },
     {
       title: "Web Dev Intern @ cooledtured",
       window: "cooledtured",
-      description: ".",
-      image: "/coding.png",
-      links: [{ name: "Website", url: "#" }],
+      description:
+        "At cooledtured, an anime toy store, I worked on an engagement page to survey & quiz users about their favorite anime, shows, and movies. This engagement page was built using React and Firebase. I built the authentication system tracking user's progress with role-based access and implemented the UI for the quiz along with a leaderboard system for each quiz.",
+      image: "/cooledtured.jpeg",
+      links: [{ name: "Website", url: "https://cooledtured.com/engage" }],
     },
     {
       title: "SWE Intern @ SCE",
-      description: ".",
-      image: "/coding.png",
-      links: [{ name: "Website", url: "#" }],
+      description:
+        "This was my first ever Software Engineering internship, which was hosted by the Software and Computer Engineering Society at SJSU. Since this was my first internship, I worked alongside a mentor who guided me through basic full-stack development along with containerization using Docker. I worked on a web-app where users can find the best professors for their classes based on ratings from ratemyprofessors.com.",
+      image: "/sce.jpg",
+      links: [{ name: "Website", url: "https://sce.sjsu.edu/" }],
     },
   ];
 
@@ -76,11 +78,14 @@ const App = () => {
       title: "StudyBuddy | 1st @ SCE Hacks 1.0, SJSU",
       window: "StudyBuddy",
       description:
-        "A web-app designed for students to receive friendly daily SMS reminders about their events and assignments. Created with React, Node.js, Express, OpenAI API, Canvas API, Google OAuth, Node-cron. Won first place overall at SCE Hacks 1.0 w/ Mintlify.",
+        "At SCE Hacks 1.0 w/ Mintlify, my group and I created StudyBuddy, a web-app designed for students to receive friendly daily SMS reminders about their events and assignments. Created with React, Node.js, Express, OpenAI API, Canvas API, Google OAuth, Node-cron. We won first place overall!",
       image: "/studybuddy.jpeg",
       links: [
-        { name: "GitHub", url: "#" },
-        { name: "Devpost", url: "#" },
+        { name: "GitHub", url: "https://github.com/deeedaniel/studybuddy" },
+        {
+          name: "Devpost",
+          url: "https://devpost.com/software/studybuddy-g1hwqe",
+        },
         // { name: "Live Demo", url: "#" },
       ],
     },
@@ -88,25 +93,34 @@ const App = () => {
       title: "Chillguy.ai | 2nd @ Hack for Humanity, SCU",
       window: "Chillguy.ai",
       description:
-        "An AI-powered mental wellness chatbot that provides a safe space for users to express their feelings and receive support. It uses sentiment analysis to offer appropriate responses and resources. Awarded second place for its social impact.",
+        "My first hackathon experience was at Santa Clara University's annual Hack for Humanity. This hackathon was focused on creating solutions for social good. My team and I built a web-app where users can get proactive mental health calls from an AI assistant. We utilized Eleven Labs and Twilio to create a realistic voice call experience. We ended up winning 2nd place overall!",
       image: "/chillguy.jpeg",
-      links: [{ name: "GitHub", url: "#" }],
+      links: [
+        { name: "Devpost", url: "https://devpost.com/software/chillguy-ai" },
+        { name: "GitHub", url: "https://github.com/ibix16/ChillGuy.ai" },
+      ],
     },
     {
       title: "VIVI | HackDavis",
       window: "VIVI",
       description:
-        "A virtual companion application for the elderly, aimed at reducing loneliness and improving mental well-being. Features include voice-activated commands, daily check-ins, and connection to family members.",
-      image: "/coding.png",
-      links: [{ name: "Devpost", url: "#" }],
+        "From December 2024 to April 2025, I tutored a young neurodivergent student in reading, writing, and math. One particular challenge we faced was that the student had difficulty reading, specifically understanding what he was reading and picturing it. \n\nThis gave me the idea to create an AI assistant to assist those having difficulty picturing what they read. At HackDavis, my team and I built this idea, calling it VIVI, visual interpretation for verbal input. We built it using React, Python, Computer Vision, and DALLE-3 image generation. In this web-app, we tracked user's gaze to track when they were reading and recorded their voice to generate images that help them visualize what they read.",
+
+      image: "/vivi.png",
+      links: [
+        { name: "Devpost", url: "https://devpost.com/software/vivi-qj6fug" },
+        { name: "GitHub", url: "https://github.com/armanbance/VIVI" },
+      ],
     },
     {
       title: "OfficeTracker | CS151",
       window: "OfficeTracker",
       description:
-        "A desktop application for managing office resources and appointments, developed as a project for a software engineering course. It follows the MVC design pattern and was built using Java, JavaFX, CSV.",
+        "In my CS151 class, my group and I created OfficeTracker, a desktop app built for faculty members to track their office hour times and scheduled appointments. It follows the MVC design pattern and was built using Java, JavaFX, SceneBuilder, and CSV.",
       image: "/officetracker.jpg",
-      links: [{ name: "GitHub", url: "#" }],
+      links: [
+        { name: "GitHub", url: "https://github.com/NyiHtett/dev-08-0.2" },
+      ],
     },
   ];
 
@@ -307,7 +321,7 @@ const App = () => {
   return (
     <div className="lg:h-screen w-screen flex items-center justify-center bg-gray-800 text-white">
       {/* Bento box grid */}
-      <div className="relative grid grid-cols-2 lg:grid-cols-3 w-full mx-1 gap-2 bg-gray-900 rounded-2xl p-1.5 border border-gray-700 max-w-5xl lg:justify-center">
+      <div className="relative grid grid-cols-2 lg:grid-cols-3 w-full mx-1 gap-2 bg-gray-900 rounded-2xl p-1.5 border border-gray-700 max-w-5xl lg:justify-center shadow-xl">
         {/* Main terminal window */}
         <div
           className={` bg-black rounded-xl col-span-2 flex border border-gray-700 flex-col ${
@@ -520,10 +534,16 @@ const App = () => {
             }`}
           >
             daniel-code - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
             <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+              onClick={() => setExpandWindow("")}
+            />
+            <p
+              className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+              onClick={() => setExpandWindow("")}
+            />
+            <p
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
               onClick={() => setExpandWindow("cli")}
             />
           </p>
@@ -565,13 +585,16 @@ const App = () => {
               <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
                 <p className="text-black bg-gray-300 rounded-t-xl text-sm text-center relative">
                   me - zsh
-                  <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+                  <button
+                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setExpandWindow("")}
+                  />
                   <button
                     className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("")}
                   />
                   <button
-                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
                     onClick={() => setExpandWindow("me")}
                   />
                 </p>
@@ -602,7 +625,10 @@ const App = () => {
                       }`}
                     >
                       {selectExperience}
-                      <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+                      <p
+                        className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                        onClick={() => setExpandWindow("")}
+                      />
                       <p
                         className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
                         onClick={() => {
@@ -664,12 +690,15 @@ const App = () => {
                       }`}
                     >
                       experience - zsh
-                      <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
                       <p
-                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                        className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
                         onClick={() => setExpandWindow("")}
                       />
-                      <p className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+                      <p
+                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                        onClick={() => setExpandWindow("")}
+                      />
+                      <p className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer" />
                     </p>
                     <div className="mt-2 mx-4">
                       {experiencesData.map((experience, index) => (
@@ -706,15 +735,21 @@ const App = () => {
                         projectsData.find((p) => p.title === selectProject)
                           ?.window
                       }
-                      <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
                       <p
-                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                        className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                        onClick={() => setExpandWindow("")}
+                      />
+                      <p
+                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
                         onClick={() => {
                           setExpandWindow("");
                           setSelectProject("");
                         }}
                       />
-                      <p className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+                      <p
+                        className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                        onClick={() => setExpandWindow("projects")}
+                      />
                     </p>
                     <div className="m-4">
                       {(() => {
@@ -768,13 +803,16 @@ const App = () => {
                       }`}
                     >
                       projects - zsh
-                      <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
                       <p
-                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                        className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
                         onClick={() => setExpandWindow("")}
                       />
                       <p
-                        className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                        onClick={() => setExpandWindow("")}
+                      />
+                      <p
+                        className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
                         onClick={() => setExpandWindow("projects")}
                       />
                     </p>
@@ -806,12 +844,18 @@ const App = () => {
                   }`}
                 >
                   music - zsh
-                  <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
                   <button
-                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
                     onClick={() => setExpandWindow("")}
                   />
-                  <button className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+                  <button
+                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setExpandWindow("")}
+                  />
+                  <button
+                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setExpandWindow("music")}
+                  />
                 </p>
                 <div className="mt-2 mx-4">
                   {nowPlaying && nowPlaying.item ? (
@@ -867,12 +911,18 @@ const App = () => {
                   }`}
                 >
                   daniel-code - zsh
-                  <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
                   <button
-                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
                     onClick={() => setExpandWindow("")}
                   />
-                  <button className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+                  <button
+                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setExpandWindow("")}
+                  />
+                  <button
+                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setExpandWindow("cli")}
+                  />
                 </p>
                 <div
                   className="mt-2 mx-4 font-mono text-sm flex-grow overflow-y-auto"
@@ -915,7 +965,7 @@ const App = () => {
       </div>
 
       {/* App menu */}
-      <div className="hidden lg:flex w-2xl absolute items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-1 rounded-xl justify-between px-4">
+      <div className="hidden lg:flex w-2xl absolute items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-1 rounded-xl justify-between px-4 shadow-xl">
         <p className="text-gray-200 bg-gray-800 p-1 px-3 rounded-lg flex items-center gap-2 border border-gray-700">
           <Search className="w-4 h-4 " />
           <p className="text-sm bg-gray-800 p-1 px-3">
