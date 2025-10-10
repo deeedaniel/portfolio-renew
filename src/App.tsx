@@ -1,6 +1,18 @@
 import { useState } from "react";
 import { useEffect } from "react";
 
+interface NowPlayingItem {
+  album: string;
+  album_image: string;
+  artists: string[];
+  name: string;
+}
+
+interface NowPlayingData {
+  is_playing: boolean;
+  item: NowPlayingItem | null;
+}
+
 const App = () => {
   const [time, setTime] = useState(new Date());
 
@@ -8,6 +20,7 @@ const App = () => {
   const [selectedAscii, setSelectedAscii] = useState(String);
   const [expandWindow, setExpandWindow] = useState(String);
   const [selectedWindow, setSelectedWindow] = useState("me");
+  const [nowPlaying, setNowPlaying] = useState<NowPlayingData | null>(null);
 
   // const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -84,6 +97,10 @@ const App = () => {
     // if (count % 10 == 0) {
     setSelectedAscii(asciiList[Math.floor(Math.random() * asciiList.length)]);
     //}
+  }, []);
+
+  useEffect(() => {
+    fetchNowPlaying().then((data) => setNowPlaying(data));
   }, []);
 
   // update time every second
@@ -197,8 +214,22 @@ const App = () => {
 `,
   ];
 
+  async function fetchNowPlaying() {
+    const res = await fetch("/api/now-playing"); // on Vercel this resolves to your function
+    if (!res.ok) {
+      console.error(await res.text());
+      return null;
+    }
+    return await res.json();
+  }
+
+  setInterval(async () => {
+    const now = await fetchNowPlaying();
+    setNowPlaying(now);
+  }, 360000); // every 6 minutes
+
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gray-800 text-white">
+    <div className="w-screen flex items-center justify-center bg-gray-800 text-white">
       {/* Bento box grid */}
       <div className="relative grid grid-cols-2 grid-rows-3 w-full mx-1 gap-2 bg-gray-900 rounded-2xl p-1.5 border border-gray-700">
         {/* Expanded overlay when user clicks */}
@@ -570,7 +601,54 @@ const App = () => {
             ))}
           </div>
         </div>
+
         {/* Music */}
+        <div
+          className={` bg-black col-span-2 border border-gray-700 rounded-xl ${
+            expandWindow ? "opacity-0" : ""
+          } transition-opacity duration-500`}
+          onClick={() => {
+            setSelectedWindow("music");
+            console.log(selectedWindow);
+          }}
+        >
+          <p
+            className={`text-black rounded-t-xl text-sm text-center relative ${
+              selectedWindow === "music" ? "bg-white" : "bg-gray-400"
+            }`}
+          >
+            music - zsh
+            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <p
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              onClick={() => setExpandWindow("music")}
+            />
+          </p>
+          <div className="mt-2 mx-4">
+            {nowPlaying && nowPlaying.item ? (
+              <div className="flex items-center">
+                <img
+                  src={nowPlaying.item.album_image}
+                  alt={nowPlaying.item.album}
+                  className="w-16 h-16 rounded-md mr-4"
+                />
+                <div>
+                  <p className="font-bold">{nowPlaying.item.name}</p>
+                  <p className="text-sm text-gray-400">
+                    {nowPlaying.item.artists.join(", ")}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {nowPlaying.item.album}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <p>I'm not currently listening to anymore!</p>
+            )}
+          </div>
+        </div>
+
         {/* CLI LLM about me */}
       </div>
 
