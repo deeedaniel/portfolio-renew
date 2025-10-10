@@ -3,6 +3,7 @@ import { Search, Paperclip } from "lucide-react";
 import Tooltip from "./components/Tooltip";
 import type { NowPlayingData, TopTracksData } from "./types/indexs";
 import { experiencesData, projectsData, asciiList } from "./data/info";
+import { Taskbar } from "./components/Taskbar";
 
 const App = () => {
   const [time, setTime] = useState(new Date());
@@ -21,6 +22,9 @@ const App = () => {
   const [projectIndex, setProjectIndex] = useState(0); // index of project
   const [selectProject, setSelectProject] = useState(""); // selected project
   const [selectExperience, setSelectExperience] = useState(""); // selected experience
+  const [selectedLinkIndex, setSelectedLinkIndex] = useState(0); // index of selected link within project
+  const [selectedExperienceLinkIndex, setSelectedExperienceLinkIndex] =
+    useState(0); // index of selected link within experience
 
   // cli
   const [command, setCommand] = useState("");
@@ -50,34 +54,123 @@ const App = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedWindow === "experience") {
-        if (e.key === "ArrowUp") {
-          setExperienceIndex((prev) =>
-            prev === 0 ? experiencesData.length - 1 : prev - 1
+        if (selectExperience) {
+          // Navigation within expanded experience (for links)
+          const selectedExperienceData = experiencesData.find(
+            (exp) => exp.title === selectExperience
           );
-        } else if (e.key === "ArrowDown") {
-          setExperienceIndex((prev) => (prev + 1) % experiencesData.length);
-        } else if (e.key === "Enter") {
-          setSelectExperience(experiencesData[experienceIndex].title);
-          console.log("hello");
-          setExpandWindow("experience");
+          if (selectedExperienceData) {
+            const totalItems = selectedExperienceData.links.length + 1; // +1 for "back to experiences" button
+
+            if (e.key === "ArrowUp") {
+              e.preventDefault();
+              setSelectedExperienceLinkIndex(
+                (prev) => (prev - 1 + totalItems) % totalItems
+              );
+            } else if (e.key === "ArrowDown") {
+              e.preventDefault();
+              setSelectedExperienceLinkIndex((prev) => (prev + 1) % totalItems);
+            } else if (e.key === "Enter") {
+              e.preventDefault();
+              if (
+                selectedExperienceLinkIndex <
+                selectedExperienceData.links.length
+              ) {
+                // Navigate to selected link
+                window.open(
+                  selectedExperienceData.links[selectedExperienceLinkIndex].url,
+                  "_blank"
+                );
+              } else {
+                // "back to experiences" button selected
+                setSelectExperience("");
+                setExpandWindow("");
+              }
+            }
+          }
+        } else {
+          // Navigation between experiences (existing code)
+          if (e.key === "ArrowUp") {
+            setExperienceIndex((prev) =>
+              prev === 0 ? experiencesData.length - 1 : prev - 1
+            );
+          } else if (e.key === "ArrowDown") {
+            setExperienceIndex((prev) => (prev + 1) % experiencesData.length);
+          } else if (e.key === "Enter") {
+            setSelectExperience(experiencesData[experienceIndex].title);
+            console.log("hello");
+            setExpandWindow("experience");
+          }
         }
       } else if (selectedWindow === "projects") {
-        if (e.key === "ArrowUp") {
-          setProjectIndex((prev) =>
-            prev === 0 ? projectsData.length - 1 : prev - 1
+        if (selectProject) {
+          // Navigation within expanded project (for links)
+          const selectedProjectData = projectsData.find(
+            (p) => p.title === selectProject
           );
-        } else if (e.key === "ArrowDown") {
-          setProjectIndex((prev) => (prev + 1) % projectsData.length);
-        } else if (e.key === "Enter") {
-          setSelectProject(projectsData[projectIndex].title);
-          setExpandWindow("projects");
+          if (selectedProjectData) {
+            const totalItems = selectedProjectData.links.length + 1; // +1 for "back to projects" button
+
+            if (e.key === "ArrowUp") {
+              e.preventDefault();
+              setSelectedLinkIndex(
+                (prev) => (prev - 1 + totalItems) % totalItems
+              );
+            } else if (e.key === "ArrowDown") {
+              e.preventDefault();
+              setSelectedLinkIndex((prev) => (prev + 1) % totalItems);
+            } else if (e.key === "Enter") {
+              e.preventDefault();
+              if (selectedLinkIndex < selectedProjectData.links.length) {
+                // Navigate to selected link
+                window.open(
+                  selectedProjectData.links[selectedLinkIndex].url,
+                  "_blank"
+                );
+              } else {
+                // "back to projects" button selected
+                setSelectProject("");
+                setExpandWindow("");
+              }
+            }
+          }
+        } else {
+          // Navigation between projects (existing code)
+          if (e.key === "ArrowUp") {
+            setProjectIndex((prev) =>
+              prev === 0 ? projectsData.length - 1 : prev - 1
+            );
+          } else if (e.key === "ArrowDown") {
+            setProjectIndex((prev) => (prev + 1) % projectsData.length);
+          } else if (e.key === "Enter") {
+            setSelectProject(projectsData[projectIndex].title);
+            setExpandWindow("projects");
+          }
         }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedWindow, experienceIndex, projectIndex]);
+  }, [
+    selectedWindow,
+    experienceIndex,
+    projectIndex,
+    selectProject,
+    selectedLinkIndex,
+    selectExperience,
+    selectedExperienceLinkIndex,
+  ]);
+
+  // Reset selected link index when project changes
+  useEffect(() => {
+    setSelectedLinkIndex(0);
+  }, [selectProject]);
+
+  // Reset selected experience link index when experience changes
+  useEffect(() => {
+    setSelectedExperienceLinkIndex(0);
+  }, [selectExperience]);
 
   // Spotify functions
   async function fetchNowPlaying() {
@@ -141,6 +234,8 @@ const App = () => {
   useEffect(() => {
     if (selectedWindow === "cli") {
       inputRef.current?.focus();
+    } else {
+      inputRef.current?.blur();
     }
   }, [selectedWindow]);
 
@@ -362,7 +457,7 @@ const App = () => {
                 but feel free to visit my{" "}
                 <a
                   href="https://open.spotify.com/user/cringedlol"
-                  className="text-blue-400"
+                  className="text-blue-400 underline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -524,30 +619,51 @@ const App = () => {
                               <img
                                 src={selectedExperienceData.image}
                                 alt={selectedExperienceData.title}
-                                className="w-full h-48 object-cover rounded-lg mb-4"
+                                className="w-full h-48 object-cover rounded-lg mb-4 max-w-2xl mx-auto"
                               />
-                              <p className="text-gray-400 mt-2">
+                              <p className="text-gray-400 mt-2 max-w-2xl mx-auto">
                                 {selectedExperienceData.description}
                               </p>
-                              <div className="mt-4">
-                                {selectedExperienceData.links.map((link) => (
-                                  <a
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    key={link.name}
-                                    className="inline-block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2"
-                                  >
-                                    {link.name}
-                                  </a>
-                                ))}
+                              <div className="mt-4 max-w-2xl mx-auto flex flex-col">
+                                {selectedExperienceData.links.map(
+                                  (link, index) => (
+                                    <a
+                                      href={link.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      key={link.name}
+                                      className={`inline-block text-white rounded transition-all duration-150 ${
+                                        index === selectedExperienceLinkIndex
+                                          ? " font-bold"
+                                          : ""
+                                      }`}
+                                    >
+                                      {link.name}{" "}
+                                      {index === selectedExperienceLinkIndex
+                                        ? "< "
+                                        : ""}
+                                    </a>
+                                  )
+                                )}
+                                <button
+                                  className={`mt-2 rounded self-start transition-all duration-150 ${
+                                    selectedExperienceLinkIndex ===
+                                    selectedExperienceData.links.length
+                                      ? "font-bold"
+                                      : ""
+                                  }`}
+                                  onClick={() => {
+                                    setSelectExperience("");
+                                    setExpandWindow("");
+                                  }}
+                                >
+                                  back to experiences{" "}
+                                  {selectedExperienceLinkIndex ===
+                                  selectedExperienceData.links.length
+                                    ? "< "
+                                    : ""}
+                                </button>
                               </div>
-                              <button
-                                className="mt-4 px-2 py-1 bg-gray-700 rounded"
-                                onClick={() => setSelectExperience("")}
-                              >
-                                Back to experiences
-                              </button>
                             </div>
                           );
                         }
@@ -598,7 +714,7 @@ const App = () => {
             {expandWindow === "projects" && (
               <>
                 {selectProject !== "" ? (
-                  <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+                  <div className="w-full min-h-full bg-black border border-gray-700 rounded-xl">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "projects"
@@ -637,30 +753,49 @@ const App = () => {
                               <img
                                 src={selectedProjectData.image}
                                 alt={selectedProjectData.title}
-                                className="w-full h-48 object-cover rounded-lg mb-4"
+                                className="mx-auto h-48 object-contain rounded-lg mb-4"
                               />
-                              <p className="text-gray-400 mt-2">
+                              <p className="text-gray-400 mt-2 max-w-2xl mx-auto">
                                 {selectedProjectData.description}
                               </p>
-                              <div className="mt-4">
-                                {selectedProjectData.links.map((link) => (
-                                  <a
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    key={link.name}
-                                    className="inline-block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2"
-                                  >
-                                    {link.name}
-                                  </a>
-                                ))}
+                              <div className="mt-4 max-w-2xl mx-auto flex flex-col">
+                                {selectedProjectData.links.map(
+                                  (link, index) => (
+                                    <a
+                                      href={link.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      key={link.name}
+                                      className={`inline-block text-white rounded transition-all duration-150 ${
+                                        index === selectedLinkIndex
+                                          ? " font-bold"
+                                          : ""
+                                      }`}
+                                    >
+                                      {link.name}{" "}
+                                      {index === selectedLinkIndex ? "< " : ""}
+                                    </a>
+                                  )
+                                )}
+                                <button
+                                  className={`mt-2 max-w-2xl self-start rounded transition-all duration-150 ${
+                                    selectedLinkIndex ===
+                                    selectedProjectData.links.length
+                                      ? " font-bold"
+                                      : ""
+                                  }`}
+                                  onClick={() => {
+                                    setSelectProject("");
+                                    setExpandWindow("");
+                                  }}
+                                >
+                                  back to projects{" "}
+                                  {selectedLinkIndex ===
+                                  selectedProjectData.links.length
+                                    ? "< "
+                                    : ""}
+                                </button>
                               </div>
-                              <button
-                                className="mt-4 px-2 py-1 bg-gray-700 rounded"
-                                onClick={() => setSelectProject("")}
-                              >
-                                Back to projects
-                              </button>
                             </div>
                           );
                         }
@@ -839,64 +974,8 @@ const App = () => {
         )}
       </div>
 
-      {/* App menu */}
-      <div className="hidden lg:flex w-2xl absolute items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-1 rounded-xl justify-between px-4 shadow-xl">
-        <p className="text-gray-200 bg-gray-800 p-1 px-3 rounded-lg flex items-center gap-2 border border-gray-700">
-          <Search className="w-4 h-4 " />
-          <p className="text-sm bg-gray-800 p-1 px-3">
-            nguyendaniel1312@gmail.com
-          </p>
-        </p>
-        <div className="flex justify-evenly gap-2 w-1/4">
-          <Tooltip text="GitHub">
-            <a
-              href="https://github.com/deeedaniel"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                src="github_white.png"
-                alt="GitHub"
-                className="w-8 h-8 transition-all duration-300"
-              />
-            </a>
-          </Tooltip>
-          <Tooltip text="LinkedIn">
-            <a
-              href="https://www.linkedin.com/in/daniel-nguyenn/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                src="linkedin_white.png"
-                alt="LinkedIn"
-                className="w-9 h-9  transition-all duration-300"
-              />
-            </a>
-          </Tooltip>
-          <Tooltip text="Resume">
-            <a
-              href="/daniel_nguyen_resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border border-gray-700 rounded-full p-1 bg-white"
-            >
-              <Paperclip
-                className="w-5 h-5  transition-all duration-300"
-                color="black"
-              />
-            </a>
-          </Tooltip>
-        </div>
-      </div>
-
-      {/* <div className="lg:hidden flex flex-col items-center justify-center text-center text-white h-screen">
-        <p className="text-blue-300 text-sm">daniel@MacbookPro</p>
-        <p className=" ml-4 text-xs">Full Stack</p>
-        <p className=" ml-4 text-xs">CS @ SJSU</p>
-        <p className=" ml-4 text-xs">San Jose, CA</p>
-        <p className=" ml-4 text-xs">{time.toLocaleTimeString()}</p>
-      </div> */}
+      {/* Taskbar menu */}
+      <Taskbar />
     </div>
   );
 };
