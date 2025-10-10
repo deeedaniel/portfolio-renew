@@ -9,7 +9,7 @@ const App = () => {
   const [expandWindow, setExpandWindow] = useState(String);
   const [selectedWindow, setSelectedWindow] = useState("me");
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // const [currentIndex, setCurrentIndex] = useState(0);
 
   const [experienceIndex, setExperienceIndex] = useState(0);
   const [projectIndex, setProjectIndex] = useState(0);
@@ -137,9 +137,9 @@ const App = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedWindow, experienceIndex, projectIndex]);
 
-  useEffect(() => {
-    setCurrentIndex(0);
-  }, [selectedWindow]);
+  // useEffect(() => {
+  //   (0);
+  // }, [selectedWindow]);
 
   const asciiList = [
     `⣶⣶⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠔⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤
