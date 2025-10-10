@@ -242,10 +242,15 @@ const App = () => {
     return await res.json();
   }
 
-  setInterval(async () => {
-    const now = await fetchNowPlaying();
-    setNowPlaying(now);
-  }, 360000); // every 6 minutes
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const now = await fetchNowPlaying();
+      setNowPlaying(now);
+    }, 360000); // every 6 minutes
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   useEffect(() => {
     async function fetchTopTracks() {
