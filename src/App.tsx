@@ -681,9 +681,17 @@ const App = () => {
               <p>I'm not currently listening to anymore!</p>
             )}
             {topTracks && topTracks.tracks ? (
-              <div className="flex items-center">
+              <div className="flex flex-col">
+                <p className="text-sm text-gray-200 mt-4">Top Tracks</p>
                 {topTracks.tracks.map((track) => (
-                  <div key={track.id}>{track.name}</div>
+                  <div key={track.id} className="flex items-center mt-1.5">
+                    <img
+                      src={track.album_image}
+                      alt={track.album}
+                      className="w-8 h-8 rounded-md mr-4"
+                    />
+                    <div className="text-sm text-gray-400">{track.name}</div>
+                  </div>
                 ))}
               </div>
             ) : (
