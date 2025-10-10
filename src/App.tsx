@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface NowPlayingItem {
   album: string;
@@ -261,6 +260,30 @@ const App = () => {
       setTopTracks(top);
     })();
   }, []);
+
+  const [command, setCommand] = useState("");
+  const [lastCommand, setLastCommand] = useState("");
+  const [response, setResponse] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleCommand = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && command) {
+      setLastCommand(command);
+      // This is where you'll make your API call
+      setResponse("Thanks for asking! This is a placeholder response.");
+      setCommand("");
+    }
+  };
+
+  useEffect(() => {
+    if (selectedWindow === "cli") {
+      inputRef.current?.focus();
+    }
+  }, [selectedWindow]);
+
+  const focusInput = () => {
+    inputRef.current?.focus();
+  };
 
   return (
     <div className="w-screen flex items-center justify-center bg-gray-800 text-white">
@@ -701,6 +724,52 @@ const App = () => {
         </div>
 
         {/* CLI LLM about me */}
+        <div
+          className={` bg-black col-span-2 border border-gray-700 rounded-xl ${
+            expandWindow ? "opacity-0" : ""
+          } transition-opacity duration-500 h-full overflow-y-auto`}
+          onClick={() => {
+            setSelectedWindow("cli");
+            focusInput();
+          }}
+        >
+          <p
+            className={`text-black rounded-t-xl text-sm text-center top-0 ${
+              selectedWindow === "cli" ? "bg-white" : "bg-gray-400"
+            }`}
+          >
+            daniel-code - zsh
+            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <p
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              onClick={() => setExpandWindow("cli")}
+            />
+          </p>
+          <div className="mt-2 mx-4 font-mono text-sm" onClick={focusInput}>
+            {lastCommand && (
+              <>
+                <div className="flex items-center">
+                  <span className="text-blue-400">❯</span>
+                  <p className="ml-2 text-gray-200">{lastCommand}</p>
+                </div>
+                <p className="text-gray-200 whitespace-pre-wrap">{response}</p>
+              </>
+            )}
+            <div className="flex items-center">
+              <span className="text-blue-400">❯</span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={command}
+                onChange={(e) => setCommand(e.target.value)}
+                onKeyDown={(e) => handleCommand(e)}
+                className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"
+                placeholder="ask me anything about myself!"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* App menu */}
