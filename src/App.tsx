@@ -114,6 +114,10 @@ const App = () => {
           );
         } else if (e.key === "ArrowDown") {
           setExperienceIndex((prev) => (prev + 1) % experiencesData.length);
+        } else if (e.key === "Enter") {
+          setSelectExperience(experiencesData[experienceIndex].title);
+          console.log("hello");
+          setExpandWindow("experience");
         }
       } else if (selectedWindow === "projects") {
         if (e.key === "ArrowUp") {
@@ -122,13 +126,16 @@ const App = () => {
           );
         } else if (e.key === "ArrowDown") {
           setProjectIndex((prev) => (prev + 1) % projectsData.length);
+        } else if (e.key === "Enter") {
+          setSelectProject(projectsData[projectIndex].title);
+          setExpandWindow("projects");
         }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedWindow]);
+  }, [selectedWindow, experienceIndex, projectIndex]);
 
   useEffect(() => {
     setCurrentIndex(0);
@@ -468,8 +475,9 @@ const App = () => {
             <div className="mx-auto  min-w-1/2 mt-2">
               <p className="text-blue-300 text-sm">daniel@MacbookPro</p>
               {/* <p className="ml-4">daniel's website</p> */}
-              <p className=" ml-4 text-xs">Full Stack</p>
+              <p className=" ml-4 text-xs">Full-Stack</p>
               <p className=" ml-4 text-xs">CS @ SJSU</p>
+              <p className=" ml-4 text-xs">San Jose, CA</p>
               <p className=" ml-4 text-xs">{time.toLocaleTimeString()}</p>
             </div>
           </div>
@@ -563,7 +571,18 @@ const App = () => {
           </div>
         </div>
         {/* Music */}
+        {/* CLI LLM about me */}
       </div>
+
+      {/* App menu */}
+      {/* <div className="absolute flex justify-center items-center gap-2 bottom-0 left-2 right-2 bg-white p-2 rounded-t-xl">
+        <a href="https://github.com/deeedaniel">
+          <img src="github-sign.png" alt="GitHub" className="w-6 h-6" />
+        </a>
+        <a href="https://www.linkedin.com/in/daniel-nguyenn/">
+          <img src="linkedin.png" alt="LinkedIn" className="w-6 h-6" />
+        </a>
+      </div> */}
     </div>
   );
 };
