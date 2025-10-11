@@ -3,7 +3,7 @@ export const experiencesData = [
     title: "Full-Stack Intern @ TwinMind",
     window: "TwinMind",
     description:
-      "Last summer I interned as a full-stack developer at TwinMind in Menlo Park, CA. TwinMind is startup that builds an AI audio recorder that transcribes and summarizes important conversations. I built their web-app from the ground up using Next.js. In the web-app users can upload & record audio files, view past recordings, chat with their recordings, generate AI to-do lists, and more.",
+      "Last summer I interned as a full-stack developer at TwinMind in Menlo Park, CA. TwinMind is a startup that is building an AI audio recorder that transcribes and summarizes important conversations. I built their web-app from the ground up using Next.js. In the web-app users can upload & record audio files, view past recordings, chat with their recordings, generate AI to-do lists, and more.",
     image: "/twinmind_team.jpeg",
     links: [{ name: "View TwinMind web-app", url: "https://app.twinmind.com" }],
   },

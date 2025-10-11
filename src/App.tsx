@@ -311,7 +311,7 @@ const App = () => {
                 daniel@MacbookPro
               </p>
               <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
-              <p className=" ml-4 text-xs lg:text-sm">CS @ SJSU</p>
+              <p className=" ml-4 text-xs lg:text-sm">Third year, CS @ SJSU</p>
               <p className=" ml-4 text-xs lg:text-sm">San Jose, CA</p>
               <p className=" ml-4 text-xs lg:text-sm">
                 {time.toLocaleTimeString()}
@@ -584,7 +584,7 @@ const App = () => {
                     <p className="text-blue-300 text-sm">daniel@MacbookPro</p>
                     {/* <p className="ml-4">daniel's website</p> */}
                     <p className=" ml-4 text-xs">Full Stack</p>
-                    <p className=" ml-4 text-xs">CS @ SJSU</p>
+                    <p className=" ml-4 text-xs">Third year, CS @ SJSU</p>
                     <p className=" ml-4 text-xs">San Jose, CA</p>
                     <p className=" ml-4 text-xs">{time.toLocaleTimeString()}</p>
                   </div>

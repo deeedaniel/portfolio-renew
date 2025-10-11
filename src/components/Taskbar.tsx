@@ -1,4 +1,4 @@
-import { Search, Paperclip, Hourglass, Mail } from "lucide-react";
+import { Search, Paperclip, Mail } from "lucide-react";
 import Tooltip from "./Tooltip";
 
 export const Taskbar = () => {
