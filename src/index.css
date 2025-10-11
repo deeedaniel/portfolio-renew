@@ -36,8 +36,36 @@ button {
 }
 
 /* For Firefox */
-body {
-  /* Or the specific element with the scrollbar */
-  scrollbar-width: thin; /* "auto" or "thin" */
-  scrollbar-color: #6b7280 transparent; /* thumb color and transparent track */
+/* Hide scrollbar for main page but keep scrolling */
+body,
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  overscroll-behavior: none;
+  overflow-y: auto; /* Ensure vertical scrolling is enabled */
+}
+
+body::-webkit-scrollbar,
+html::-webkit-scrollbar {
+  display: none; /* WebKit browsers */
+}
+
+/* Keep custom scrollbars for other elements */
+div::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+div::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+div::-webkit-scrollbar-thumb {
+  background: #6b7280;
+  border-radius: 10px;
+}
+
+div::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
 }
