@@ -42,6 +42,7 @@ const App = () => {
   const [pomodoroCount, setPomodoroCount] = useState(0);
   const [customMinutes, setCustomMinutes] = useState(30);
   const [isTimerOpen, setIsTimerOpen] = useState(false);
+  const [selectedTimerButton, setSelectedTimerButton] = useState(0); // 0 for start/pause, 1 for reset
 
   // pick random ascii art
   useEffect(() => {
@@ -424,6 +425,96 @@ const App = () => {
     return () => window.removeEventListener("openTimer", handleOpenTimer);
   }, []);
 
+  // Add this new state variable for expanded timer navigation (near the other timer states around line 45)
+  const [selectedExpandedTimerButton, setSelectedExpandedTimerButton] =
+    useState(0);
+  // 0-1: start/pause and reset buttons, 2-6: custom timer buttons (5m, 15m, 30m, 45m, 60m)
+
+  // Update the existing timer keyboard navigation useEffect to handle both compact and expanded modes
+  useEffect(() => {
+    if (selectedWindow !== "timer") return;
+
+    const handleTimerKeyDown = (e: KeyboardEvent) => {
+      if (expandWindow === "timer") {
+        // Expanded timer navigation with two levels: start/reset (0-1) and custom timers (2-6)
+        if (e.key === "ArrowUp") {
+          e.preventDefault();
+          // Move between levels: if in custom timers (2-6), go to start/reset level
+          if (selectedExpandedTimerButton >= 2) {
+            setSelectedExpandedTimerButton(0); // Go to start button
+          } else {
+            // If in start/reset level, go to custom timers
+            setSelectedExpandedTimerButton(2); // Go to first custom timer (5m)
+          }
+        } else if (e.key === "ArrowDown") {
+          e.preventDefault();
+          // Move between levels: if in start/reset (0-1), go to custom timers
+          if (selectedExpandedTimerButton <= 1) {
+            setSelectedExpandedTimerButton(2); // Go to first custom timer (5m)
+          } else {
+            // If in custom timers, go to start/reset level
+            setSelectedExpandedTimerButton(0); // Go to start button
+          }
+        } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          if (selectedExpandedTimerButton <= 1) {
+            // Navigate within start/reset level (0-1)
+            setSelectedExpandedTimerButton((prev) => (prev === 0 ? 1 : 0));
+          } else {
+            // Navigate within custom timer level (2-6)
+            setSelectedExpandedTimerButton((prev) => Math.max(2, prev - 1));
+          }
+        } else if (e.key === "ArrowRight") {
+          e.preventDefault();
+          if (selectedExpandedTimerButton <= 1) {
+            // Navigate within start/reset level (0-1)
+            setSelectedExpandedTimerButton((prev) => (prev === 1 ? 0 : 1));
+          } else {
+            // Navigate within custom timer level (2-6)
+            setSelectedExpandedTimerButton((prev) => Math.min(6, prev + 1));
+          }
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (selectedExpandedTimerButton === 0) {
+            isTimerRunning ? pauseTimer() : startTimer();
+          } else if (selectedExpandedTimerButton === 1) {
+            resetTimer();
+          } else {
+            // Custom timer buttons (2-6 correspond to [5, 15, 30, 45, 60])
+            const customTimes = [5, 15, 30, 45, 60];
+            const timeIndex = selectedExpandedTimerButton - 2;
+            setCustomTimer(customTimes[timeIndex]);
+          }
+        }
+      } else {
+        // Compact timer navigation (existing code)
+        if (e.key === "ArrowUp") {
+          e.preventDefault();
+          setSelectedTimerButton((prev) => (prev === 0 ? 1 : 0));
+        } else if (e.key === "ArrowDown") {
+          e.preventDefault();
+          setSelectedTimerButton((prev) => (prev === 1 ? 0 : 1));
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          if (selectedTimerButton === 0) {
+            isTimerRunning ? pauseTimer() : startTimer();
+          } else {
+            resetTimer();
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleTimerKeyDown);
+    return () => window.removeEventListener("keydown", handleTimerKeyDown);
+  }, [
+    selectedWindow,
+    selectedTimerButton,
+    selectedExpandedTimerButton,
+    isTimerRunning,
+    expandWindow,
+  ]);
+
   return (
     <div className="lg:h-screen w-screen flex items-center justify-center bg-black text-white pb-24 lg:pb-0 bg-[url('/creation_of_adam.jpeg')] bg-cover bg-center">
       {/* Bento box grid */}
@@ -443,7 +534,7 @@ const App = () => {
               selectedWindow === "me" ? "bg-white" : "bg-gray-400"
             }`}
           >
-            me - zsh
+            info - zsh
             <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
             <button
               className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
@@ -616,7 +707,7 @@ const App = () => {
                   <div>
                     <p className="text-xs lg:text-sm font-medium">
                       i'm not currently listening to music {"("}or my spotify
-                      api has been rate-limited lol{")"}.
+                      api has been rate-limited ˙◠˙{")"}.
                     </p>
                     <p className="text-xs text-gray-400">
                       visit my{" "}
@@ -695,22 +786,53 @@ const App = () => {
                   ? "Short Break"
                   : "Long Break"}
               </div> */}
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2">
                 <button
                   onClick={isTimerRunning ? pauseTimer : startTimer}
-                  className="p-1 bg-gray-800 rounded hover:bg-gray-700"
+                  className={`p-1 rounded hover:bg-gray-700 ${
+                    selectedTimerButton === 0 ? " " : ""
+                  }`}
                 >
                   {isTimerRunning ? (
-                    <Pause className="w-4 h-4" />
+                    <div className="flex items-center gap-2">
+                      <Pause className="w-4 h-4" />
+                      <p
+                        className={
+                          selectedTimerButton === 0 ? "font-bold underline" : ""
+                        }
+                      >
+                        pause
+                      </p>
+                    </div>
                   ) : (
-                    <Play className="w-4 h-4" />
+                    <div className="flex items-center gap-2">
+                      <Play className="w-4 h-4" />
+                      <p
+                        className={
+                          selectedTimerButton === 0 ? "font-bold underline" : ""
+                        }
+                      >
+                        start
+                      </p>
+                    </div>
                   )}
                 </button>
                 <button
                   onClick={resetTimer}
-                  className="p-1 bg-gray-800 rounded hover:bg-gray-700"
+                  className={`p-1 rounded hover:bg-gray-700 ${
+                    selectedTimerButton === 1 ? "" : ""
+                  }`}
                 >
-                  <RotateCcw className="w-4 h-4" />
+                  <div className="flex items-center gap-2">
+                    <RotateCcw className="w-4 h-4" />
+                    <p
+                      className={
+                        selectedTimerButton === 1 ? "font-bold underline" : ""
+                      }
+                    >
+                      reset
+                    </p>
+                  </div>
                 </button>
               </div>
             </div>
@@ -854,6 +976,9 @@ const App = () => {
                                 alt={selectedExperienceData.title}
                                 className="w-full h-48 object-cover rounded-lg mb-4 max-w-2xl mx-auto"
                               />
+                              <p className="text-gray-300 mt-2 max-w-2xl mx-auto">
+                                {selectedExperienceData.date}
+                              </p>
                               <p className="text-gray-400 mt-2 max-w-2xl mx-auto">
                                 {selectedExperienceData.description}
                               </p>
@@ -988,6 +1113,9 @@ const App = () => {
                                 alt={selectedProjectData.title}
                                 className="mx-auto h-48 object-contain rounded-lg mb-4"
                               />
+                              <p className="text-gray-300 mt-2 max-w-2xl mx-auto">
+                                {selectedProjectData.date}
+                              </p>
                               <p className="text-gray-400 mt-2 max-w-2xl mx-auto">
                                 {selectedProjectData.description}
                               </p>
@@ -1121,7 +1249,7 @@ const App = () => {
                   ) : (
                     <p>
                       i'm not currently listening to music {"("}or my spotify
-                      api has been rate-limited lol{")"}.
+                      api has been rate-limited ˙◠˙{")"}.
                       <br />
                       feel free to visit my{" "}
                       <a
@@ -1258,21 +1386,41 @@ const App = () => {
                   <div className="flex gap-4 mb-8">
                     <button
                       onClick={isTimerRunning ? pauseTimer : startTimer}
-                      className="px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
+                      className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-colors ${
+                        selectedExpandedTimerButton === 0 ? "font-bold" : ""
+                      }`}
                     >
                       {isTimerRunning ? (
                         <Pause className="w-5 h-5" />
                       ) : (
                         <Play className="w-5 h-5" />
                       )}
-                      {isTimerRunning ? "pause" : "start"}
+                      <span
+                        className={
+                          selectedExpandedTimerButton === 0
+                            ? "font-bold underline"
+                            : ""
+                        }
+                      >
+                        {isTimerRunning ? "pause" : "start"}
+                      </span>
                     </button>
                     <button
                       onClick={resetTimer}
-                      className="px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
+                      className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-colors ${
+                        selectedExpandedTimerButton === 1 ? "" : ""
+                      }`}
                     >
                       <RotateCcw className="w-5 h-5" />
-                      reset
+                      <span
+                        className={
+                          selectedExpandedTimerButton === 1
+                            ? "font-bold underline"
+                            : ""
+                        }
+                      >
+                        reset
+                      </span>
                     </button>
                   </div>
 
@@ -1281,7 +1429,7 @@ const App = () => {
                       custom timer (minutes):
                     </p>
                     <div className="flex gap-2 mb-4">
-                      {[5, 15, 30, 45, 60].map((minutes) => (
+                      {[5, 15, 30, 45, 60].map((minutes, index) => (
                         <button
                           key={minutes}
                           onClick={() => setCustomTimer(minutes)}
@@ -1289,9 +1437,19 @@ const App = () => {
                             customMinutes === minutes
                               ? "font-bold text-blue-300"
                               : ""
+                          } ${
+                            selectedExpandedTimerButton === index + 2 ? "" : ""
                           }`}
                         >
-                          {minutes}m
+                          <span
+                            className={
+                              selectedExpandedTimerButton === index + 2
+                                ? "font-bold underline"
+                                : ""
+                            }
+                          >
+                            {minutes}m
+                          </span>
                         </button>
                       ))}
                     </div>
