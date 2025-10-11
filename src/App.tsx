@@ -3,6 +3,7 @@ import type { NowPlayingData, TopTracksData } from "./types/indexs";
 import { experiencesData, projectsData, asciiList } from "./data/info";
 import { Taskbar } from "./components/Taskbar";
 import { HeadphoneOff } from "lucide-react";
+import { Play, Pause, RotateCcw } from "lucide-react";
 
 const App = () => {
   const [time, setTime] = useState(new Date());
@@ -30,6 +31,17 @@ const App = () => {
   const [lastCommand, setLastCommand] = useState("");
   const [response, setResponse] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // timer state
+  const [timerMinutes, setTimerMinutes] = useState(30); // default pomodoro time
+  const [timerSeconds, setTimerSeconds] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [timerMode, setTimerMode] = useState<"work" | "break" | "longBreak">(
+    "work"
+  );
+  const [pomodoroCount, setPomodoroCount] = useState(0);
+  const [customMinutes, setCustomMinutes] = useState(30);
+  const [isTimerOpen, setIsTimerOpen] = useState(false);
 
   // pick random ascii art
   useEffect(() => {
@@ -279,10 +291,12 @@ const App = () => {
     inputRef.current?.focus();
   };
 
-  // keyboard navigation between for windows using < and >
-  const windowOrder = ["me", "experience", "projects", "music", "cli"];
-
   useEffect(() => {
+    // keyboard navigation between for windows using < and >
+    const windowOrder = isTimerOpen
+      ? ["me", "experience", "projects", "music", "timer", "cli"]
+      : ["me", "experience", "projects", "music", "cli"];
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (expandWindow) return;
 
@@ -307,10 +321,111 @@ const App = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedWindow, expandWindow]);
+  }, [selectedWindow, expandWindow, isTimerOpen]);
+
+  // Handle closing timer when it's the selected window
+  useEffect(() => {
+    if (!isTimerOpen && selectedWindow === "timer") {
+      setSelectedWindow("music");
+      setExpandWindow("");
+    }
+  }, [isTimerOpen, selectedWindow]);
+
+  useEffect(() => {
+    let interval: number;
+
+    if (isTimerRunning && (timerMinutes > 0 || timerSeconds > 0)) {
+      interval = setInterval(() => {
+        if (timerSeconds > 0) {
+          setTimerSeconds(timerSeconds - 1);
+        } else if (timerMinutes > 0) {
+          setTimerMinutes(timerMinutes - 1);
+          setTimerSeconds(59);
+        }
+      }, 1000);
+    } else if (isTimerRunning && timerMinutes === 0 && timerSeconds === 0) {
+      // Timer finished
+      setIsTimerRunning(false);
+      playNotificationSound();
+      handleTimerComplete();
+    }
+
+    return () => clearInterval(interval);
+  }, [isTimerRunning, timerMinutes, timerSeconds]);
+
+  // Add timer helper functions
+  const playNotificationSound = () => {
+    // Create audio context for notification sound
+    const audioContext = new (window.AudioContext ||
+      (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+    oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.1);
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.2);
+
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.01,
+      audioContext.currentTime + 0.5
+    );
+
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.5);
+  };
+
+  const handleTimerComplete = () => {
+    if (timerMode === "work") {
+      setPomodoroCount((prev) => prev + 1);
+      if (pomodoroCount + 1 >= 4) {
+        setTimerMode("longBreak");
+        setTimerMinutes(15);
+        setPomodoroCount(0);
+      } else {
+        setTimerMode("break");
+        setTimerMinutes(5);
+      }
+    } else {
+      setTimerMode("work");
+      setTimerMinutes(customMinutes);
+    }
+    setTimerSeconds(0);
+  };
+
+  const startTimer = () => setIsTimerRunning(true);
+  const pauseTimer = () => setIsTimerRunning(false);
+  const resetTimer = () => {
+    setIsTimerRunning(false);
+    setTimerMinutes(customMinutes);
+    setTimerSeconds(0);
+    setTimerMode("work");
+    setPomodoroCount(0);
+  };
+
+  const setCustomTimer = (minutes: number) => {
+    setCustomMinutes(minutes);
+    setTimerMinutes(minutes);
+    setTimerSeconds(0);
+    setIsTimerRunning(false);
+  };
+
+  // Add event listener for taskbar timer button
+  useEffect(() => {
+    const handleOpenTimer = () => {
+      setIsTimerOpen(true);
+      setSelectedWindow("timer");
+    };
+
+    window.addEventListener("openTimer", handleOpenTimer);
+    return () => window.removeEventListener("openTimer", handleOpenTimer);
+  }, []);
 
   return (
-    <div className="lg:h-screen w-screen flex items-center justify-center bg-gray-800 text-white pb-24 lg:pb-0">
+    <div className="lg:h-screen w-screen flex items-center justify-center bg-gray-800 text-white pb-24 lg:pb-0 ">
       {/* Bento box grid */}
       <div className="relative grid grid-cols-2 lg:grid-cols-3 w-full mx-1 gap-2 bg-gray-900 rounded-2xl p-1.5 border border-gray-700 max-w-5xl lg:justify-center shadow-xl">
         {/* Main terminal window */}
@@ -377,10 +492,10 @@ const App = () => {
             }`}
           >
             experience - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer" />
+            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer" />
             <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
               onClick={() => setExpandWindow("experience")}
             />
           </p>
@@ -420,10 +535,10 @@ const App = () => {
             }`}
           >
             projects - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer" />
+            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer" />
             <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
               onClick={() => setExpandWindow("projects")}
             />
           </p>
@@ -451,7 +566,11 @@ const App = () => {
 
         {/* Music */}
         <div
-          className={` bg-black col-span-2 border border-gray-700 rounded-xl ${
+          className={` bg-black ${
+            isTimerOpen
+              ? "col-span-2 lg:col-span-1"
+              : "col-span-2 lg:col-span-2"
+          } border border-gray-700 rounded-xl ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500`}
           onClick={() => {
@@ -465,10 +584,10 @@ const App = () => {
             }`}
           >
             music - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer" />
+            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer" />
             <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
               onClick={() => setExpandWindow("music")}
             />
           </p>
@@ -536,6 +655,67 @@ const App = () => {
             )}
           </div>
         </div>
+
+        {/* Timer - only render when open */}
+        {isTimerOpen && (
+          <div
+            className={` bg-black col-span-2 lg:col-span-1 border border-gray-700 rounded-xl ${
+              expandWindow ? "opacity-0" : ""
+            } transition-opacity duration-500`}
+            onClick={() => {
+              setSelectedWindow("timer");
+              console.log(selectedWindow);
+            }}
+          >
+            <p
+              className={`text-black rounded-t-xl text-sm text-center relative ${
+                selectedWindow === "timer" ? "bg-white" : "bg-gray-400"
+              }`}
+            >
+              pomodoro timer - zsh
+              <p
+                className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                onClick={() => setIsTimerOpen(false)}
+              />
+              <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer" />
+              <p
+                className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                onClick={() => setExpandWindow("timer")}
+              />
+            </p>
+            <div className="mt-2 mx-4 flex flex-col items-center justify-center h-32">
+              <div className="text-3xl font-mono mb-2">
+                {String(timerMinutes).padStart(2, "0")}:
+                {String(timerSeconds).padStart(2, "0")}
+              </div>
+              {/* <div className="text-xs text-gray-400 mb-2">
+                {timerMode === "work"
+                  ? "Work Time"
+                  : timerMode === "break"
+                  ? "Short Break"
+                  : "Long Break"}
+              </div> */}
+              <div className="flex gap-2">
+                <button
+                  onClick={isTimerRunning ? pauseTimer : startTimer}
+                  className="p-1 bg-gray-800 rounded hover:bg-gray-700"
+                >
+                  {isTimerRunning ? (
+                    <Pause className="w-4 h-4" />
+                  ) : (
+                    <Play className="w-4 h-4" />
+                  )}
+                </button>
+                <button
+                  onClick={resetTimer}
+                  className="p-1 bg-gray-800 rounded hover:bg-gray-700"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* CLI LLM about me */}
         <div
@@ -1031,6 +1211,101 @@ const App = () => {
                       className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"
                       placeholder="ask me anything about myself!"
                     />
+                  </div>
+                </div>
+              </div>
+            )}
+            {expandWindow === "timer" && isTimerOpen && (
+              <div className="w-full h-full bg-black border border-gray-700 rounded-xl flex flex-col">
+                <p
+                  className={`text-black rounded-t-xl text-sm text-center relative ${
+                    selectedWindow === "timer" ? "bg-white" : "bg-gray-400"
+                  }`}
+                >
+                  pomodoro timer - zsh
+                  <button
+                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => {
+                      setExpandWindow("");
+                      // setIsTimerOpen(false);
+                    }}
+                  />
+                  <button
+                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setExpandWindow("")}
+                  />
+                  <button
+                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setExpandWindow("timer")}
+                  />
+                </p>
+                <div className="flex-grow flex flex-col items-center justify-center p-8">
+                  <div className="text-6xl font-mono mb-4">
+                    {String(timerMinutes).padStart(2, "0")}:
+                    {String(timerSeconds).padStart(2, "0")}
+                  </div>
+                  {/* <div className="text-lg text-gray-400 mb-6">
+                    {timerMode === "work"
+                      ? "Work Time"
+                      : timerMode === "break"
+                      ? "Short Break"
+                      : "Long Break"}
+                  </div> */}
+                  <div className="text-sm text-gray-500 mb-8">
+                    pomodoros completed: {pomodoroCount}/4
+                  </div>
+
+                  <div className="flex gap-4 mb-8">
+                    <button
+                      onClick={isTimerRunning ? pauseTimer : startTimer}
+                      className="px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
+                    >
+                      {isTimerRunning ? (
+                        <Pause className="w-5 h-5" />
+                      ) : (
+                        <Play className="w-5 h-5" />
+                      )}
+                      {isTimerRunning ? "pause" : "start"}
+                    </button>
+                    <button
+                      onClick={resetTimer}
+                      className="px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
+                    >
+                      <RotateCcw className="w-5 h-5" />
+                      reset
+                    </button>
+                  </div>
+
+                  <div className=" max-w-md">
+                    <p className="text-sm text-gray-400 mb-4">
+                      custom timer (minutes):
+                    </p>
+                    <div className="flex gap-2 mb-4">
+                      {[5, 15, 30, 45, 60].map((minutes) => (
+                        <button
+                          key={minutes}
+                          onClick={() => setCustomTimer(minutes)}
+                          className={`px-3 py-2 rounded text-sm transition-colors ${
+                            customMinutes === minutes
+                              ? "font-bold text-blue-300"
+                              : ""
+                          }`}
+                        >
+                          {minutes}m
+                        </button>
+                      ))}
+                    </div>
+                    {/* <input
+                      type="number"
+                      min="0"
+                      max="120"
+                      value={customMinutes}
+                      onChange={(e) =>
+                        setCustomTimer(parseInt(e.target.value) || 25)
+                      }
+                      className="w-full p-2 rounded text-center"
+                      placeholder="Custom minutes"
+                    /> */}
                   </div>
                 </div>
               </div>

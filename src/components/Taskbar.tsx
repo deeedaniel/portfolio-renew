@@ -1,4 +1,4 @@
-import { Search, Paperclip, Mail } from "lucide-react";
+import { Search, Paperclip, Mail, Timer } from "lucide-react";
 import Tooltip from "./Tooltip";
 
 export const Taskbar = () => {
@@ -29,14 +29,18 @@ export const Taskbar = () => {
 
       {/* Icons section - larger touch targets on mobile */}
       <div className="flex justify-evenly gap-3 lg:gap-2 flex-shrink-0">
-        {/* <Tooltip text="Timer">
-          <div className="p-1">
-            <Hourglass
-              className="w-8 h-8 lg:w-6 lg:h-6 transition-all duration-300 bg-white rounded-full p-1.5 lg:p-1 cursor-pointer"
-              color="black"
-            />
-          </div>
-        </Tooltip> */}
+        <Tooltip text="Pomodoro Timer">
+          <button
+            onClick={() => {
+              // You'll need to pass these as props or use a context
+              // For now, this will just be a placeholder
+              window.dispatchEvent(new CustomEvent("openTimer"));
+            }}
+            className="p-1"
+          >
+            <Timer className="w-8 h-8 lg:w-6 lg:h-6 transition-all duration-300 bg-white rounded-full p-1.5 lg:p-1 cursor-pointer text-black" />
+          </button>
+        </Tooltip>
 
         <Tooltip text="GitHub">
           <a
