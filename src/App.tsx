@@ -1112,7 +1112,7 @@ const App = () => {
             {expandWindow === "experience" && (
               <>
                 {selectExperience !== "" ? (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-24 lg:pb-0">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-36 lg:pb-0">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "experience"
@@ -1201,7 +1201,7 @@ const App = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-24 lg:pb-0">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "experience"
@@ -1243,7 +1243,7 @@ const App = () => {
             {expandWindow === "projects" && (
               <>
                 {selectProject !== "" ? (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-36 lg:pb-0">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "projects"
