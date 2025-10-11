@@ -516,7 +516,7 @@ const App = () => {
   ]);
 
   return (
-    <div className="lg:h-screen w-screen flex items-center justify-center bg-black text-white pb-24 lg:pb-0 bg-[url('/creation_of_adam.jpeg')] bg-cover bg-center">
+    <div className="lg:h-screen w-screen flex items-center justify-center bg-black text-white pb-24 lg:pb-0 lg:bg-[url('/creation_of_adam.jpeg')] bg-cover bg-center">
       {/* Bento box grid */}
       <div className="relative grid grid-cols-2 lg:grid-cols-3 w-full mx-1 gap-2 bg-gray-900/40 bg-opacity-50 rounded-2xl p-1.5 border border-gray-700 max-w-5xl lg:justify-center shadow-xl">
         {/* Main terminal window */}
