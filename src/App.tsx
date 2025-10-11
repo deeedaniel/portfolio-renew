@@ -208,25 +208,62 @@ const App = () => {
     })();
   }, []);
 
-  // ask question to Gemini
-  async function askQuestion(q: String) {
+  // ask question to Gemini with client-side streaming
+  async function askQuestion(q: string, onChunk: (chunk: string) => void) {
     const res = await fetch("/api/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question: q }),
     });
-    const j = await res.json();
-    return j.answer;
+
+    const data = await res.json();
+    const fullResponse = data.answer;
+
+    // Stream the response word by word for that authentic feel
+    const words = fullResponse.split(" ");
+    let currentText = "";
+
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const chunk = (i === 0 ? "" : " ") + word;
+      currentText += chunk;
+      onChunk(chunk);
+
+      // Variable delay based on word length and punctuation for natural feel
+      let delay = 25 + Math.random() * 25; // Base 25-50ms
+
+      // Longer pause after punctuation
+      if (word.includes(".") || word.includes("!") || word.includes("?")) {
+        delay += 200 + Math.random() * 100;
+      } else if (word.includes(",") || word.includes(";")) {
+        delay += 100 + Math.random() * 50;
+      }
+
+      // Shorter delay for short words
+      if (word.length <= 2) {
+        delay *= 0.7;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
   }
 
   // handle command input
   const handleCommand = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && command) {
       setLastCommand(command);
-      // This is where you'll make your API call
-      const answer = await askQuestion(command);
-      setResponse(answer);
+      setResponse(""); // Clear previous response
       setCommand("");
+
+      // Stream the response
+      try {
+        await askQuestion(command, (chunk: string) => {
+          setResponse((prev) => prev + chunk);
+        });
+      } catch (error) {
+        console.error("Error streaming response:", error);
+        setResponse("sorry, something went wrong. try again?");
+      }
     }
   };
 
@@ -315,6 +352,10 @@ const App = () => {
               <p className=" ml-4 text-xs lg:text-sm">San Jose, CA</p>
               <p className=" ml-4 text-xs lg:text-sm">
                 {time.toLocaleTimeString()}
+              </p>
+              <p className=" ml-4 mt-2 text-xs hidden lg:block text-gray-400">
+                <p className="inline-block text-lg">☆</p> try using arrow keys &
+                enter to navigate!
               </p>
             </div>
           </div>
@@ -500,7 +541,7 @@ const App = () => {
         <div
           className={` bg-black col-span-2 lg:col-span-3 border border-gray-700 rounded-xl ${
             expandWindow ? "opacity-0" : ""
-          } transition-opacity duration-500 pb-3 overflow-y-auto`}
+          } transition-opacity duration-500 pb-3 flex flex-col max-h-56`}
           onClick={() => {
             setSelectedWindow("cli");
             focusInput();
@@ -525,7 +566,10 @@ const App = () => {
               onClick={() => setExpandWindow("cli")}
             />
           </p>
-          <div className="mt-2 mx-4 font-mono text-sm" onClick={focusInput}>
+          <div
+            className="mt-2 mx-4 font-mono text-sm flex-grow overflow-y-auto"
+            onClick={focusInput}
+          >
             {lastCommand && (
               <>
                 <div className="flex items-center">
@@ -545,8 +589,6 @@ const App = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleCommand(e);
-                    setResponse("...");
-                    setCommand("");
                   }
                 }}
                 className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"
@@ -587,6 +629,9 @@ const App = () => {
                     <p className=" ml-4 text-xs">Third year, CS @ SJSU</p>
                     <p className=" ml-4 text-xs">San Jose, CA</p>
                     <p className=" ml-4 text-xs">{time.toLocaleTimeString()}</p>
+                    <p className=" ml-4 text-xs hidden lg:block">
+                      try using arrow keys & enter to navigate!
+                    </p>
                   </div>
                 </div>
               </div>
@@ -981,8 +1026,6 @@ const App = () => {
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           handleCommand(e);
-                          setResponse("...");
-                          setCommand("");
                         }
                       }}
                       className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"

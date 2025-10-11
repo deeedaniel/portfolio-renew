@@ -15,3 +15,30 @@ button {
     font-size: 16px !important;
   }
 }
+
+/* For WebKit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px; /* Adjust scrollbar width */
+  height: 8px; /* Adjust scrollbar height for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Remove the white/light gray background */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6b7280; /* Gray-500 to match your theme */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563; /* Gray-600 on hover for better contrast */
+}
+
+/* For Firefox */
+body {
+  /* Or the specific element with the scrollbar */
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: #6b7280 transparent; /* thumb color and transparent track */
+}
