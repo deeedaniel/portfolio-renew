@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import type { NowPlayingData, TopTracksData } from "./types/indexs";
 import { experiencesData, projectsData, asciiList } from "./data/info";
 import { Taskbar } from "./components/Taskbar";
+import { HeadphoneOff } from "lucide-react";
 
 const App = () => {
   const [time, setTime] = useState(new Date());
@@ -272,7 +273,7 @@ const App = () => {
   }, [selectedWindow, expandWindow]);
 
   return (
-    <div className="lg:h-screen w-screen flex items-center justify-center bg-gray-800 text-white">
+    <div className="lg:h-screen w-screen flex items-center justify-center bg-gray-800 text-white pb-24 lg:pb-0">
       {/* Bento box grid */}
       <div className="relative grid grid-cols-2 lg:grid-cols-3 w-full mx-1 gap-2 bg-gray-900 rounded-2xl p-1.5 border border-gray-700 max-w-5xl lg:justify-center shadow-xl">
         {/* Main terminal window */}
@@ -348,7 +349,7 @@ const App = () => {
                 key={index}
                 className={` rounded-md transition-all duration-150 cursor-pointer ${
                   index === experienceIndex
-                    ? " text-white"
+                    ? " text-white font-bold"
                     : "bg-transparent text-blue-300 hover:bg-gray-800"
                 }`}
                 onClick={() => {
@@ -356,7 +357,7 @@ const App = () => {
                   setSelectExperience(experience.title);
                 }}
               >
-                {experience.title} {index == experienceIndex ? " <" : ""}
+                {experience.title} {index == experienceIndex ? " ❮" : ""}
               </div>
             ))}
           </div>
@@ -391,7 +392,7 @@ const App = () => {
                 key={index}
                 className={` rounded-md transition-all duration-150 cursor-pointer ${
                   index === projectIndex
-                    ? " text-white"
+                    ? " text-white font-bold"
                     : "bg-transparent text-blue-300 hover:bg-gray-800"
                 }`}
                 onClick={() => {
@@ -401,7 +402,7 @@ const App = () => {
                 }}
               >
                 {project.title}
-                {index === projectIndex ? " <" : ""}
+                {index === projectIndex ? " ❮" : ""}
               </div>
             ))}
           </div>
@@ -450,18 +451,27 @@ const App = () => {
               </div>
             ) : (
               <p>
-                i'm not currently listening to music,
-                <br />
-                but feel free to visit my{" "}
-                <a
-                  href="https://open.spotify.com/user/cringedlol"
-                  className="text-blue-400 underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  spotify
-                </a>
-                !
+                <div className="flex items-center">
+                  <HeadphoneOff className="w-16 h-16 p-3 rounded-md mr-4 bg-gray-800" />
+                  <div>
+                    <p className="text-xs lg:text-sm font-medium">
+                      i'm not currently listening to music {"("}or my spotify
+                      api has been rate-limited lol{")"}.
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      visit my{" "}
+                      <a
+                        href="https://open.spotify.com/user/cringedlol"
+                        className="text-blue-400 underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        spotify
+                      </a>
+                      !
+                    </p>
+                  </div>
+                </div>
               </p>
             )}
             {topTracks && topTracks.tracks ? (
@@ -638,7 +648,7 @@ const App = () => {
                                     >
                                       {link.name}{" "}
                                       {index === selectedExperienceLinkIndex
-                                        ? "< "
+                                        ? "❮ "
                                         : ""}
                                     </a>
                                   )
@@ -658,7 +668,7 @@ const App = () => {
                                   back to experiences{" "}
                                   {selectedExperienceLinkIndex ===
                                   selectedExperienceData.links.length
-                                    ? "< "
+                                    ? "❮ "
                                     : ""}
                                 </button>
                               </div>
@@ -695,13 +705,13 @@ const App = () => {
                           key={index}
                           className={` rounded-md transition-all duration-150 cursor-pointer ${
                             index === experienceIndex
-                              ? " text-white"
+                              ? " text-white font-bold"
                               : "bg-transparent text-blue-300 hover:bg-gray-800"
                           }`}
                           onClick={() => setSelectExperience(experience.title)}
                         >
                           {experience.title}{" "}
-                          {index == experienceIndex ? " <" : ""}
+                          {index == experienceIndex ? " ❮" : ""}
                         </div>
                       ))}
                     </div>
@@ -771,7 +781,7 @@ const App = () => {
                                       }`}
                                     >
                                       {link.name}{" "}
-                                      {index === selectedLinkIndex ? "< " : ""}
+                                      {index === selectedLinkIndex ? "❮ " : ""}
                                     </a>
                                   )
                                 )}
@@ -790,7 +800,7 @@ const App = () => {
                                   back to projects{" "}
                                   {selectedLinkIndex ===
                                   selectedProjectData.links.length
-                                    ? "< "
+                                    ? "❮ "
                                     : ""}
                                 </button>
                               </div>
@@ -830,13 +840,13 @@ const App = () => {
                           key={index}
                           className={` rounded-md transition-all duration-150 cursor-pointer ${
                             index === projectIndex
-                              ? " text-white"
+                              ? " text-white font-bold"
                               : "bg-transparent text-blue-300 hover:bg-gray-800"
                           }`}
                           onClick={() => setSelectProject(project.title)}
                         >
                           {project.title}
-                          {index === projectIndex ? " <" : ""}
+                          {index === projectIndex ? " ❮" : ""}
                         </div>
                       ))}
                     </div>
@@ -884,7 +894,21 @@ const App = () => {
                       </div>
                     </div>
                   ) : (
-                    <p>i'm not currently listening to music anymore!</p>
+                    <p>
+                      i'm not currently listening to music {"("}or my spotify
+                      api has been rate-limited lol{")"}.
+                      <br />
+                      feel free to visit my{" "}
+                      <a
+                        href="https://open.spotify.com/user/cringedlol"
+                        className="text-blue-400 underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        spotify
+                      </a>
+                      !
+                    </p>
                   )}
                   {topTracks && topTracks.tracks ? (
                     <div className="flex flex-col">
@@ -906,7 +930,7 @@ const App = () => {
                       ))}
                     </div>
                   ) : (
-                    <p>i'm not currently listening to music anymore!</p>
+                    <p>top tracks loading...</p>
                   )}
                 </div>
               </div>
