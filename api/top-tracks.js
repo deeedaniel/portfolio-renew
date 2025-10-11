@@ -1,47 +1,24 @@
-// /api/top-tracks.js
+import { getValidAccessToken } from "./token-manager.js";
 
 let cachedTracks = null;
 let lastFetchTime = 0;
 
 export default async function handler(req, res) {
-  const CACHE_TTL = 1000 * 60 * 1440; // 1 day since this is top tracks, wont change often
+  const CACHE_TTL = 1000 * 60 * 1440; // 1 day since this is top tracks
 
   // Step 1: Serve from cache if recent
   if (cachedTracks && Date.now() - lastFetchTime < CACHE_TTL) {
     return res.status(200).json({ tracks: cachedTracks, cached: true });
   }
 
-  // Step 2: Otherwise fetch fresh
   try {
-    const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
-    const tokenParams = new URLSearchParams({
-      grant_type: "refresh_token",
-      refresh_token: refreshToken,
-    });
-
-    const credentials = Buffer.from(
-      `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
-    ).toString("base64");
-
-    const tokenRes = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: {
-        Authorization: `Basic ${credentials}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: tokenParams.toString(),
-    });
-
-    const tokenData = await tokenRes.json();
-    if (!tokenData.access_token)
-      return res
-        .status(500)
-        .json({ error: "Failed to refresh access token", details: tokenData });
+    // Step 2: Get valid access token (will refresh if needed)
+    const accessToken = await getValidAccessToken();
 
     const spRes = await fetch(
       "https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=medium_term",
       {
-        headers: { Authorization: `Bearer ${tokenData.access_token}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
 
@@ -56,9 +33,20 @@ export default async function handler(req, res) {
 
     if (!spRes.ok) {
       const text = await spRes.text();
-      return res
-        .status(spRes.status)
-        .json({ error: "Spotify API error", details: text });
+
+      // Fallback to cache on error
+      if (cachedTracks) {
+        return res.status(200).json({
+          tracks: cachedTracks,
+          cached: true,
+          warning: "Spotify API error, showing cached data",
+        });
+      }
+
+      return res.status(spRes.status).json({
+        error: "Spotify API error",
+        details: text,
+      });
     }
 
     const data = await spRes.json();
@@ -77,7 +65,9 @@ export default async function handler(req, res) {
     lastFetchTime = Date.now();
 
     return res.status(200).json({ tracks: simplified, cached: false });
-  } catch (err) {
+  } catch (error) {
+    console.error("Error in top-tracks API:", error);
+
     if (cachedTracks) {
       return res.status(200).json({
         tracks: cachedTracks,
@@ -85,6 +75,10 @@ export default async function handler(req, res) {
         warning: "API failed, showing cached data",
       });
     }
-    return res.status(500).json({ error: "Server error", details: err });
+
+    return res.status(500).json({
+      error: "Server error",
+      details: error.message,
+    });
   }
 }
