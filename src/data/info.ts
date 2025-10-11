@@ -23,7 +23,7 @@ export const experiencesData = [
     title: "SWE Intern @ SCE",
     date: "June-July, 2024",
     description:
-      "This was my first ever Software Engineering internship, which was hosted by the Software and Computer Engineering Society at SJSU. Since this was my first internship, I worked alongside a mentor who guided me through basic full-stack development along with containerization using Docker. I worked on a web-app where users can find the best professors for their classes based on ratings from ratemyprofessors.com.",
+      "This was my first ever Software Engineering internship, which was hosted by the Software and Computer Engineering Society at SJSU. I worked alongside a mentor who guided me through basic full-stack development along with Docker containerization. I worked on a web-app where students can find the best professors for their classes based on ratings from ratemyprofessors.com.",
     image: "/sce.jpg",
     links: [{ name: "View SCE's page", url: "https://sce.sjsu.edu/" }],
   },
@@ -51,7 +51,7 @@ export const projectsData = [
     window: "Chillguy.ai",
     date: "Feb 15-16, 2025",
     description:
-      "My first hackathon experience was at Santa Clara University's annual Hack for Humanity. This hackathon was focused on creating solutions for social good. My team and I built a web-app where users can get proactive mental health calls from an AI assistant. We utilized Eleven Labs and Twilio to create a realistic voice call experience. We ended up winning 2nd place overall!",
+      "My first ever hackathon experience was at Santa Clara University's annual Hack for Humanity. My team and I built Chillguy.ai, a web-app where users can get proactive mental health calls from an AI assistant. We utilized Eleven Labs and Twilio to create a realistic voice call experience. We ended up winning 2nd place overall!",
     image: "/chillguy.jpeg",
     links: [
       { name: "Devpost", url: "https://devpost.com/software/chillguy-ai" },
@@ -63,7 +63,7 @@ export const projectsData = [
     window: "VIVI",
     date: "Apr 19-20, 2025",
     description:
-      "From Dec. 2024 to Apr. 2025, I tutored a young neurodivergent student. One particular challenge we faced was that the student had difficulty reading, specifically understanding what he was reading and picturing it. \n\nThis gave me the idea to create an AI assistant to assist those having difficulty picturing what they read. At HackDavis, my team and I built this idea, calling it VIVI, visual interpretation for verbal input. We built it using React, Python, Computer Vision, and DALLE-3 image generation. In this web-app, we tracked user's gaze to track when they were reading and recorded their voice to generate images that help them visualize what they read.",
+      "From Dec. 2024 to Apr. 2025, I tutored a young neurodivergent student. One particular challenge we faced was that he had difficulty reading, specifically understanding what he was reading and imagining it. \n\nThis gave me the idea to create an AI assistant to assist those having difficulty picturing what they read. At HackDavis, my team and I built this idea. We called it VIVI (visual interpretation for verbal input). We built it using React, Python, Computer Vision, and DALLE-3 image generation. In this web-app, we track user's gaze when they are reading and record their voice. Once they look back at the screen, we generate an image to visualize what they had read.",
 
     image: "/vivi.png",
     links: [

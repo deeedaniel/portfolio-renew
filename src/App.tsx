@@ -554,7 +554,10 @@ const App = () => {
                 daniel@MacbookPro
               </p>
               <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
-              <p className=" ml-4 text-xs lg:text-sm">Third year, CS @ SJSU</p>
+              <p className=" ml-4 text-xs lg:text-sm">CS @ SJSU</p>
+              <p className=" ml-4 text-xs lg:text-sm">
+                Expected grad: May 2027
+              </p>
               <p className=" ml-4 text-xs lg:text-sm">San Jose, CA</p>
               <p className=" ml-4 text-xs lg:text-sm">
                 {time.toLocaleTimeString()}
