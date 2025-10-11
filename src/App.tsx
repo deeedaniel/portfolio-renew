@@ -31,6 +31,7 @@ const App = () => {
   const [lastCommand, setLastCommand] = useState("");
   const [response, setResponse] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const meWindowRef = useRef<HTMLDivElement>(null);
 
   // timer state
   const [timerMinutes, setTimerMinutes] = useState(30); // default pomodoro time
@@ -65,6 +66,36 @@ const App = () => {
   // handle keyboard navigation between list of exp & projs
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedWindow === "me") {
+        if (e.key === "Enter") {
+          setExpandWindow("me");
+        }
+      }
+      if (expandWindow === "me") {
+        if (e.key === "Enter") {
+          setExpandWindow("");
+        } else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+          e.preventDefault();
+          if (meWindowRef.current) {
+            const scrollAmount = 50; // pixels to scroll
+            if (e.key === "ArrowUp") {
+              meWindowRef.current.scrollTop -= scrollAmount;
+            } else {
+              meWindowRef.current.scrollTop += scrollAmount;
+            }
+          }
+        }
+      }
+      if (selectedWindow === "music") {
+        if (e.key === "Enter") {
+          setExpandWindow("music");
+        }
+      }
+      if (expandWindow === "music") {
+        if (e.key === "Enter") {
+          setExpandWindow("");
+        }
+      }
       if (selectedWindow === "experience") {
         if (selectExperience) {
           // Navigation within expanded experience (for links)
@@ -166,6 +197,7 @@ const App = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [
     selectedWindow,
+    expandWindow,
     experienceIndex,
     projectIndex,
     selectProject,
@@ -174,14 +206,34 @@ const App = () => {
     selectedExperienceLinkIndex,
   ]);
 
-  // Reset selected link index when project changes
+  // Reset selected link index when project changes - default to "back" button
   useEffect(() => {
-    setSelectedLinkIndex(0);
+    if (selectProject) {
+      const selectedProjectData = projectsData.find(
+        (p) => p.title === selectProject
+      );
+      if (selectedProjectData) {
+        // Set to the "back" button index (which is after all links)
+        setSelectedLinkIndex(selectedProjectData.links.length);
+      }
+    } else {
+      setSelectedLinkIndex(0);
+    }
   }, [selectProject]);
 
-  // Reset selected experience link index when experience changes
+  // Reset selected experience link index when experience changes - default to "back" button
   useEffect(() => {
-    setSelectedExperienceLinkIndex(0);
+    if (selectExperience) {
+      const selectedExperienceData = experiencesData.find(
+        (exp) => exp.title === selectExperience
+      );
+      if (selectedExperienceData) {
+        // Set to the "back" button index (which is after all links)
+        setSelectedExperienceLinkIndex(selectedExperienceData.links.length);
+      }
+    } else {
+      setSelectedExperienceLinkIndex(0);
+    }
   }, [selectExperience]);
 
   // Spotify functions
@@ -287,6 +339,13 @@ const App = () => {
       inputRef.current?.blur();
     }
   }, [selectedWindow]);
+
+  // Auto-focus the expanded me window for keyboard navigation
+  useEffect(() => {
+    if (expandWindow === "me" && meWindowRef.current) {
+      meWindowRef.current.focus();
+    }
+  }, [expandWindow]);
 
   const focusInput = () => {
     inputRef.current?.focus();
@@ -425,6 +484,28 @@ const App = () => {
     return () => window.removeEventListener("openTimer", handleOpenTimer);
   }, []);
 
+  // Prevent background scrolling when window is expanded on mobile
+  useEffect(() => {
+    if (expandWindow) {
+      // Lock body scroll
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
+    } else {
+      // Unlock body scroll
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+    };
+  }, [expandWindow]);
+
   // Add this new state variable for expanded timer navigation (near the other timer states around line 45)
   const [selectedExpandedTimerButton, setSelectedExpandedTimerButton] =
     useState(0);
@@ -534,7 +615,7 @@ const App = () => {
               selectedWindow === "me" ? "bg-white" : "bg-gray-400"
             }`}
           >
-            info - zsh
+            me - zsh
             <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
             <button
               className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
@@ -556,7 +637,7 @@ const App = () => {
               <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
               <p className=" ml-4 text-xs lg:text-sm">CS @ SJSU</p>
               <p className=" ml-4 text-xs lg:text-sm">
-                Expected grad: May 2027
+                Expected Grad: May 2027
               </p>
               <p className=" ml-4 text-xs lg:text-sm">San Jose, CA</p>
               <p className=" ml-4 text-xs lg:text-sm">
@@ -593,11 +674,11 @@ const App = () => {
               onClick={() => setExpandWindow("experience")}
             />
           </p>
-          <div className="mt-2 mx-4">
+          <div className="my-2 mx-4">
             {experiencesData.map((experience, index) => (
               <div
                 key={index}
-                className={` rounded-md transition-all duration-150 cursor-pointer ${
+                className={`rounded-md text-sm lg:text-base transition-all duration-150 cursor-pointer my-2 lg:my-1 ${
                   index === experienceIndex
                     ? " text-white font-bold"
                     : "bg-transparent text-blue-300"
@@ -640,7 +721,7 @@ const App = () => {
             {projectsData.map((project, index) => (
               <div
                 key={index}
-                className={` rounded-md transition-all duration-150 cursor-pointer ${
+                className={` rounded-md text-sm lg:text-base transition-all duration-150 cursor-pointer my-2 lg:my-1 ${
                   index === projectIndex
                     ? " text-white font-bold"
                     : "bg-transparent text-blue-300"
@@ -777,7 +858,7 @@ const App = () => {
                 onClick={() => setExpandWindow("timer")}
               />
             </p>
-            <div className="mt-2 mx-4 flex flex-col items-center justify-center h-32">
+            <div className="mt-2 mx-4 flex flex-col items-center justify-center h-48">
               <div className="text-3xl font-mono mb-2">
                 {String(timerMinutes).padStart(2, "0")}:
                 {String(timerSeconds).padStart(2, "0")}
@@ -835,6 +916,23 @@ const App = () => {
                     >
                       reset
                     </p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => setExpandWindow("timer")}
+                  className={`p-1 rounded hover:bg-gray-700 ${
+                    selectedTimerButton === 2 ? "" : ""
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    {/* <Pencil className="w-4 h-4" />
+                    <p
+                      className={
+                        selectedTimerButton === 2 ? "font-bold underline" : ""
+                      }
+                    >
+                      edit
+                    </p> */}
                   </div>
                 </button>
               </div>
@@ -905,10 +1003,14 @@ const App = () => {
 
         {/* Expanded overlay when user clicks */}
         {expandWindow && (
-          <div className="absolute inset-0 z-20 transition-opacity duration-300">
+          <div className="lg:absolute lg:inset-0 fixed inset-0 z-20 transition-opacity duration-300 lg:h-full h-screen max-h-screen overflow-y-auto flex items-center justify-center lg:items-stretch lg:justify-stretch">
             {expandWindow === "me" && (
-              <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl">
-                <p className="text-black bg-gray-300 rounded-t-xl text-sm text-center relative">
+              <div
+                ref={meWindowRef}
+                className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto focus:outline-none relative"
+                tabIndex={0}
+              >
+                <p className="text-black bg-gray-300 rounded-t-xl text-sm text-center sticky top-0 left-0 right-0">
                   me - zsh
                   <button
                     className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
@@ -923,28 +1025,63 @@ const App = () => {
                     onClick={() => setExpandWindow("me")}
                   />
                 </p>
-                <div className="my-auto flex">
+                <div className=" flex mt-6">
                   <p className="text-[4px] text-blue-100 font-mono whitespace-pre min-w-1/2 text-center">
                     {selectedAscii}
                   </p>
                   <div className="mx-auto  min-w-1/2 mt-2">
-                    <p className="text-blue-300 text-sm">daniel@MacbookPro</p>
-                    {/* <p className="ml-4">daniel's website</p> */}
-                    <p className=" ml-4 text-xs">Full Stack</p>
-                    <p className=" ml-4 text-xs">Third year, CS @ SJSU</p>
-                    <p className=" ml-4 text-xs">San Jose, CA</p>
-                    <p className=" ml-4 text-xs">{time.toLocaleTimeString()}</p>
-                    <p className=" ml-4 text-xs hidden lg:block">
-                      try using arrow keys & enter to navigate!
+                    <p className="text-blue-300 text-sm lg:text-lg">
+                      daniel@MacbookPro
+                    </p>
+                    <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
+                    <p className=" ml-4 text-xs lg:text-sm">CS @ SJSU</p>
+                    <p className=" ml-4 text-xs lg:text-sm">
+                      Expected Grad: May 2027
+                    </p>
+                    <p className=" ml-4 text-xs lg:text-sm">San Jose, CA</p>
+                    <p className=" ml-4 text-xs lg:text-sm">
+                      {time.toLocaleTimeString()}
+                    </p>
+                    <p className=" ml-4 mt-2 text-xs hidden lg:block text-gray-400">
+                      <p className="inline-block text-lg">☆</p> try using arrow
+                      keys & enter to navigate!
                     </p>
                   </div>
+                </div>
+                <div className="flex flex-col gap-5 max-w-2xl mx-auto mt-4 mb-10 px-4 ">
+                  <p className="text-gray-200">Hello!</p>
+                  <p className="text-gray-200">
+                    Welcome to my portfolio, I hope you like it!
+                  </p>
+                  <p className="text-gray-200">
+                    Back in high school, I took AP Computer Science for fun. I
+                    thought it was a really fun class, so when applying to
+                    colleges, I picked Computer Science as my major not really
+                    knowing what it was about. Since then, I have really fell in
+                    love with coding.
+                  </p>
+                  <p className="text-gray-200">
+                    I'm currently in my third year at SJSU, and I'm expected to
+                    graduate in May 2027. I'm also working part-time as a
+                    full-stack developer at TwinMind.
+                  </p>
+                  <p className="text-gray-200">
+                    Outside of school, I like to film & edit videos, playing
+                    basketball, watching movies/shows/anime, and listening to
+                    music.
+                  </p>
+                  <p className="text-gray-200">
+                    I'm currently focused on improving my engineering skills and
+                    searching for Summer 2026 internships.
+                  </p>
+                  <p className="text-gray-200">✉︎ nguyendaniel1312@gmail.com</p>
                 </div>
               </div>
             )}
             {expandWindow === "experience" && (
               <>
                 {selectExperience !== "" ? (
-                  <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "experience"
@@ -1033,7 +1170,7 @@ const App = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "experience"
@@ -1075,7 +1212,7 @@ const App = () => {
             {expandWindow === "projects" && (
               <>
                 {selectProject !== "" ? (
-                  <div className="w-full min-h-full bg-black/80 border border-gray-700 rounded-xl">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "projects"
@@ -1168,7 +1305,7 @@ const App = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "projects"
@@ -1211,7 +1348,7 @@ const App = () => {
               </>
             )}
             {expandWindow === "music" && (
-              <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl">
+              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
                 <p
                   className={`text-black rounded-t-xl text-sm text-center relative ${
                     selectedWindow === "music" ? "bg-white" : "bg-gray-400"
@@ -1251,19 +1388,27 @@ const App = () => {
                     </div>
                   ) : (
                     <p>
-                      i'm not currently listening to music {"("}or my spotify
-                      api has been rate-limited ˙◠˙{")"}.
-                      <br />
-                      feel free to visit my{" "}
-                      <a
-                        href="https://open.spotify.com/user/cringedlol"
-                        className="text-blue-400 underline"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        spotify
-                      </a>
-                      !
+                      <div className="flex items-center">
+                        <HeadphoneOff className="w-16 h-16 p-3 rounded-md mr-4 bg-gray-800" />
+                        <div>
+                          <p className="text-xs lg:text-sm font-medium">
+                            i'm not currently listening to music {"("}or my
+                            spotify api has been rate-limited ˙◠˙{")"}.
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            visit my{" "}
+                            <a
+                              href="https://open.spotify.com/user/cringedlol"
+                              className="text-blue-400 underline"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              spotify
+                            </a>
+                            !
+                          </p>
+                        </div>
+                      </div>
                     </p>
                   )}
                   {topTracks && topTracks.tracks ? (
@@ -1292,7 +1437,7 @@ const App = () => {
               </div>
             )}
             {expandWindow === "cli" && (
-              <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl flex flex-col">
+              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl flex flex-col overflow-y-auto">
                 <p
                   className={`text-black rounded-t-xl text-sm text-center relative ${
                     selectedWindow === "cli" ? "bg-white" : "bg-gray-400"
@@ -1347,7 +1492,7 @@ const App = () => {
               </div>
             )}
             {expandWindow === "timer" && isTimerOpen && (
-              <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl flex flex-col">
+              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl flex flex-col overflow-y-auto">
                 <p
                   className={`text-black rounded-t-xl text-sm text-center relative ${
                     selectedWindow === "timer" ? "bg-white" : "bg-gray-400"

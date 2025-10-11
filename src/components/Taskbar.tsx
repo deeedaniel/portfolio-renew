@@ -3,7 +3,7 @@ import Tooltip from "./Tooltip";
 
 export const Taskbar = () => {
   return (
-    <div className="flex w-97/100 lg:w-full max-w-sm sm:max-w-md lg:max-w-2xl fixed items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-2 py-1 lg:p-1 rounded-xl justify-between px-3 lg:px-4 shadow-xl mx-2 lg:mx-0">
+    <div className="flex w-97/100 lg:w-full max-w-sm sm:max-w-md lg:max-w-2xl fixed items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-2 py-1 lg:p-1 rounded-xl justify-between px-3 lg:px-4 shadow-xl mx-2 lg:mx-0 z-50">
       {/* Desktop: Search/Email display, Mobile: Mail button */}
       <div className="min-w-0 flex-shrink">
         {/* Desktop version - shows email with search icon */}
