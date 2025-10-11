@@ -1031,7 +1031,7 @@ const App = () => {
             {expandWindow === "me" && (
               <div
                 ref={meWindowRef}
-                className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto focus:outline-none relative pb-24 lg:pb-0"
+                className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto focus:outline-none relative pb-24 lg:pb-0 overscroll-none"
                 tabIndex={0}
               >
                 <p className="text-black bg-gray-300 rounded-t-xl text-sm text-center sticky top-0 left-0 right-0">
@@ -1112,7 +1112,7 @@ const App = () => {
             {expandWindow === "experience" && (
               <>
                 {selectExperience !== "" ? (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-36 lg:pb-0">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-36 lg:pb-0 overscroll-none">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center sticky top-0 ${
                         selectedWindow === "experience"
@@ -1201,7 +1201,7 @@ const App = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto overscroll-none">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "experience"
@@ -1243,7 +1243,7 @@ const App = () => {
             {expandWindow === "projects" && (
               <>
                 {selectProject !== "" ? (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-36 lg:pb-0">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-36 lg:pb-0 overscroll-none">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center sticky top-0 ${
                         selectedWindow === "projects"
@@ -1379,7 +1379,7 @@ const App = () => {
               </>
             )}
             {expandWindow === "music" && (
-              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
+              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto overscroll-none">
                 <p
                   className={`text-black rounded-t-xl text-sm text-center sticky top-0 ${
                     selectedWindow === "music" ? "bg-white" : "bg-gray-400"
@@ -1468,7 +1468,7 @@ const App = () => {
               </div>
             )}
             {expandWindow === "cli" && (
-              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl flex flex-col overflow-y-auto">
+              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl flex flex-col overflow-y-auto overscroll-none">
                 <p
                   className={`text-black rounded-t-xl text-sm text-center sticky top-0 ${
                     selectedWindow === "cli" ? "bg-white" : "bg-gray-400"
@@ -1523,7 +1523,7 @@ const App = () => {
               </div>
             )}
             {expandWindow === "timer" && isTimerOpen && (
-              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl flex flex-col overflow-y-auto">
+              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl flex flex-col overflow-y-auto overscroll-none">
                 <p
                   className={`text-black rounded-t-xl text-sm text-center sticky top-0 ${
                     selectedWindow === "timer" ? "bg-white" : "bg-gray-400"
