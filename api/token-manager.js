@@ -1,8 +1,21 @@
 // Shared token management for Spotify API
+import {
+  isRateLimited,
+  getRateLimitInfo,
+  handleRateLimitResponse,
+} from "./rate-limit-manager.js";
+
 let cachedAccessToken = null;
 let tokenExpiresAt = 0;
 
 export async function getValidAccessToken() {
+  // Check if we're currently rate limited
+  if (isRateLimited()) {
+    const rateLimitInfo = getRateLimitInfo();
+    throw new Error(
+      `Rate limited. Retry after ${rateLimitInfo.remainingSeconds} seconds.`
+    );
+  }
   // Check if we have a valid cached token
   if (cachedAccessToken && Date.now() < tokenExpiresAt) {
     return cachedAccessToken;
@@ -31,6 +44,12 @@ export async function getValidAccessToken() {
     },
     body: tokenParams.toString(),
   });
+
+  // Handle rate limiting for token refresh
+  const rateLimitResult = handleRateLimitResponse(tokenRes);
+  if (rateLimitResult.isRateLimited) {
+    throw new Error(rateLimitResult.message);
+  }
 
   const tokenData = await tokenRes.json();
 

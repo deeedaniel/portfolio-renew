@@ -1,4 +1,9 @@
 import { getValidAccessToken } from "./token-manager.js";
+import {
+  isRateLimited,
+  getRateLimitInfo,
+  handleRateLimitResponse,
+} from "./rate-limit-manager.js";
 
 let cachedTracks = null;
 let lastFetchTime = 0;
@@ -11,8 +16,30 @@ export default async function handler(req, res) {
     return res.status(200).json({ tracks: cachedTracks, cached: true });
   }
 
+  // Step 2: Check if we're rate limited before making any requests
+  if (isRateLimited()) {
+    const rateLimitInfo = getRateLimitInfo();
+
+    // If we have cached data, serve it with rate limit info
+    if (cachedTracks) {
+      return res.status(200).json({
+        tracks: cachedTracks,
+        cached: true,
+        warning: `Rate limited. Retry after ${rateLimitInfo.remainingSeconds} seconds.`,
+        rateLimitInfo,
+      });
+    }
+
+    // No cached data available
+    return res.status(429).json({
+      error: "Rate limited",
+      message: `Please wait ${rateLimitInfo.remainingSeconds} seconds before retrying`,
+      retryAfter: rateLimitInfo.remainingSeconds,
+    });
+  }
+
   try {
-    // Step 2: Get valid access token (will refresh if needed)
+    // Step 3: Get valid access token (will refresh if needed)
     const accessToken = await getValidAccessToken();
 
     const spRes = await fetch(
@@ -22,12 +49,25 @@ export default async function handler(req, res) {
       }
     );
 
-    // if 429, return cached if we have one
-    if (spRes.status === 429 && cachedTracks) {
-      return res.status(200).json({
-        tracks: cachedTracks,
-        cached: true,
-        warning: "Rate-limited, showing cached data",
+    // Handle rate limit response
+    const rateLimitResult = handleRateLimitResponse(spRes);
+    if (rateLimitResult.isRateLimited) {
+      // Rate limit detected, serve cached data if available
+      if (cachedTracks) {
+        return res.status(200).json({
+          tracks: cachedTracks,
+          cached: true,
+          warning: rateLimitResult.message,
+          rateLimitInfo: {
+            retryAfter: rateLimitResult.retryAfterSeconds,
+          },
+        });
+      }
+
+      return res.status(429).json({
+        error: "Spotify rate limit exceeded",
+        message: rateLimitResult.message,
+        retryAfter: rateLimitResult.retryAfterSeconds,
       });
     }
 
