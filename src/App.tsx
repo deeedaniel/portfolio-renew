@@ -1031,7 +1031,7 @@ const App = () => {
             {expandWindow === "me" && (
               <div
                 ref={meWindowRef}
-                className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto focus:outline-none relative"
+                className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto focus:outline-none relative pb-24 lg:pb-0"
                 tabIndex={0}
               >
                 <p className="text-black bg-gray-300 rounded-t-xl text-sm text-center sticky top-0 left-0 right-0">
@@ -1112,7 +1112,7 @@ const App = () => {
             {expandWindow === "experience" && (
               <>
                 {selectExperience !== "" ? (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-24 lg:pb-0">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "experience"
@@ -1201,7 +1201,7 @@ const App = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
+                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-24 lg:pb-0">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "experience"
