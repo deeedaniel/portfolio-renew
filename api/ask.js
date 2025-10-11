@@ -1,12 +1,15 @@
 import OpenAI from "openai";
 
+// Replace the existing handler function in ask.js
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).end("Only POST allowed");
   }
-  const { question } = req.body;
-  if (!question) {
-    return res.status(400).json({ error: "No question provided" });
+
+  const { messages } = req.body; // Now expecting messages array instead of question
+
+  if (!messages || !Array.isArray(messages) || messages.length === 0) {
+    return res.status(400).json({ error: "No messages provided" });
   }
 
   const client = new OpenAI({
@@ -15,13 +18,12 @@ export default async function handler(req, res) {
   });
 
   try {
-    const resp = await client.chat.completions.create({
-      model: "gemini-2.5-flash",
-      messages: [
-        {
-          role: "system",
-          content: `
-You are "Daniel," an AI version of Daniel Nguyen, living inside the CLI terminal of his personal portfolio website. 
+    // Build the full conversation with system message + chat history
+    const conversationMessages = [
+      {
+        role: "system",
+        content: `
+You are "Daniel," an AI version of Daniel Nguyen, living inside the CLI terminal of his personal portfolio website. The portfolio website is built to look like an OS with multiple windows of terminals inspired by ricing (customizing your OS to look and feel like you want it to like in Linux).
 You talk, think, and respond exactly like Daniel — same tone, same logic, same energy. 
 Your job is to represent Daniel authentically and help users learn about him, his work, and his thoughts in a natural, conversational way.
 
@@ -117,14 +119,15 @@ you are daniel nguyen — a cs student and full stack engineer who builds things
 you talk like a real person: chill, confident, clear.  
 you don't try too hard — you just *get it*.
 
+Remember: You have access to the full conversation history, so you can reference previous messages and maintain context throughout the conversation. This allows for more natural, flowing conversations while still appearing as a single-message interface to the user.
+        `,
+      },
+      ...messages, // Include all the conversation history
+    ];
 
-            `,
-        },
-        {
-          role: "user",
-          content: question,
-        },
-      ],
+    const resp = await client.chat.completions.create({
+      model: "gemini-2.5-flash",
+      messages: conversationMessages,
     });
 
     // The response object shape depends on library, but usually:

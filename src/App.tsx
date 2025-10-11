@@ -45,6 +45,11 @@ const App = () => {
   const [isTimerOpen, setIsTimerOpen] = useState(false);
   const [selectedTimerButton, setSelectedTimerButton] = useState(0); // 0 for start/pause, 1 for reset
 
+  // Add this near your other CLI state variables (around line 29)
+  const [chatHistory, setChatHistory] = useState<
+    Array<{ role: "user" | "assistant"; content: string }>
+  >([]);
+
   // pick random ascii art
   useEffect(() => {
     // if (count % 10 == 0) {
@@ -274,11 +279,15 @@ const App = () => {
   }, []);
 
   // ask question to Gemini with client-side streaming
+  // Replace the existing askQuestion function (lines 276-314)
   async function askQuestion(q: string, onChunk: (chunk: string) => void) {
+    // Build the conversation history including the new question
+    const messages = [...chatHistory, { role: "user" as const, content: q }];
+
     const res = await fetch("/api/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: q }),
+      body: JSON.stringify({ messages }), // Send full conversation instead of just question
     });
 
     const data = await res.json();
@@ -311,6 +320,13 @@ const App = () => {
 
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
+
+    // After streaming is complete, update chat history
+    setChatHistory((prev) => [
+      ...prev,
+      { role: "user", content: q },
+      { role: "assistant", content: fullResponse },
+    ]);
   }
 
   // handle command input
@@ -970,7 +986,7 @@ const App = () => {
             />
           </p>
           <div
-            className="mt-2 mx-4 font-mono text-sm flex-grow overflow-y-auto"
+            className="mt-2 ml-4 font-mono text-sm flex-grow overflow-y-auto"
             onClick={focusInput}
           >
             {lastCommand && (
