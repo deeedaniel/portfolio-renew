@@ -659,10 +659,18 @@ const App = () => {
               <p className=" ml-4 text-xs lg:text-sm">
                 {time.toLocaleTimeString()}
               </p>
-              <p className=" ml-4 mt-2 text-xs hidden lg:block text-gray-400">
+              <p className=" ml-4 mt-2 mb-2 text-xs hidden lg:block text-gray-400">
                 <p className="inline-block text-lg">☆</p> try using arrow keys &
-                enter to navigate!
+                pressing enter on each window!
               </p>
+              <a
+                className=" ml-4 mt-2 mb-2 text-xs block lg:hidden text-gray-400"
+                onClick={() => {
+                  setExpandWindow("me");
+                }}
+              >
+                click me to read more!
+              </a>
             </div>
           </div>
         </div>
@@ -1059,8 +1067,8 @@ const App = () => {
                       {time.toLocaleTimeString()}
                     </p>
                     <p className=" ml-4 mt-2 text-xs hidden lg:block text-gray-400">
-                      <p className="inline-block text-lg">☆</p> try using arrow
-                      keys & enter to navigate!
+                      <p className="inline-block text-lg">☆</p> try using keys &
+                      pressing enter on each window!
                     </p>
                   </div>
                 </div>
@@ -1091,6 +1099,13 @@ const App = () => {
                     searching for Summer 2026 internships.
                   </p>
                   <p className="text-gray-200">✉︎ nguyendaniel1312@gmail.com</p>
+                  <a
+                    href=""
+                    className="text-gray-400 block lg:hidden"
+                    onClick={() => setExpandWindow("")}
+                  >
+                    back to main page
+                  </a>
                 </div>
               </div>
             )}
