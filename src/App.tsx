@@ -425,12 +425,12 @@ const App = () => {
   }, []);
 
   return (
-    <div className="lg:h-screen w-screen flex items-center justify-center bg-gray-800 text-white pb-24 lg:pb-0 ">
+    <div className="lg:h-screen w-screen flex items-center justify-center bg-black text-white pb-24 lg:pb-0 bg-[url('/creation_of_adam.jpeg')] bg-cover bg-center">
       {/* Bento box grid */}
-      <div className="relative grid grid-cols-2 lg:grid-cols-3 w-full mx-1 gap-2 bg-gray-900 rounded-2xl p-1.5 border border-gray-700 max-w-5xl lg:justify-center shadow-xl">
+      <div className="relative grid grid-cols-2 lg:grid-cols-3 w-full mx-1 gap-2 bg-gray-900/40 bg-opacity-50 rounded-2xl p-1.5 border border-gray-700 max-w-5xl lg:justify-center shadow-xl">
         {/* Main terminal window */}
         <div
-          className={` bg-black rounded-xl col-span-2 flex border border-gray-700 flex-col ${
+          className={` bg-black/80 rounded-xl col-span-2 flex border border-gray-700 flex-col ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500`}
           onClick={() => {
@@ -478,7 +478,7 @@ const App = () => {
 
         {/* Experience */}
         <div
-          className={` bg-black col-span-2 lg:col-span-1 border border-gray-700 rounded-xl ${
+          className={`bg-black/80 col-span-2 lg:col-span-1 border border-gray-700 rounded-xl ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500`}
           onClick={() => {
@@ -506,7 +506,7 @@ const App = () => {
                 className={` rounded-md transition-all duration-150 cursor-pointer ${
                   index === experienceIndex
                     ? " text-white font-bold"
-                    : "bg-transparent text-blue-300 hover:bg-gray-800"
+                    : "bg-transparent text-blue-300"
                 }`}
                 onClick={() => {
                   setExpandWindow("experience");
@@ -521,7 +521,7 @@ const App = () => {
 
         {/* Projects */}
         <div
-          className={` bg-black col-span-2 lg:col-span-1 border border-gray-700 rounded-xl ${
+          className={` bg-black/80 col-span-2 lg:col-span-1 border border-gray-700 rounded-xl ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500`}
           onClick={() => {
@@ -549,7 +549,7 @@ const App = () => {
                 className={` rounded-md transition-all duration-150 cursor-pointer ${
                   index === projectIndex
                     ? " text-white font-bold"
-                    : "bg-transparent text-blue-300 hover:bg-gray-800"
+                    : "bg-transparent text-blue-300"
                 }`}
                 onClick={() => {
                   setExpandWindow("projects");
@@ -566,7 +566,7 @@ const App = () => {
 
         {/* Music */}
         <div
-          className={` bg-black ${
+          className={` bg-black/80 ${
             isTimerOpen
               ? "col-span-2 lg:col-span-1"
               : "col-span-2 lg:col-span-2"
@@ -659,7 +659,7 @@ const App = () => {
         {/* Timer - only render when open */}
         {isTimerOpen && (
           <div
-            className={` bg-black col-span-2 lg:col-span-1 border border-gray-700 rounded-xl ${
+            className={` bg-black/80 col-span-2 lg:col-span-1 border border-gray-700 rounded-xl ${
               expandWindow ? "opacity-0" : ""
             } transition-opacity duration-500`}
             onClick={() => {
@@ -719,7 +719,7 @@ const App = () => {
 
         {/* CLI LLM about me */}
         <div
-          className={` bg-black col-span-2 lg:col-span-3 border border-gray-700 rounded-xl ${
+          className={`bg-black/80 col-span-2 lg:col-span-3 border border-gray-700 rounded-xl ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500 pb-3 flex flex-col max-h-56`}
           onClick={() => {
@@ -782,7 +782,7 @@ const App = () => {
         {expandWindow && (
           <div className="absolute inset-0 z-20 transition-opacity duration-300">
             {expandWindow === "me" && (
-              <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+              <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl">
                 <p className="text-black bg-gray-300 rounded-t-xl text-sm text-center relative">
                   me - zsh
                   <button
@@ -819,7 +819,7 @@ const App = () => {
             {expandWindow === "experience" && (
               <>
                 {selectExperience !== "" ? (
-                  <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+                  <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "experience"
@@ -905,7 +905,7 @@ const App = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+                  <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "experience"
@@ -931,7 +931,7 @@ const App = () => {
                           className={` rounded-md transition-all duration-150 cursor-pointer ${
                             index === experienceIndex
                               ? " text-white font-bold"
-                              : "bg-transparent text-blue-300 hover:bg-gray-800"
+                              : "bg-transparent text-blue-300"
                           }`}
                           onClick={() => setSelectExperience(experience.title)}
                         >
@@ -947,7 +947,7 @@ const App = () => {
             {expandWindow === "projects" && (
               <>
                 {selectProject !== "" ? (
-                  <div className="w-full min-h-full bg-black border border-gray-700 rounded-xl">
+                  <div className="w-full min-h-full bg-black/80 border border-gray-700 rounded-xl">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "projects"
@@ -1037,7 +1037,7 @@ const App = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+                  <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl">
                     <p
                       className={`text-black rounded-t-xl text-sm text-center relative ${
                         selectedWindow === "projects"
@@ -1066,7 +1066,7 @@ const App = () => {
                           className={` rounded-md transition-all duration-150 cursor-pointer ${
                             index === projectIndex
                               ? " text-white font-bold"
-                              : "bg-transparent text-blue-300 hover:bg-gray-800"
+                              : "bg-transparent text-blue-300"
                           }`}
                           onClick={() => setSelectProject(project.title)}
                         >
@@ -1080,7 +1080,7 @@ const App = () => {
               </>
             )}
             {expandWindow === "music" && (
-              <div className="w-full h-full bg-black border border-gray-700 rounded-xl">
+              <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl">
                 <p
                   className={`text-black rounded-t-xl text-sm text-center relative ${
                     selectedWindow === "music" ? "bg-white" : "bg-gray-400"
@@ -1161,7 +1161,7 @@ const App = () => {
               </div>
             )}
             {expandWindow === "cli" && (
-              <div className="w-full h-full bg-black border border-gray-700 rounded-xl flex flex-col">
+              <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl flex flex-col">
                 <p
                   className={`text-black rounded-t-xl text-sm text-center relative ${
                     selectedWindow === "cli" ? "bg-white" : "bg-gray-400"
@@ -1216,7 +1216,7 @@ const App = () => {
               </div>
             )}
             {expandWindow === "timer" && isTimerOpen && (
-              <div className="w-full h-full bg-black border border-gray-700 rounded-xl flex flex-col">
+              <div className="w-full h-full bg-black/80 border border-gray-700 rounded-xl flex flex-col">
                 <p
                   className={`text-black rounded-t-xl text-sm text-center relative ${
                     selectedWindow === "timer" ? "bg-white" : "bg-gray-400"

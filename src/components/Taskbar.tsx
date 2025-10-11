@@ -80,7 +80,7 @@ export const Taskbar = () => {
             className="border border-gray-700 rounded-full p-2 lg:p-1 bg-white"
           >
             <Paperclip
-              className="w-6 h-6 lg:w-5 lg:h-5 transition-all duration-300 object-contain"
+              className="w-4 h-4 lg:w-5 lg:h-5 transition-all duration-300 object-contain"
               color="black"
             />
           </a>
