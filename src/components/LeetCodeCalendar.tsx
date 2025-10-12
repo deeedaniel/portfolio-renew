@@ -80,7 +80,7 @@ const LeetCodeCalendar: React.FC<SubmissionCalendarProps> = ({
                 text={`${count} submissions on ${day.toDateString()}`}
               >
                 <div
-                  className={`w-full aspect-square flex items-center justify-center rounded-sm ${color}`}
+                  className={`w-full aspect-square flex items-center justify-center rounded-lg ${color}`}
                 >
                   <span className="text-white text-xs">{day.getDate()}</span>
                 </div>
