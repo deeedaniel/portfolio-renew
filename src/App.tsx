@@ -1158,9 +1158,8 @@ const App = () => {
                       {time.toLocaleTimeString()}
                     </p>
                     <p className=" ml-4 mt-2 text-xs hidden lg:block text-gray-400">
-                      <p className="inline-block text-lg">☆</p> using keys to
-                      navigate between windows <br />& enter to expand/close
-                      windows!
+                      <p className="inline-block text-lg">☆</p> try arrows keys
+                      & enter!
                     </p>
                   </div>
                 </div>
