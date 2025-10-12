@@ -1,3 +1,8 @@
+export interface NowPlayingData {
+  is_playing: boolean;
+  item: NowPlayingItem | null;
+}
+
 interface NowPlayingItem {
   album: string;
   album_image: string;
@@ -5,16 +10,11 @@ interface NowPlayingItem {
   name: string;
 }
 
-export interface NowPlayingData {
-  is_playing: boolean;
-  item: NowPlayingItem | null;
-}
-
 export interface TopTracksData {
   tracks: Track[];
 }
 
-export interface Track {
+interface Track {
   id: string;
   name: string;
   artists: string[];
