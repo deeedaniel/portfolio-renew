@@ -1,20 +1,11 @@
-import {
-  Search,
-  Paperclip,
-  Mail,
-  Timer,
-  Linkedin,
-  Github,
-  Film,
-} from "lucide-react";
+import { FileUser, Timer, Linkedin, Github, Film } from "lucide-react";
 import Tooltip from "./Tooltip";
 
 export const Taskbar = () => {
   return (
-    <div className="flex w-97/100 lg:w-full max-w-sm sm:max-w-md lg:max-w-2xl fixed items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-2 py-1 lg:p-1 rounded-xl justify-between px-3 lg:px-4 shadow-xl mx-2 lg:mx-0 z-50">
-      {/* Desktop: Search/Email display, Mobile: Mail button */}
-      <div className="min-w-0 flex-shrink">
-        {/* Desktop version - shows email with search icon */}
+    <div className="flex w-97/100 max-w-sm sm:max-w-md lg:w-fit fixed items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-2 py-1 rounded-xl justify-between px-3 lg:p-2 shadow-xl mx-2 lg:mx-0 z-50">
+      {/* <div className="min-w-0 flex-shrink">
+        
         <div className="hidden lg:flex text-gray-200 bg-gray-800 p-1 px-3 rounded-lg items-center gap-2 border border-gray-700">
           <Search className="w-4 h-4 flex-shrink-0" />
           <p className="text-sm bg-gray-800 p-1 px-3">
@@ -22,7 +13,7 @@ export const Taskbar = () => {
           </p>
         </div>
 
-        {/* Mobile version - mail button */}
+       
         <div className="lg:hidden">
           <Tooltip text="Send Email">
             <a
@@ -33,12 +24,11 @@ export const Taskbar = () => {
             </a>
           </Tooltip>
         </div>
-      </div>
+      </div> */}
 
       {/* Icons section - larger touch targets on mobile */}
       <div className="flex justify-evenly gap-3 lg:gap-2 flex-shrink-0">
         <Tooltip text="Media Player">
-          {" "}
           <button
             onClick={() => {
               window.dispatchEvent(new CustomEvent("openMedia"));
@@ -46,7 +36,7 @@ export const Taskbar = () => {
             className="border border-gray-700 rounded-lg p-2 lg:p-1 bg-white"
           >
             <Film
-              className="w-4 h-4 lg:w-5 lg:h-5 transition-all duration-300 object-contain"
+              className="w-4 h-4 lg:w-7 lg:h-7 transition-all duration-300 object-contain"
               color="black"
             />
           </button>
@@ -61,7 +51,7 @@ export const Taskbar = () => {
             className="border border-gray-700 rounded-lg p-2 lg:p-1 bg-white"
           >
             <Timer
-              className="w-4 h-4 lg:w-5 lg:h-5 transition-all duration-300 object-contain"
+              className="w-4 h-4 lg:w-7 lg:h-7 transition-all duration-300 object-contain"
               color="black"
             />
           </button>
@@ -75,7 +65,7 @@ export const Taskbar = () => {
             className="border border-gray-700 rounded-lg p-2 lg:p-1 bg-white"
           >
             <Github
-              className="w-4 h-4 lg:w-5 lg:h-5 transition-all duration-300 object-contain"
+              className="w-4 h-4 lg:w-7 lg:h-7 transition-all duration-300 object-contain"
               color="black"
             />
           </a>
@@ -89,24 +79,24 @@ export const Taskbar = () => {
             className="border border-gray-700 rounded-lg p-2 lg:p-1 bg-white"
           >
             <Linkedin
-              className="w-4 h-4 lg:w-5 lg:h-5 transition-all duration-300 object-contain"
+              className="w-4 h-4 lg:w-7 lg:h-7 transition-all duration-300 object-contain"
               color="black"
             />
           </a>
         </Tooltip>
 
         <Tooltip text="Resume">
-          <a
-            href="/daniel_nguyen_resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => {
+              window.dispatchEvent(new CustomEvent("openResume"));
+            }}
             className="border border-gray-700 rounded-lg p-2 lg:p-1 bg-white"
           >
-            <Paperclip
-              className="w-4 h-4 lg:w-5 lg:h-5 transition-all duration-300 object-contain"
+            <FileUser
+              className="w-4 h-4 lg:w-7 lg:h-7 transition-all duration-300 object-contain"
               color="black"
             />
-          </a>
+          </button>
         </Tooltip>
       </div>
     </div>

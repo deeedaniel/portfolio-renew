@@ -50,6 +50,7 @@ const App = () => {
   const [customMinutes, setCustomMinutes] = useState(30);
   const [isTimerOpen, setIsTimerOpen] = useState(false);
   const [selectedTimerButton, setSelectedTimerButton] = useState(0); // 0 for start/pause, 1 for reset
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   // Add this near your other CLI state variables (around line 29)
   const [chatHistory, setChatHistory] = useState<
@@ -528,6 +529,30 @@ const App = () => {
     window.addEventListener("openTimer", handleOpenTimer);
     return () => window.removeEventListener("openTimer", handleOpenTimer);
   }, []);
+
+  // Add event listener for taskbar resume button
+  useEffect(() => {
+    const handleOpenResume = () => {
+      setIsResumeOpen(true);
+    };
+
+    window.addEventListener("openResume", handleOpenResume);
+    return () => window.removeEventListener("openResume", handleOpenResume);
+  }, []);
+
+  // Handle keyboard navigation for resume overlay
+  useEffect(() => {
+    if (!isResumeOpen) return;
+
+    const handleResumeKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsResumeOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleResumeKeyDown);
+    return () => window.removeEventListener("keydown", handleResumeKeyDown);
+  }, [isResumeOpen]);
 
   // Prevent background scrolling when window is expanded on mobile
   useEffect(() => {
@@ -1805,6 +1830,40 @@ const App = () => {
           </div>
         )}
       </div>
+
+      {/* Resume overlay window */}
+      {isResumeOpen && (
+        <div
+          className="fixed inset-0 z-30 flex items-center justify-center"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsResumeOpen(false);
+            }
+          }}
+        >
+          <div className="w-full h-[70vh] max-w-4xl max-h-[90vh] bg-black/90 border border-gray-700 rounded-xl flex flex-col shadow-2xl">
+            <div className="text-black bg-white rounded-t-xl text-sm text-center relative">
+              daniel_nguyen_resume.pdf
+              <button
+                className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer hover:bg-red-600 transition-colors"
+                onClick={() => setIsResumeOpen(false)}
+              />
+              <button
+                className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                onClick={() => setIsResumeOpen(false)}
+              />
+              <button className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+            </div>
+            <div className="flex-1 p-4 overflow-hidden">
+              <iframe
+                src="/daniel_nguyen_resume.pdf"
+                className="w-full h-full rounded-lg border border-gray-600"
+                title="Daniel Nguyen Resume"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Taskbar menu */}
       <Taskbar />
