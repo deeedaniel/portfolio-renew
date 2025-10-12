@@ -1586,7 +1586,7 @@ const App = () => {
                         <p className="text-sm font-bold text-white">
                           total solved: {leetCode.totalSolved}
                         </p>
-                        <div className="flex flex-col  justify-between text-sm mt-2">
+                        <div className="flex flex-col  justify-between text-sm">
                           <p className="text-green-400">
                             easy: {leetCode.easySolved}
                           </p>
