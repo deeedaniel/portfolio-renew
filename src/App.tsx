@@ -691,14 +691,14 @@ const App = () => {
                 <p className="inline-block text-lg">☆</p> try arrows keys &
                 enter!
               </p>
-              <a
+              <button
                 className=" ml-4 mt-2 mb-2 text-xs block lg:hidden text-gray-400"
                 onClick={() => {
                   setExpandWindow("me");
                 }}
               >
                 click me to read more!
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -723,10 +723,10 @@ const App = () => {
             }`}
           >
             music - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer" />
-            <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+            <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+            <button className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <button
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
               onClick={() => setExpandWindow("music")}
             />
           </p>
@@ -812,14 +812,14 @@ const App = () => {
               }`}
             >
               leetcode - zsh
-              <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer" />
-              <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer" />
-              <p
-                className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+              <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+              <button className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+              <button
+                className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
                 onClick={() => setExpandWindow("leetcode")}
               />
             </p>
-            <div className="w-full flex flex-col items-center justify-center mt-4">
+            <div className="w-full flex flex-col items-center justify-center my-2">
               {leetCode && leetCode.totalSolved ? (
                 <div className="flex items-center gap-4">
                   <img
@@ -831,7 +831,7 @@ const App = () => {
                     <p className="text-sm font-bold text-white">
                       total solved: {leetCode.totalSolved}
                     </p>
-                    <div className="flex flex-col justify-between text-sm mt-2">
+                    <div className="flex flex-col justify-between text-sm">
                       <p className="text-green-400">
                         easy: {leetCode.easySolved}
                       </p>
@@ -874,16 +874,16 @@ const App = () => {
             }`}
           >
             daniel-code - zsh
-            <p
-              className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+            <button
+              className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2"
               onClick={() => setExpandWindow("")}
             />
-            <p
-              className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+            <button
+              className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
               onClick={() => setExpandWindow("")}
             />
-            <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+            <button
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
               onClick={() => setExpandWindow("cli")}
             />
           </p>
@@ -913,7 +913,7 @@ const App = () => {
                   }
                 }}
                 className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"
-                placeholder="ask me anything about myself!"
+                placeholder="ask me anything!"
               />
             </div>
           </div>
@@ -935,10 +935,10 @@ const App = () => {
             }`}
           >
             experience - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer" />
-            <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+            <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+            <button className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <button
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
               onClick={() => setExpandWindow("experience")}
             />
           </p>
@@ -978,10 +978,10 @@ const App = () => {
             }`}
           >
             projects - zsh
-            <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer" />
-            <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer" />
-            <p
-              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+            <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
+            <button className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+            <button
+              className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
               onClick={() => setExpandWindow("projects")}
             />
           </p>
@@ -1024,13 +1024,13 @@ const App = () => {
               }`}
             >
               pomodoro timer - zsh
-              <p
-                className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+              <button
+                className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2"
                 onClick={() => setIsTimerOpen(false)}
               />
-              <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer" />
-              <p
-                className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+              <button className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2" />
+              <button
+                className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
                 onClick={() => setExpandWindow("timer")}
               />
             </p>
@@ -1190,13 +1190,12 @@ const App = () => {
                     searching for Summer 2026 internships.
                   </p>
                   <p className="text-gray-200">✉︎ nguyendaniel1312@gmail.com</p>
-                  <a
-                    href=""
+                  <button
                     className="text-gray-400 block lg:hidden"
                     onClick={() => setExpandWindow("")}
                   >
                     back to main page
-                  </a>
+                  </button>
                 </div>
               </div>
             )}
@@ -1212,18 +1211,18 @@ const App = () => {
                       }`}
                     >
                       {selectExperience}
-                      <p
+                      <button
                         className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
                         onClick={() => setExpandWindow("")}
                       />
-                      <p
+                      <button
                         className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
                         onClick={() => {
                           setExpandWindow("");
                           setSelectExperience("");
                         }}
                       />
-                      <p className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+                      <button className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
                     </p>
                     <div className="m-4">
                       {(() => {
@@ -1301,15 +1300,15 @@ const App = () => {
                       }`}
                     >
                       experience - zsh
-                      <p
-                        className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                      <button
+                        className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2"
                         onClick={() => setExpandWindow("")}
                       />
-                      <p
-                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                      <button
+                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
                         onClick={() => setExpandWindow("")}
                       />
-                      <p className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer" />
+                      <button className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
                     </p>
                     <div className="mt-2 mx-4">
                       {experiencesData.map((experience, index) => (
@@ -1346,19 +1345,19 @@ const App = () => {
                         projectsData.find((p) => p.title === selectProject)
                           ?.window
                       }
-                      <p
-                        className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                      <button
+                        className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2"
                         onClick={() => setExpandWindow("")}
                       />
-                      <p
-                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                      <button
+                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
                         onClick={() => {
                           setExpandWindow("");
                           setSelectProject("");
                         }}
                       />
-                      <p
-                        className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                      <button
+                        className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
                         onClick={() => setExpandWindow("projects")}
                       />
                     </p>
@@ -1436,16 +1435,16 @@ const App = () => {
                       }`}
                     >
                       projects - zsh
-                      <p
-                        className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                      <button
+                        className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2"
                         onClick={() => setExpandWindow("")}
                       />
-                      <p
-                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                      <button
+                        className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
                         onClick={() => setExpandWindow("")}
                       />
-                      <p
-                        className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                      <button
+                        className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
                         onClick={() => setExpandWindow("projects")}
                       />
                     </p>
@@ -1478,15 +1477,15 @@ const App = () => {
                 >
                   music - zsh
                   <button
-                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("")}
                   />
                   <button
-                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("")}
                   />
                   <button
-                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("music")}
                   />
                 </p>
@@ -1562,16 +1561,16 @@ const App = () => {
               <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto overscroll-none">
                 <p className="text-black bg-white rounded-t-xl text-sm text-center sticky top-0 z-10">
                   leetcode - zsh
-                  <p
-                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                  <button
+                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("")}
                   />
-                  <p
-                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                  <button
+                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("")}
                   />
-                  <p
-                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                  <button
+                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("leetcode")}
                   />
                 </p>
@@ -1625,15 +1624,15 @@ const App = () => {
                 >
                   daniel-code - zsh
                   <button
-                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("")}
                   />
                   <button
-                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("")}
                   />
                   <button
-                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("cli")}
                   />
                 </p>
@@ -1680,18 +1679,18 @@ const App = () => {
                 >
                   pomodoro timer - zsh
                   <button
-                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2"
                     onClick={() => {
                       setExpandWindow("");
                       // setIsTimerOpen(false);
                     }}
                   />
                   <button
-                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("")}
                   />
                   <button
-                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2"
                     onClick={() => setExpandWindow("timer")}
                   />
                 </p>
