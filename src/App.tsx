@@ -9,6 +9,7 @@ import { Taskbar } from "./components/Taskbar";
 import { HeadphoneOff } from "lucide-react";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import LeetCodeCalendar from "./components/LeetCodeCalendar";
+import AnimatedEllipsis from "./components/AnimatedEllipsis";
 
 const App = () => {
   const [time, setTime] = useState(new Date());
@@ -862,7 +863,7 @@ const App = () => {
         <div
           className={`bg-black/80 col-span-2 lg:col-span-1 lg:row-span-2 border border-gray-700 rounded-xl order-3 ${
             expandWindow ? "opacity-0" : ""
-          } transition-opacity duration-500 pb-3 flex flex-col`}
+          } transition-opacity duration-500 pb-3 flex flex-col min-h-0`}
           onClick={() => {
             setSelectedWindow("cli");
             focusInput();
@@ -888,7 +889,7 @@ const App = () => {
             />
           </p>
           <div
-            className="mt-2 mx-4 font-mono text-sm flex-grow overflow-y-auto"
+            className="mt-2 mx-4 font-mono text-sm flex-grow overflow-y-auto h-0"
             onClick={focusInput}
           >
             {lastCommand && (
@@ -897,6 +898,12 @@ const App = () => {
                   <span className="text-blue-400">❯</span>
                   <p className="ml-2 text-gray-200">{lastCommand}</p>
                 </div>
+                {!response && (
+                  <p className="text-gray-200 whitespace-pre-wrap">
+                    hmm
+                    <AnimatedEllipsis />
+                  </p>
+                )}
                 <p className="text-gray-200 whitespace-pre-wrap">{response}</p>
               </>
             )}
