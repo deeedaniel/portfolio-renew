@@ -692,7 +692,7 @@ const App = () => {
                 enter!
               </p>
               <button
-                className=" ml-4 mt-2 mb-2 text-xs block lg:hidden text-gray-400"
+                className=" ml-4 mt-2 mb-2 text-xs block text-left lg:hidden text-gray-400"
                 onClick={() => {
                   setExpandWindow("me");
                 }}
@@ -1191,10 +1191,10 @@ const App = () => {
                   </p>
                   <p className="text-gray-200">✉︎ nguyendaniel1312@gmail.com</p>
                   <button
-                    className="text-gray-400 block lg:hidden"
+                    className="text-gray-400 block lg:hidden text-left underline"
                     onClick={() => setExpandWindow("")}
                   >
-                    back to main page
+                    back to main page ❮
                   </button>
                 </div>
               </div>
