@@ -1605,7 +1605,7 @@ const App = () => {
                     </p>
                   )}
                   {leetCode && leetCode.submissionCalendar && (
-                    <div className="min-w-md">
+                    <div className="min-w-xs lg:min-w-md">
                       <LeetCodeCalendar
                         submissionCalendar={leetCode.submissionCalendar}
                         viewMode="month"
