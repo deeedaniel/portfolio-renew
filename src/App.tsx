@@ -643,7 +643,7 @@ const App = () => {
   return (
     <div className="min-h-screen w-screen flex items-center justify-center bg-black text-white py-6 pb-24 lg:py-8 lg:pb-20 lg:bg-[url('/creation_of_adam.jpeg')] bg-fixed bg-cover bg-center overscroll-none">
       {/* Bento box grid */}
-      <div className="relative grid grid-cols-2 lg:grid-cols-4 lg:row-span-4 w-full mx-1 gap-2 bg-gray-900/40 bg-opacity-50 rounded-2xl p-1.5 border border-gray-700 max-w-6xl lg:justify-center shadow-xl lg:min-h-[700px]">
+      <div className="relative grid grid-cols-2 lg:grid-cols-4 lg:row-span-4 w-full mx-1 gap-2 bg-gray-900/40 bg-opacity-50 rounded-2xl p-1.5 border border-gray-700 max-w-6xl lg:justify-center shadow-xl lg:min-h-[70vh]">
         {/* Main terminal window */}
         <div
           className={` bg-black/80 rounded-xl col-span-2 flex border border-gray-700 flex-col order-1 ${
