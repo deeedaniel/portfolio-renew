@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import type { NowPlayingData, TopTracksData } from "./types/indexs";
+import type {
+  NowPlayingData,
+  TopTracksData,
+  LeetCodeData,
+} from "./types/indexs";
 import { experiencesData, projectsData, asciiList } from "./data/info";
 import { Taskbar } from "./components/Taskbar";
 import { HeadphoneOff } from "lucide-react";
 import { Play, Pause, RotateCcw } from "lucide-react";
+import LeetCodeCalendar from "./components/LeetCodeCalendar";
 
 const App = () => {
   const [time, setTime] = useState(new Date());
@@ -15,7 +20,7 @@ const App = () => {
 
   const [nowPlaying, setNowPlaying] = useState<NowPlayingData | null>(null); // now playing on spotify
   const [topTracks, setTopTracks] = useState<TopTracksData | null>(null); // top tracks on spotify
-
+  const [leetCode, setLeetCode] = useState<LeetCodeData | null>(null); // leetcode stats
   // const [currentIndex, setCurrentIndex] = useState(0);
 
   const [experienceIndex, setExperienceIndex] = useState(0); // index of experience
@@ -59,6 +64,10 @@ const App = () => {
 
   useEffect(() => {
     fetchNowPlaying().then((data) => setNowPlaying(data));
+  }, []);
+
+  useEffect(() => {
+    fetchLeetCode().then((data) => setLeetCode(data));
   }, []);
 
   // update time every second
@@ -196,6 +205,16 @@ const App = () => {
           }
         }
       }
+      if (selectedWindow === "leetcode") {
+        if (e.key === "Enter") {
+          setExpandWindow("leetcode");
+        }
+      }
+      if (expandWindow === "leetcode") {
+        if (e.key === "Enter") {
+          setExpandWindow("");
+        }
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -244,6 +263,15 @@ const App = () => {
   // Spotify functions
   async function fetchNowPlaying() {
     const res = await fetch("/api/now-playing");
+    if (!res.ok) {
+      console.error(await res.text());
+      return null;
+    }
+    return await res.json();
+  }
+
+  async function fetchLeetCode() {
+    const res = await fetch("/api/leetcode");
     if (!res.ok) {
       console.error(await res.text());
       return null;
@@ -371,7 +399,7 @@ const App = () => {
     // keyboard navigation between for windows using < and >
     const windowOrder = isTimerOpen
       ? ["me", "experience", "projects", "music", "timer", "cli"]
-      : ["me", "experience", "projects", "music", "cli"];
+      : ["me", "experience", "projects", "music", "leetcode", "cli"];
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (expandWindow) return;
@@ -615,7 +643,7 @@ const App = () => {
   return (
     <div className="min-h-screen w-screen flex items-center justify-center bg-black text-white py-6 pb-24 lg:py-8 lg:pb-20 lg:bg-[url('/creation_of_adam.jpeg')] bg-fixed bg-cover bg-center overscroll-none">
       {/* Bento box grid */}
-      <div className="relative grid grid-cols-2 lg:grid-cols-4 lg:row-span-2 w-full mx-1 gap-2 bg-gray-900/40 bg-opacity-50 rounded-2xl p-1.5 border border-gray-700 max-w-6xl lg:justify-center shadow-xl lg:min-h-[70vh]">
+      <div className="relative grid grid-cols-2 lg:grid-cols-4 lg:row-span-4 w-full mx-1 gap-2 bg-gray-900/40 bg-opacity-50 rounded-2xl p-1.5 border border-gray-700 max-w-6xl lg:justify-center shadow-xl lg:min-h-[70vh]">
         {/* Main terminal window */}
         <div
           className={` bg-black/80 rounded-xl col-span-2 flex border border-gray-700 flex-col order-1 ${
@@ -680,7 +708,7 @@ const App = () => {
           className={` bg-black/80 ${
             isTimerOpen
               ? "col-span-2 lg:col-span-1"
-              : "col-span-2 lg:col-span-1 lg:row-span-2"
+              : "col-span-2 lg:col-span-1 lg:row-span-1"
           } border border-gray-700 rounded-xl order-2 ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500`}
@@ -766,6 +794,69 @@ const App = () => {
             )}
           </div>
         </div>
+
+        {/* LeetCode */}
+        {!isTimerOpen && (
+          <div
+            className={` bg-black/80 col-span-2 lg:col-span-1 border border-gray-700 rounded-xl order-7 row-start-6 lg:row-start-2 ${
+              expandWindow ? "opacity-0" : ""
+            } transition-opacity duration-500`}
+            onClick={() => {
+              setSelectedWindow("leetcode");
+              console.log(selectedWindow);
+            }}
+          >
+            <p
+              className={`text-black rounded-t-xl text-sm text-center relative ${
+                selectedWindow === "leetcode" ? "bg-white" : "bg-gray-400"
+              }`}
+            >
+              leetcode - zsh
+              <p className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer" />
+              <p className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer" />
+              <p
+                className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                onClick={() => setExpandWindow("leetcode")}
+              />
+            </p>
+            <div className="w-full flex flex-col items-center justify-center mt-4">
+              {leetCode && leetCode.totalSolved ? (
+                <div className="flex items-center gap-4">
+                  <img
+                    src="/leetcode_color.png"
+                    alt="LeetCode Logo"
+                    className="w-16 h-16 bg-gray-100 rounded-xl p-1"
+                  />
+                  <div className="flex-grow">
+                    <p className="text-sm font-bold text-white">
+                      total solved: {leetCode.totalSolved}
+                    </p>
+                    <div className="flex flex-col justify-between text-sm mt-2">
+                      <p className="text-green-400">
+                        easy: {leetCode.easySolved}
+                      </p>
+                      <p className="text-yellow-400">
+                        medium: {leetCode.mediumSolved}
+                      </p>
+                      <p className="text-red-400">
+                        hard: {leetCode.hardSolved}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-200 mt-4 p-4">
+                  fetching leetcode stats...
+                </p>
+              )}
+              {leetCode && leetCode.submissionCalendar && (
+                <LeetCodeCalendar
+                  submissionCalendar={leetCode.submissionCalendar}
+                />
+              )}
+            </div>
+          </div>
+        )}
 
         {/* CLI LLM about me */}
         <div
@@ -943,7 +1034,7 @@ const App = () => {
                 onClick={() => setExpandWindow("timer")}
               />
             </p>
-            <div className="mt-2 mx-4 flex flex-col items-center justify-center">
+            <div className="mt-4 mx-4 flex flex-col items-center justify-center">
               <div className="text-3xl font-mono mb-2">
                 {String(timerMinutes).padStart(2, "0")}:
                 {String(timerSeconds).padStart(2, "0")}
@@ -1464,6 +1555,64 @@ const App = () => {
                     </div>
                   ) : (
                     <p>top tracks loading...</p>
+                  )}
+                </div>
+              </div>
+            )}
+            {expandWindow === "leetcode" && (
+              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto overscroll-none">
+                <p className="text-black bg-white rounded-t-xl text-sm text-center sticky top-0 z-10">
+                  leetcode - zsh
+                  <p
+                    className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setExpandWindow("")}
+                  />
+                  <p
+                    className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setExpandWindow("")}
+                  />
+                  <p
+                    className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setExpandWindow("leetcode")}
+                  />
+                </p>
+                <div className="w-full flex flex-col items-center justify-center mt-4">
+                  {leetCode && leetCode.totalSolved ? (
+                    <div className="flex items-center gap-4">
+                      <img
+                        src="/leetcode_color.png"
+                        alt="LeetCode Logo"
+                        className="w-16 h-16 bg-white rounded-full p-1"
+                      />
+                      <div className="flex-grow">
+                        <p className="text-sm font-bold text-white">
+                          total solved: {leetCode.totalSolved}
+                        </p>
+                        <div className="flex flex-col  justify-between text-sm mt-2">
+                          <p className="text-green-400">
+                            easy: {leetCode.easySolved}
+                          </p>
+                          <p className="text-yellow-400">
+                            medium: {leetCode.mediumSolved}
+                          </p>
+                          <p className="text-red-400">
+                            hard: {leetCode.hardSolved}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-200 mt-4">
+                      fetching leetcode stats...
+                    </p>
+                  )}
+                  {leetCode && leetCode.submissionCalendar && (
+                    <div className="min-w-md">
+                      <LeetCodeCalendar
+                        submissionCalendar={leetCode.submissionCalendar}
+                        viewMode="month"
+                      />
+                    </div>
                   )}
                 </div>
               </div>

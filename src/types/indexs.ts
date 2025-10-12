@@ -23,3 +23,13 @@ interface Track {
   spotify_url: string;
   preview_url: string;
 }
+
+export interface LeetCodeData {
+  easySolved: number;
+  mediumSolved: number;
+  hardSolved: number;
+  totalSolved: number;
+  submissionCalendar: {
+    [timestamp: string]: number;
+  };
+}
