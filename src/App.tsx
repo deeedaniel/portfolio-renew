@@ -1059,7 +1059,7 @@ const App = () => {
         <div
           className={`${windowThemeClass} col-span-2 lg:col-span-1 lg:row-span-2 rounded-xl order-3 ${
             expandWindow ? "opacity-0" : ""
-          } transition-opacity duration-500 pb-3 flex flex-col min-h-0`}
+          } transition-opacity duration-500 flex flex-col min-h-0`}
           onClick={() => {
             setSelectedWindow("cli");
             focusInput();
@@ -1085,12 +1085,12 @@ const App = () => {
             />
           </p>
           <div
-            className="mt-2 mx-4 font-mono text-sm flex-grow overflow-y-auto lg:h-0"
+            className="font-mono text-sm flex-grow overflow-y-auto lg:h-0"
             onClick={focusInput}
           >
             {lastCommand && (
               <>
-                <div className="flex items-center">
+                <div className="flex items-center py-2 px-4">
                   <span className="text-blue-400">❯</span>
                   <p
                     className={`ml-2 ${
@@ -1104,7 +1104,7 @@ const App = () => {
                   <p
                     className={`${
                       isDark ? "text-gray-200" : "text-gray-800"
-                    } whitespace-pre-wrap`}
+                    } whitespace-pre-wrap px-4`}
                   >
                     hmm
                     <AnimatedEllipsis />
@@ -1113,13 +1113,13 @@ const App = () => {
                 <p
                   className={`${
                     isDark ? "text-gray-200" : "text-gray-800"
-                  } whitespace-pre-wrap`}
+                  } whitespace-pre-wrap px-4`}
                 >
                   {response}
                 </p>
               </>
             )}
-            <div className="flex items-center">
+            <div className="flex items-center py-2 px-4">
               <span className="text-blue-400">❯</span>
               <input
                 ref={inputRef}
