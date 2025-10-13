@@ -6,11 +6,13 @@ interface SubmissionCalendarProps {
     [timestamp: string]: number;
   };
   viewMode?: "week" | "month";
+  isDark?: boolean;
 }
 
 const LeetCodeCalendar: React.FC<SubmissionCalendarProps> = ({
   submissionCalendar,
   viewMode = "week",
+  isDark = true,
 }) => {
   const today = new Date();
 
@@ -59,7 +61,11 @@ const LeetCodeCalendar: React.FC<SubmissionCalendarProps> = ({
 
     return (
       <div className="flex flex-col items-center mt-4 w-full px-4">
-        <p className="text-white text-sm mb-2 self-center">
+        <p
+          className={`text-sm mb-2 self-center ${
+            isDark ? "text-gray-200" : "text-gray-800"
+          }`}
+        >
           {monthName.toLowerCase()} {year}
         </p>
         <div className="grid grid-cols-7 gap-1 w-full text-center text-xs text-gray-400">
@@ -107,7 +113,13 @@ const LeetCodeCalendar: React.FC<SubmissionCalendarProps> = ({
 
   return (
     <div className="flex flex-col items-center mt-4 w-full px-4">
-      <p className="text-white text-sm mb-2 self-center">week's submissions</p>
+      <p
+        className={` text-sm mb-2 self-center ${
+          isDark ? "text-gray-200" : "text-gray-800"
+        }`}
+      >
+        week's submissions
+      </p>
       <div className="grid grid-cols-7 gap-2 w-full text-center">
         {daysInWeek.map((day, index) => {
           const count = getSubmissionCount(day);
@@ -118,13 +130,23 @@ const LeetCodeCalendar: React.FC<SubmissionCalendarProps> = ({
               text={`${count} submissions on ${day.toLocaleDateString()}`}
             >
               <div className="flex flex-col items-center gap-1">
-                <span className="text-xs text-gray-400">
+                <span
+                  className={`text-xs text-gray-400 ${
+                    isDark ? "text-gray-200" : "text-gray-800"
+                  }`}
+                >
                   {daysOfWeek[index]}
                 </span>
                 <div
                   className={`w-8 h-8 flex items-center justify-center rounded-sm ${color}`}
                 >
-                  <span className="text-white text-xs">{day.getDate()}</span>
+                  <span
+                    className={`text-white text-xs ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
+                    {day.getDate()}
+                  </span>
                 </div>
               </div>
             </Tooltip>

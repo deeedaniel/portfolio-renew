@@ -1,9 +1,24 @@
-import { FileUser, Timer, Linkedin, Github, Film } from "lucide-react";
+import {
+  FileUser,
+  Timer,
+  Linkedin,
+  Github,
+  Film,
+  Sun,
+  Moon,
+} from "lucide-react";
 import Tooltip from "./Tooltip";
 
-export const Taskbar = () => {
+export const Taskbar = ({ theme }: { theme: "dark" | "light" }) => {
   return (
-    <div className="flex w-fit max-w-sm sm:max-w-md lg:w-fit fixed items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-2 py-2 lg:py-1 rounded-xl justify-between px-3 lg:p-2 shadow-xl mx-2 lg:mx-0 z-50">
+    <div
+      className={
+        "flex w-fit max-w-sm sm:max-w-md lg:w-fit fixed items-center gap-2 bottom-2 p-2 py-2 lg:py-1 rounded-xl justify-between px-3 lg:p-2 shadow-xl mx-2 lg:mx-0 z-50 " +
+        (theme === "dark"
+          ? "border border-gray-700 bg-gray-950"
+          : "border border-gray-300 bg-white")
+      }
+    >
       {/* <div className="min-w-0 flex-shrink">
         
         <div className="hidden lg:flex text-gray-200 bg-gray-800 p-1 px-3 rounded-lg items-center gap-2 border border-gray-700">
@@ -33,7 +48,12 @@ export const Taskbar = () => {
             onClick={() => {
               window.dispatchEvent(new CustomEvent("openMedia"));
             }}
-            className="border border-gray-700 rounded-lg p-1 bg-white"
+            className={
+              "border rounded-lg p-1 " +
+              (theme === "dark"
+                ? "border-gray-700 bg-white"
+                : "border-gray-300")
+            }
           >
             <Film
               className="w-7 h-7 transition-all duration-300 object-contain"
@@ -48,7 +68,12 @@ export const Taskbar = () => {
               // For now, this will just be a placeholder
               window.dispatchEvent(new CustomEvent("openTimer"));
             }}
-            className="border border-gray-700 rounded-lg p-1 bg-white"
+            className={
+              "border rounded-lg p-1 " +
+              (theme === "dark"
+                ? "border-gray-700 bg-white"
+                : "border-gray-300")
+            }
           >
             <Timer
               className="w-7 h-7 transition-all duration-300 object-contain"
@@ -62,7 +87,12 @@ export const Taskbar = () => {
             href="https://github.com/deeedaniel"
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-gray-700 rounded-lg p-1 bg-white"
+            className={
+              "border rounded-lg p-1 " +
+              (theme === "dark"
+                ? "border-gray-700 bg-white"
+                : "border-gray-300")
+            }
           >
             <Github
               className="w-7 h-7 transition-all duration-300 object-contain"
@@ -76,7 +106,12 @@ export const Taskbar = () => {
             href="https://www.linkedin.com/in/daniel-nguyenn/"
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-gray-700 rounded-lg p-1 bg-white"
+            className={
+              "border rounded-lg p-1 " +
+              (theme === "dark"
+                ? "border-gray-700 bg-white"
+                : "border-gray-300")
+            }
           >
             <Linkedin
               className="w-7 h-7 transition-all duration-300 object-contain"
@@ -90,12 +125,41 @@ export const Taskbar = () => {
             onClick={() => {
               window.dispatchEvent(new CustomEvent("openResume"));
             }}
-            className="border border-gray-700 rounded-lg p-1 bg-white"
+            className={
+              "border rounded-lg p-1 " +
+              (theme === "dark"
+                ? "border-gray-700 bg-white"
+                : "border-gray-300")
+            }
           >
             <FileUser
               className="w-7 h-7 transition-all duration-300 object-contain"
               color="black"
             />
+          </button>
+        </Tooltip>
+        <div className="border border-gray-300 rounded-full" />
+        <Tooltip text={theme === "dark" ? "Light Mode" : "Dark Mode"}>
+          <button
+            onClick={() => {
+              window.dispatchEvent(new CustomEvent("toggleTheme"));
+            }}
+            className={
+              "border rounded-lg p-1 bg-white " +
+              (theme === "dark" ? "border-gray-700" : "border-gray-300 ")
+            }
+          >
+            {theme === "dark" ? (
+              <Sun
+                className="w-7 h-7 transition-all duration-300 object-contain"
+                color="black"
+              />
+            ) : (
+              <Moon
+                className="w-7 h-7 transition-all duration-300 object-contain"
+                color="black"
+              />
+            )}
           </button>
         </Tooltip>
       </div>
