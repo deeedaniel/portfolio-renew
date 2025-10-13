@@ -2173,7 +2173,7 @@ const App = () => {
           }}
         >
           <div
-            className={`w-full h-[80vh] max-w-5xl max-h-[90vh] ${overlayThemeClass} rounded-xl flex flex-col shadow-2xl`}
+            className={`w-full h-[70vh] max-w-5xl max-h-[90vh] ${overlayThemeClass} rounded-xl flex flex-col shadow-2xl`}
           >
             <div
               className={`rounded-t-xl text-sm text-center relative ${headerClass(
@@ -2204,7 +2204,7 @@ const App = () => {
               </div>
 
               {/* Video Controls */}
-              <div className="rounded-lg p-3">
+              <div className="rounded-lg">
                 <div className="flex items-center justify-between mb-2">
                   <button
                     onClick={() =>
