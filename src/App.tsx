@@ -938,7 +938,7 @@ const App = () => {
                       <a
                         href="https://open.spotify.com/user/cringedlol"
                         className={`${
-                          isDark ? "text-blue-400" : "text-red-600"
+                          isDark ? "text-blue-400" : "text-[#2A8EE0]"
                         } underline`}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -972,7 +972,11 @@ const App = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-200 mt-4">
+              <p
+                className={`text-sm text-gray-200 mt-4 ${
+                  isDark ? "text-gray-200" : "text-gray-800"
+                }`}
+              >
                 fetching top tracks...
               </p>
             )}
@@ -1033,7 +1037,11 @@ const App = () => {
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-gray-200 mt-4 p-4">
+                <p
+                  className={`text-sm text-gray-200 mt-4 p-4 ${
+                    isDark ? "text-gray-200" : "text-gray-800"
+                  }`}
+                >
                   fetching leetcode stats...
                 </p>
               )}
@@ -1916,7 +1924,11 @@ const App = () => {
                       </div>
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-200 mt-4">
+                    <p
+                      className={`text-sm text-gray-200 mt-4 ${
+                        isDark ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
                       fetching leetcode stats...
                     </p>
                   )}
