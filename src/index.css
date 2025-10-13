@@ -2,6 +2,7 @@
 
 * {
   font-family: OCR A Std, monospace;
+  scrollbar-gutter: stable both-edges; /* Prevents layout shift */
 }
 
 button {
@@ -15,10 +16,19 @@ button {
   }
 }
 
+/* Make scrollbars overlay */
+body,
+html,
+div {
+  scrollbar-width: thin; /* Firefox - thin scrollbar */
+  scrollbar-color: #6b7280 transparent; /* Firefox - thumb and track colors */
+}
+
 /* For WebKit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   width: 8px; /* Adjust scrollbar width */
   height: 8px; /* Adjust scrollbar height for horizontal scrollbars */
+  background: transparent;
 }
 
 ::-webkit-scrollbar-track {
@@ -33,6 +43,10 @@ button {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #4b5563; /* Gray-600 on hover for better contrast */
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 /* For Firefox */
@@ -54,6 +68,7 @@ html::-webkit-scrollbar {
 div::-webkit-scrollbar {
   width: 8px;
   height: 8px;
+  background: transparent;
 }
 
 div::-webkit-scrollbar-track {
