@@ -834,7 +834,7 @@ const App = () => {
                 enter!
               </p>
               <button
-                className=" ml-4 mt-2 mb-2 text-xs block text-left lg:hidden text-gray-400"
+                className=" ml-4 mt-2 mb-2 text-xs block text-left text-gray-400 underline"
                 onClick={() => {
                   setExpandWindow("me");
                 }}
@@ -1423,15 +1423,15 @@ const App = () => {
                     I'm currently focused on improving my engineering skills and
                     searching for Summer 2026 internships.
                   </p>
-                  <p
+                  {/* <p
                     className={`text-gray-200 ${
                       isDark ? "text-gray-200" : "text-gray-800"
                     }`}
                   >
                     ✉︎ nguyendaniel1312@gmail.com
-                  </p>
+                  </p> */}
                   <button
-                    className="text-gray-400 block lg:hidden text-left underline"
+                    className="text-gray-400 text-left underline"
                     onClick={() => setExpandWindow("")}
                   >
                     back to main page ❮
