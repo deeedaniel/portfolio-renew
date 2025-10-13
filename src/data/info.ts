@@ -200,3 +200,16 @@ export const asciiList = [
 ⠀⠀⠀⠀
 `,
 ];
+
+export const videos = [
+  {
+    id: "SI--bNjvQSg",
+    title: "reno",
+    embedUrl: "https://www.youtube.com/embed/SI--bNjvQSg",
+  },
+  {
+    id: "UM6B-B2rey8",
+    title: "santa cruz hike",
+    embedUrl: "https://www.youtube.com/embed/UM6B-B2rey8",
+  },
+];
