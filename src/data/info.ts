@@ -13,7 +13,7 @@ export const experiencesData = [
     window: "cooledtured",
     date: "Oct 2024-Apr 2025",
     description:
-      "At cooledtured, an anime toy store, I worked on an engagement page to survey & quiz users about their favorite anime, shows, and movies. This engagement page was built using React and Firebase. I built the authentication system tracking user's progress with role-based access and implemented the UI for the quiz along with a leaderboard system for each quiz.",
+      "At cooledtured, an anime toy store, I worked on an engagement page to survey & quiz users about their favorite anime, shows, and movies. This engagement page was built using React and Firebase. I built the authentication system tracking user's progress with role-based access and implemented the UI for the quiz along with a leaderboard system for each quiz. I also created their onboarding documentation for new developers, including written tutorials and videos.",
     image: "/cooledtured.jpeg",
     links: [
       { name: "View engagement page", url: "https://cooledtured.com/engage" },
@@ -211,5 +211,15 @@ export const videos = [
     id: "UM6B-B2rey8",
     title: "santa cruz hike",
     embedUrl: "https://www.youtube.com/embed/UM6B-B2rey8",
+  },
+  {
+    id: "Lqy06QtT4m8",
+    title: "valorant edit",
+    embedUrl: "https://www.youtube.com/embed/Lqy06QtT4m8",
+  },
+  {
+    id: "-gcgE-FCVIE",
+    title: "anime edit",
+    embedUrl: "https://www.youtube.com/embed/-gcgE-FCVIE",
   },
 ];
