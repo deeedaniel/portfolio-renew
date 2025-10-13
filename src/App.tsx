@@ -17,6 +17,16 @@ const App = () => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("theme");
       if (saved === "dark" || saved === "light") return saved;
+
+      // Check OS theme preference if no saved preference
+      if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      ) {
+        return "dark";
+      } else {
+        return "light";
+      }
     }
     return "dark";
   });
@@ -762,6 +772,26 @@ const App = () => {
     isTimerRunning,
     expandWindow,
   ]);
+
+  // Add effect to listen for OS theme changes
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia) {
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+      const handleChange = (e: MediaQueryListEvent) => {
+        // Only update theme if user hasn't manually set a preference
+        const savedTheme = localStorage.getItem("theme");
+        if (!savedTheme) {
+          setTheme(e.matches ? "dark" : "light");
+        }
+      };
+
+      // Listen for changes in OS theme preference
+      mediaQuery.addEventListener("change", handleChange);
+
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+  }, []);
 
   return (
     <div
