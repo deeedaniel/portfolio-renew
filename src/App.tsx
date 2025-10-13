@@ -13,6 +13,13 @@ import AnimatedEllipsis from "./components/AnimatedEllipsis";
 import { videos } from "./data/info";
 
 const App = () => {
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("theme");
+      if (saved === "dark" || saved === "light") return saved;
+    }
+    return "dark";
+  });
   const [time, setTime] = useState(new Date());
 
   // const [count, setCount] = useState(0);
@@ -400,6 +407,39 @@ const App = () => {
     }
   }, [expandWindow]);
 
+  // theme toggle
+  useEffect(() => {
+    const handler = () =>
+      setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+    window.addEventListener("toggleTheme", handler);
+    return () => window.removeEventListener("toggleTheme", handler);
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {}
+  }, [theme]);
+
+  const isDark = theme === "dark";
+  const windowThemeClass = isDark
+    ? "bg-black/80 border border-gray-700"
+    : "bg-[#F6F6F6]/80 border border-gray-300";
+  const gridThemeClass = isDark
+    ? "bg-gray-900/40 border border-gray-700"
+    : "bg-gray-100/60 border border-gray-300";
+  const overlayThemeClass = isDark
+    ? "bg-black/90 border border-gray-700"
+    : "bg-white border border-gray-300";
+  const headerClass = (selected: boolean) =>
+    isDark
+      ? selected
+        ? "bg-white text-black"
+        : "bg-gray-400 text-black"
+      : selected
+      ? "bg-gray-400 text-black"
+      : "bg-gray-200 text-black";
+
   const focusInput = () => {
     inputRef.current?.focus();
   };
@@ -724,12 +764,20 @@ const App = () => {
   ]);
 
   return (
-    <div className="min-h-screen w-screen flex items-center justify-center bg-black text-white py-6 pb-24 lg:py-8 lg:pb-20 lg:bg-[url('/creation_of_adam.jpeg')] bg-fixed bg-cover bg-center overscroll-none">
+    <div
+      className={`${
+        isDark
+          ? "bg-black text-white lg:bg-[url('/creation_of_adam.jpeg')]"
+          : "bg-white text-black lg:bg-[url('/creation_of_adam_light.jpg')]"
+      } min-h-screen w-screen flex items-center justify-center py-6 pb-24 lg:py-8 lg:pb-20 bg-fixed bg-cover bg-center overscroll-none`}
+    >
       {/* Bento box grid */}
-      <div className="relative grid grid-cols-2 lg:grid-cols-4 lg:row-span-4 w-full mx-1 gap-2 bg-gray-900/40 bg-opacity-50 rounded-2xl p-1.5 border border-gray-700 max-w-6xl lg:justify-center shadow-xl lg:min-h-[70vh]">
+      <div
+        className={`relative grid grid-cols-2 lg:grid-cols-4 lg:row-span-4 w-full mx-1 gap-2 rounded-2xl p-1.5 ${gridThemeClass} max-w-6xl lg:justify-center shadow-xl lg:min-h-[70vh]`}
+      >
         {/* Main terminal window */}
         <div
-          className={` bg-black/80 rounded-xl col-span-2 flex border border-gray-700 flex-col order-1 ${
+          className={` ${windowThemeClass} rounded-xl col-span-2 flex flex-col order-1 ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500`}
           onClick={() => {
@@ -738,9 +786,9 @@ const App = () => {
           }}
         >
           <p
-            className={`text-black  rounded-t-xl text-sm text-center relative ${
-              selectedWindow === "me" ? "bg-white" : "bg-gray-400"
-            }`}
+            className={`rounded-t-xl text-sm text-center relative ${headerClass(
+              selectedWindow === "me"
+            )}`}
           >
             me - zsh
             <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
@@ -754,11 +802,19 @@ const App = () => {
             />
           </p>
           <div className="my-auto flex">
-            <p className="text-[4px] text-blue-100 font-mono whitespace-pre min-w-1/2 text-center">
+            <p
+              className={`text-[4px] font-mono whitespace-pre min-w-1/2 text-center ${
+                isDark ? "text-blue-100" : "text-[#000000]"
+              }`}
+            >
               {selectedAscii}
             </p>
             <div className="mx-auto  min-w-1/2 mt-2">
-              <p className="text-blue-300 text-sm lg:text-lg">
+              <p
+                className={`${
+                  isDark ? "text-blue-300" : "text-[#2A8EE0]"
+                } text-sm lg:text-lg`}
+              >
                 daniel@MacbookPro
               </p>
               <p className="text-[9px] lg:text-sm mb-2">
@@ -791,11 +847,11 @@ const App = () => {
 
         {/* Music */}
         <div
-          className={` bg-black/80 ${
+          className={` ${windowThemeClass} ${
             isTimerOpen
               ? "col-span-2 lg:col-span-1"
               : "col-span-2 lg:col-span-1 lg:row-span-1"
-          } border border-gray-700 rounded-xl order-2 ${
+          } rounded-xl order-2 ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500`}
           onClick={() => {
@@ -804,9 +860,9 @@ const App = () => {
           }}
         >
           <p
-            className={`text-black rounded-t-xl text-sm text-center relative ${
-              selectedWindow === "music" ? "bg-white" : "bg-gray-400"
-            }`}
+            className={`rounded-t-xl text-sm text-center relative ${headerClass(
+              selectedWindow === "music"
+            )}`}
           >
             music - zsh
             <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
@@ -837,7 +893,11 @@ const App = () => {
             ) : (
               <p>
                 <div className="flex items-center">
-                  <HeadphoneOff className="w-16 h-16 p-3 rounded-md mr-4 bg-gray-800" />
+                  <HeadphoneOff
+                    className={`w-16 h-16 p-3 rounded-md mr-4 ${
+                      isDark ? "bg-gray-800" : "bg-gray-200"
+                    }`}
+                  />
                   <div>
                     <p className="text-xs lg:text-sm font-medium">
                       i'm not currently listening to music {"("}or my spotify
@@ -847,7 +907,9 @@ const App = () => {
                       visit my{" "}
                       <a
                         href="https://open.spotify.com/user/cringedlol"
-                        className="text-blue-400 underline"
+                        className={`${
+                          isDark ? "text-blue-400" : "text-red-600"
+                        } underline`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -861,7 +923,13 @@ const App = () => {
             )}
             {topTracks && topTracks.tracks ? (
               <div className="flex flex-col mb-3">
-                <p className="text-sm text-gray-200 mt-4">Top Tracks</p>
+                <p
+                  className={`text-sm ${
+                    isDark ? "text-gray-200" : "text-gray-800"
+                  } mt-4`}
+                >
+                  Top Tracks
+                </p>
                 {topTracks.tracks.map((track) => (
                   <div key={track.id} className="flex items-center mt-1.5">
                     <img
@@ -884,7 +952,7 @@ const App = () => {
         {/* LeetCode */}
         {!isTimerOpen && (
           <div
-            className={` bg-black/80 col-span-2 lg:col-span-1 border border-gray-700 rounded-xl order-7 row-start-6 lg:row-start-2 ${
+            className={` ${windowThemeClass} col-span-2 lg:col-span-1 rounded-xl order-7 row-start-6 lg:row-start-2 ${
               expandWindow ? "opacity-0" : ""
             } transition-opacity duration-500`}
             onClick={() => {
@@ -893,9 +961,9 @@ const App = () => {
             }}
           >
             <p
-              className={`text-black rounded-t-xl text-sm text-center relative ${
-                selectedWindow === "leetcode" ? "bg-white" : "bg-gray-400"
-              }`}
+              className={`rounded-t-xl text-sm text-center relative ${headerClass(
+                selectedWindow === "leetcode"
+              )}`}
             >
               leetcode - zsh
               <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
@@ -914,7 +982,11 @@ const App = () => {
                     className="w-16 h-16 bg-gray-100 rounded-xl p-1"
                   />
                   <div className="flex-grow">
-                    <p className="text-sm font-bold text-white">
+                    <p
+                      className={`text-sm font-bold ${
+                        isDark ? "text-white" : "text-gray-800"
+                      }`}
+                    >
                       total solved: {leetCode.totalSolved}
                     </p>
                     <div className="flex flex-col justify-between text-sm">
@@ -938,6 +1010,7 @@ const App = () => {
               {leetCode && leetCode.submissionCalendar && (
                 <LeetCodeCalendar
                   submissionCalendar={leetCode.submissionCalendar}
+                  isDark={isDark}
                 />
               )}
             </div>
@@ -946,7 +1019,7 @@ const App = () => {
 
         {/* CLI LLM about me */}
         <div
-          className={`bg-black/80 col-span-2 lg:col-span-1 lg:row-span-2 border border-gray-700 rounded-xl order-3 ${
+          className={`${windowThemeClass} col-span-2 lg:col-span-1 lg:row-span-2 rounded-xl order-3 ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500 pb-3 flex flex-col min-h-0`}
           onClick={() => {
@@ -955,9 +1028,9 @@ const App = () => {
           }}
         >
           <p
-            className={`text-black rounded-t-xl text-sm text-center relative top-0 ${
-              selectedWindow === "cli" ? "bg-white" : "bg-gray-400"
-            }`}
+            className={`rounded-t-xl text-sm text-center relative top-0 ${headerClass(
+              selectedWindow === "cli"
+            )}`}
           >
             daniel-code - zsh
             <button
@@ -974,22 +1047,38 @@ const App = () => {
             />
           </p>
           <div
-            className="mt-2 mx-4 font-mono text-sm flex-grow overflow-y-auto h-0"
+            className="mt-2 mx-4 font-mono text-sm flex-grow overflow-y-auto lg:h-0"
             onClick={focusInput}
           >
             {lastCommand && (
               <>
                 <div className="flex items-center">
                   <span className="text-blue-400">❯</span>
-                  <p className="ml-2 text-gray-200">{lastCommand}</p>
+                  <p
+                    className={`ml-2 ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
+                    {lastCommand}
+                  </p>
                 </div>
                 {!response && (
-                  <p className="text-gray-200 whitespace-pre-wrap">
+                  <p
+                    className={`${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    } whitespace-pre-wrap`}
+                  >
                     hmm
                     <AnimatedEllipsis />
                   </p>
                 )}
-                <p className="text-gray-200 whitespace-pre-wrap">{response}</p>
+                <p
+                  className={`${
+                    isDark ? "text-gray-200" : "text-gray-800"
+                  } whitespace-pre-wrap`}
+                >
+                  {response}
+                </p>
               </>
             )}
             <div className="flex items-center">
@@ -1004,7 +1093,11 @@ const App = () => {
                     handleCommand(e);
                   }
                 }}
-                className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"
+                className={`bg-transparent border-none ${
+                  isDark
+                    ? "text-gray-200 placeholder:text-gray-400"
+                    : "text-gray-800 placeholder:text-gray-400"
+                } w-full focus:outline-none ml-2`}
                 placeholder="ask me anything!"
               />
             </div>
@@ -1013,7 +1106,7 @@ const App = () => {
 
         {/* Experience */}
         <div
-          className={`bg-black/80 col-span-2 lg:col-span-1 border border-gray-700 rounded-xl order-4 row-start-2 ${
+          className={`${windowThemeClass} col-span-2 lg:col-span-1 rounded-xl order-4 row-start-2 ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500`}
           onClick={() => {
@@ -1022,9 +1115,9 @@ const App = () => {
           }}
         >
           <p
-            className={`text-black rounded-t-xl text-sm text-center relative ${
-              selectedWindow === "experience" ? "bg-white" : "bg-gray-400"
-            }`}
+            className={`rounded-t-xl text-sm text-center relative ${headerClass(
+              selectedWindow === "experience"
+            )}`}
           >
             experience - zsh
             <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
@@ -1040,8 +1133,12 @@ const App = () => {
                 key={index}
                 className={`rounded-md text-sm lg:text-base transition-all duration-150 cursor-pointer my-2 lg:my-1 ${
                   index === experienceIndex
-                    ? " text-white font-bold underline"
-                    : "bg-transparent text-blue-300"
+                    ? `${
+                        isDark ? "text-white" : "text-gray-800"
+                      } font-bold underline`
+                    : `bg-transparent ${
+                        isDark ? "text-blue-300" : "text-[#75b8eb]"
+                      }`
                 }`}
                 onClick={() => {
                   setExpandWindow("experience");
@@ -1056,7 +1153,7 @@ const App = () => {
 
         {/* Projects */}
         <div
-          className={` bg-black/80 col-span-2 lg:col-span-1 border border-gray-700 rounded-xl order-5 row-start-3 lg:row-start-2 ${
+          className={` ${windowThemeClass} col-span-2 lg:col-span-1 rounded-xl order-5 row-start-3 lg:row-start-2 ${
             expandWindow ? "opacity-0" : ""
           } transition-opacity duration-500`}
           onClick={() => {
@@ -1065,9 +1162,9 @@ const App = () => {
           }}
         >
           <p
-            className={`text-black rounded-t-xl text-sm text-center relative ${
-              selectedWindow === "projects" ? "bg-white" : "bg-gray-400"
-            }`}
+            className={`rounded-t-xl text-sm text-center relative ${headerClass(
+              selectedWindow === "projects"
+            )}`}
           >
             projects - zsh
             <button className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2" />
@@ -1083,8 +1180,12 @@ const App = () => {
                 key={index}
                 className={` rounded-md text-sm lg:text-base transition-all duration-150 cursor-pointer my-2 lg:my-1 ${
                   index === projectIndex
-                    ? " text-white font-bold underline"
-                    : "bg-transparent text-blue-300"
+                    ? `${
+                        isDark ? "text-white" : "text-gray-800"
+                      } font-bold underline`
+                    : `bg-transparent ${
+                        isDark ? "text-blue-300" : "text-[#75b8eb]"
+                      }`
                 }`}
                 onClick={() => {
                   setExpandWindow("projects");
@@ -1102,7 +1203,7 @@ const App = () => {
         {/* Timer - only render when open */}
         {isTimerOpen && (
           <div
-            className={` bg-black/80 col-span-2 lg:col-span-1 border border-gray-700 rounded-xl order-6 ${
+            className={` ${windowThemeClass} col-span-2 lg:col-span-1 rounded-xl order-6 ${
               expandWindow ? "opacity-0" : ""
             } transition-opacity duration-500`}
             onClick={() => {
@@ -1111,9 +1212,9 @@ const App = () => {
             }}
           >
             <p
-              className={`text-black rounded-t-xl text-sm text-center relative ${
-                selectedWindow === "timer" ? "bg-white" : "bg-gray-400"
-              }`}
+              className={`rounded-t-xl text-sm text-center relative ${headerClass(
+                selectedWindow === "timer"
+              )}`}
             >
               pomodoro timer - zsh
               <button
@@ -1214,10 +1315,14 @@ const App = () => {
             {expandWindow === "me" && (
               <div
                 ref={meWindowRef}
-                className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto focus:outline-none relative pb-24 lg:pb-0 overscroll-none"
+                className={`w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none ${windowThemeClass} rounded-xl overflow-y-auto focus:outline-none relative pb-24 lg:pb-0 overscroll-none`}
                 tabIndex={0}
               >
-                <p className="text-black bg-gray-300 rounded-t-xl text-sm text-center sticky top-0 left-0 right-0">
+                <p
+                  className={`rounded-t-xl text-sm text-center sticky top-0 left-0 right-0 ${headerClass(
+                    true
+                  )}`}
+                >
                   me - zsh
                   <button
                     className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer"
@@ -1233,11 +1338,19 @@ const App = () => {
                   />
                 </p>
                 <div className=" flex mt-6">
-                  <p className="text-[4px] text-blue-100 font-mono whitespace-pre min-w-1/2 text-center">
+                  <p
+                    className={`text-[4px] ${
+                      isDark ? "text-blue-100" : "text-black"
+                    } font-mono whitespace-pre min-w-1/2 text-center`}
+                  >
                     {selectedAscii}
                   </p>
                   <div className="mx-auto  min-w-1/2 mt-2">
-                    <p className="text-blue-300 text-sm lg:text-lg">
+                    <p
+                      className={`${
+                        isDark ? "text-blue-300" : "text-[#75b8eb]"
+                      } text-sm lg:text-lg`}
+                    >
                       daniel@MacbookPro
                     </p>
                     <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
@@ -1256,32 +1369,64 @@ const App = () => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-5 max-w-2xl mx-auto mt-4 mb-10 px-4 ">
-                  <p className="text-gray-200">Hello!</p>
-                  <p className="text-gray-200">
+                  <p
+                    className={`text-gray-200 ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
+                    Hello!
+                  </p>
+                  <p
+                    className={`text-gray-200 ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
                     Welcome to my portfolio, I hope you like it!
                   </p>
-                  <p className="text-gray-200">
+                  <p
+                    className={`text-gray-200 ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
                     Back in high school, I took AP Computer Science for fun. I
                     thought it was a really fun class, so when applying to
                     colleges, I picked Computer Science as my major not really
                     knowing what it was about. Since then, I have really fell in
                     love with coding.
                   </p>
-                  <p className="text-gray-200">
+                  <p
+                    className={`text-gray-200 ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
                     I'm currently in my third year at SJSU, and I'm expected to
                     graduate in May 2027. I'm also working part-time as a
                     full-stack developer at TwinMind.
                   </p>
-                  <p className="text-gray-200">
+                  <p
+                    className={`text-gray-200 ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
                     Outside of school, I like to film & edit videos, playing
                     basketball, watching movies/shows/anime, and listening to
                     music.
                   </p>
-                  <p className="text-gray-200">
+                  <p
+                    className={`text-gray-200 ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
                     I'm currently focused on improving my engineering skills and
                     searching for Summer 2026 internships.
                   </p>
-                  <p className="text-gray-200">✉︎ nguyendaniel1312@gmail.com</p>
+                  <p
+                    className={`text-gray-200 ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
+                    ✉︎ nguyendaniel1312@gmail.com
+                  </p>
                   <button
                     className="text-gray-400 block lg:hidden text-left underline"
                     onClick={() => setExpandWindow("")}
@@ -1294,13 +1439,13 @@ const App = () => {
             {expandWindow === "experience" && (
               <>
                 {selectExperience !== "" ? (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-36 lg:pb-0 overscroll-none">
+                  <div
+                    className={`w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none ${windowThemeClass} rounded-xl overflow-y-auto pb-36 lg:pb-0 overscroll-none`}
+                  >
                     <p
-                      className={`text-black rounded-t-xl text-sm text-center sticky top-0 ${
+                      className={`rounded-t-xl text-sm text-center sticky top-0 ${headerClass(
                         selectedWindow === "experience"
-                          ? "bg-white"
-                          : "bg-gray-400"
-                      }`}
+                      )}`}
                     >
                       {selectExperience}
                       <button
@@ -1329,10 +1474,18 @@ const App = () => {
                                 alt={selectedExperienceData.title}
                                 className="w-full h-48 object-cover rounded-lg mb-4 max-w-2xl mx-auto"
                               />
-                              <p className="text-gray-300 mt-2 max-w-2xl mx-auto">
+                              <p
+                                className={`text-gray-300 mt-2 max-w-2xl mx-auto ${
+                                  isDark ? "text-gray-200" : "text-gray-800"
+                                }`}
+                              >
                                 {selectedExperienceData.date}
                               </p>
-                              <p className="text-gray-400 mt-2 max-w-2xl mx-auto">
+                              <p
+                                className={`text-gray-400 mt-2 max-w-2xl mx-auto ${
+                                  isDark ? "text-gray-200" : "text-gray-800"
+                                }`}
+                              >
                                 {selectedExperienceData.description}
                               </p>
                               <div className="mt-4 max-w-2xl mx-auto flex flex-col">
@@ -1343,7 +1496,11 @@ const App = () => {
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       key={link.name}
-                                      className={`inline-block text-white rounded transition-all duration-150 ${
+                                      className={`inline-block  rounded transition-all duration-150 ${
+                                        isDark
+                                          ? "text-gray-200"
+                                          : "text-gray-800"
+                                      } ${
                                         index === selectedExperienceLinkIndex
                                           ? " font-bold"
                                           : ""
@@ -1383,13 +1540,13 @@ const App = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto overscroll-none">
+                  <div
+                    className={`w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none ${windowThemeClass} rounded-xl overflow-y-auto overscroll-none`}
+                  >
                     <p
-                      className={`text-black rounded-t-xl text-sm text-center relative ${
+                      className={`rounded-t-xl text-sm text-center relative ${headerClass(
                         selectedWindow === "experience"
-                          ? "bg-white"
-                          : "bg-gray-400"
-                      }`}
+                      )}`}
                     >
                       experience - zsh
                       <button
@@ -1425,13 +1582,13 @@ const App = () => {
             {expandWindow === "projects" && (
               <>
                 {selectProject !== "" ? (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto pb-36 lg:pb-0 overscroll-none">
+                  <div
+                    className={`w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none ${windowThemeClass} rounded-xl overflow-y-auto pb-36 lg:pb-0 overscroll-none`}
+                  >
                     <p
-                      className={`text-black rounded-t-xl text-sm text-center sticky top-0 ${
+                      className={`rounded-t-xl text-sm text-center sticky top-0 ${headerClass(
                         selectedWindow === "projects"
-                          ? "bg-white"
-                          : "bg-gray-400"
-                      }`}
+                      )}`}
                     >
                       {
                         projectsData.find((p) => p.title === selectProject)
@@ -1466,10 +1623,18 @@ const App = () => {
                                 alt={selectedProjectData.title}
                                 className="mx-auto h-48 object-contain rounded-lg mb-4"
                               />
-                              <p className="text-gray-300 mt-2 max-w-2xl mx-auto">
+                              <p
+                                className={`text-gray-300 mt-2 max-w-2xl mx-auto ${
+                                  isDark ? "text-gray-200" : "text-gray-800"
+                                }`}
+                              >
                                 {selectedProjectData.date}
                               </p>
-                              <p className="text-gray-400 mt-2 max-w-2xl mx-auto">
+                              <p
+                                className={`text-gray-400 mt-2 max-w-2xl mx-auto ${
+                                  isDark ? "text-gray-200" : "text-gray-800"
+                                }`}
+                              >
                                 {selectedProjectData.description}
                               </p>
                               <div className="mt-4 max-w-2xl mx-auto flex flex-col">
@@ -1480,7 +1645,11 @@ const App = () => {
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       key={link.name}
-                                      className={`inline-block text-white rounded transition-all duration-150 ${
+                                      className={`inline-block ${
+                                        isDark
+                                          ? "text-gray-200"
+                                          : "text-gray-800"
+                                      } rounded transition-all duration-150 ${
                                         index === selectedLinkIndex
                                           ? " font-bold"
                                           : ""
@@ -1518,13 +1687,13 @@ const App = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto">
+                  <div
+                    className={`w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none ${windowThemeClass} rounded-xl overflow-y-auto`}
+                  >
                     <p
-                      className={`text-black rounded-t-xl text-sm text-center relative ${
+                      className={`rounded-t-xl text-sm text-center relative ${headerClass(
                         selectedWindow === "projects"
-                          ? "bg-white"
-                          : "bg-gray-400"
-                      }`}
+                      )}`}
                     >
                       projects - zsh
                       <button
@@ -1561,11 +1730,13 @@ const App = () => {
               </>
             )}
             {expandWindow === "music" && (
-              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto overscroll-none">
+              <div
+                className={`w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none ${windowThemeClass} rounded-xl overflow-y-auto overscroll-none`}
+              >
                 <p
-                  className={`text-black rounded-t-xl text-sm text-center sticky top-0 ${
-                    selectedWindow === "music" ? "bg-white" : "bg-gray-400"
-                  }`}
+                  className={`rounded-t-xl text-sm text-center sticky top-0 ${headerClass(
+                    selectedWindow === "music"
+                  )}`}
                 >
                   music - zsh
                   <button
@@ -1602,7 +1773,11 @@ const App = () => {
                   ) : (
                     <p>
                       <div className="flex items-center">
-                        <HeadphoneOff className="w-16 h-16 p-3 rounded-md mr-4 bg-gray-800" />
+                        <HeadphoneOff
+                          className={`w-16 h-16 p-3 rounded-md mr-4 ${
+                            isDark ? "bg-gray-800" : "bg-gray-200"
+                          }`}
+                        />
                         <div>
                           <p className="text-xs lg:text-sm font-medium">
                             i'm not currently listening to music {"("}or my
@@ -1626,7 +1801,13 @@ const App = () => {
                   )}
                   {topTracks && topTracks.tracks ? (
                     <div className="flex flex-col">
-                      <p className="text-sm text-gray-200 mt-4">Top Tracks</p>
+                      <p
+                        className={`text-sm ${
+                          isDark ? "text-gray-200" : "text-gray-800"
+                        } mt-4`}
+                      >
+                        Top Tracks
+                      </p>
                       {topTracks.tracks.map((track) => (
                         <div
                           key={track.id}
@@ -1650,8 +1831,14 @@ const App = () => {
               </div>
             )}
             {expandWindow === "leetcode" && (
-              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl overflow-y-auto overscroll-none">
-                <p className="text-black bg-white rounded-t-xl text-sm text-center sticky top-0 z-10">
+              <div
+                className={`w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none ${windowThemeClass} rounded-xl overflow-y-auto overscroll-none`}
+              >
+                <p
+                  className={`${
+                    isDark ? "text-white" : "text-gray-800"
+                  } rounded-t-xl text-sm text-center sticky top-0 z-10`}
+                >
                   leetcode - zsh
                   <button
                     className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2"
@@ -1675,7 +1862,11 @@ const App = () => {
                         className="w-16 h-16 bg-white rounded-full p-1"
                       />
                       <div className="flex-grow">
-                        <p className="text-sm font-bold text-white">
+                        <p
+                          className={`text-sm font-bold ${
+                            isDark ? "text-white" : "text-gray-800"
+                          }`}
+                        >
                           total solved: {leetCode.totalSolved}
                         </p>
                         <div className="flex flex-col  justify-between text-sm">
@@ -1701,6 +1892,7 @@ const App = () => {
                       <LeetCodeCalendar
                         submissionCalendar={leetCode.submissionCalendar}
                         viewMode="month"
+                        isDark={isDark}
                       />
                     </div>
                   )}
@@ -1708,11 +1900,13 @@ const App = () => {
               </div>
             )}
             {expandWindow === "cli" && (
-              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl flex flex-col overflow-y-auto overscroll-none">
+              <div
+                className={`w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none ${windowThemeClass} rounded-xl flex flex-col overflow-y-auto overscroll-none`}
+              >
                 <p
-                  className={`text-black rounded-t-xl text-sm text-center sticky top-0 ${
-                    selectedWindow === "cli" ? "bg-white" : "bg-gray-400"
-                  }`}
+                  className={`rounded-t-xl text-sm text-center sticky top-0 ${headerClass(
+                    selectedWindow === "cli"
+                  )}`}
                 >
                   daniel-code - zsh
                   <button
@@ -1736,9 +1930,29 @@ const App = () => {
                     <>
                       <div className="flex items-center">
                         <span className="text-blue-400">❯</span>
-                        <p className="ml-2 text-gray-200">{lastCommand}</p>
+                        <p
+                          className={`ml-2 ${
+                            isDark ? "text-gray-200" : "text-gray-800"
+                          }`}
+                        >
+                          {lastCommand}
+                        </p>
                       </div>
-                      <p className="text-gray-200 whitespace-pre-wrap">
+                      {!response && (
+                        <p
+                          className={`${
+                            isDark ? "text-gray-200" : "text-gray-800"
+                          } whitespace-pre-wrap`}
+                        >
+                          hmm
+                          <AnimatedEllipsis />
+                        </p>
+                      )}
+                      <p
+                        className={`${
+                          isDark ? "text-gray-200" : "text-gray-800"
+                        } whitespace-pre-wrap`}
+                      >
                         {response}
                       </p>
                     </>
@@ -1755,7 +1969,11 @@ const App = () => {
                           handleCommand(e);
                         }
                       }}
-                      className="bg-transparent border-none text-gray-200 w-full focus:outline-none ml-2"
+                      className={`bg-transparent border-none ${
+                        isDark
+                          ? "text-gray-200 placeholder:text-gray-400"
+                          : "text-gray-800 placeholder:text-gray-400"
+                      } w-full focus:outline-none ml-2`}
                       placeholder="ask me anything about myself!"
                     />
                   </div>
@@ -1763,11 +1981,13 @@ const App = () => {
               </div>
             )}
             {expandWindow === "timer" && isTimerOpen && (
-              <div className="w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none bg-black/80 border border-gray-700 rounded-xl flex flex-col overflow-y-auto overscroll-none">
+              <div
+                className={`w-full h-full lg:w-full lg:h-full max-w-4xl max-h-[90vh] lg:max-w-none lg:max-h-none ${windowThemeClass} rounded-xl flex flex-col overflow-y-auto overscroll-none`}
+              >
                 <p
-                  className={`text-black rounded-t-xl text-sm text-center sticky top-0 ${
-                    selectedWindow === "timer" ? "bg-white" : "bg-gray-400"
-                  }`}
+                  className={`rounded-t-xl text-sm text-center sticky top-0 ${headerClass(
+                    selectedWindow === "timer"
+                  )}`}
                 >
                   pomodoro timer - zsh
                   <button
@@ -1901,8 +2121,14 @@ const App = () => {
             }
           }}
         >
-          <div className="w-full lg:w-1/2 h-[70vh] max-w-4xl max-h-[90vh] bg-black/90 border border-gray-700 rounded-xl flex flex-col shadow-2xl">
-            <div className="text-black bg-white rounded-t-xl text-sm text-center relative">
+          <div
+            className={`w-full lg:w-1/2 h-[70vh] max-w-4xl max-h-[90vh] ${overlayThemeClass} rounded-xl flex flex-col shadow-2xl`}
+          >
+            <div
+              className={`rounded-t-xl text-sm text-center relative ${headerClass(
+                true
+              )}`}
+            >
               daniel_nguyen_resume.pdf
               <button
                 className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer hover:bg-red-600 transition-colors"
@@ -1943,8 +2169,14 @@ const App = () => {
             }
           }}
         >
-          <div className="w-full h-[80vh] max-w-5xl max-h-[90vh] bg-black/90 border border-gray-700 rounded-xl flex flex-col shadow-2xl">
-            <div className="text-black bg-white rounded-t-xl text-sm text-center relative">
+          <div
+            className={`w-full h-[80vh] max-w-5xl max-h-[90vh] ${overlayThemeClass} rounded-xl flex flex-col shadow-2xl`}
+          >
+            <div
+              className={`rounded-t-xl text-sm text-center relative ${headerClass(
+                true
+              )}`}
+            >
               {videos[currentVideoIndex].title} - Media Player
               <button
                 className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer hover:bg-red-600 transition-colors"
@@ -1977,7 +2209,9 @@ const App = () => {
                         (prev) => (prev - 1 + videos.length) % videos.length
                       )
                     }
-                    className="px-4 py-2 rounded-lg text-white transition-colors"
+                    className={`px-4 py-2 rounded-lg transition-colors ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
                   >
                     ← previous
                   </button>
@@ -2003,7 +2237,9 @@ const App = () => {
                     onClick={() =>
                       setCurrentVideoIndex((prev) => (prev + 1) % videos.length)
                     }
-                    className="px-4 py-2 rounded-lg text-white transition-colors"
+                    className={`px-4 py-2 rounded-lg transition-colors ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
                   >
                     next →
                   </button>
@@ -2015,7 +2251,7 @@ const App = () => {
       )}
 
       {/* Taskbar menu */}
-      <Taskbar />
+      <Taskbar theme={theme} />
     </div>
   );
 };
