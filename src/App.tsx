@@ -803,7 +803,9 @@ const App = () => {
     >
       {/* Bento box grid */}
       <div
-        className={`relative grid grid-cols-2 lg:grid-cols-4 lg:row-span-4 w-full mx-1 gap-2 rounded-2xl p-1.5 ${gridThemeClass} max-w-6xl lg:justify-center shadow-xl lg:min-h-[70vh]`}
+        className={`relative grid grid-cols-2 lg:grid-cols-4 lg:row-span-4 w-full mx-1 gap-2 rounded-2xl p-1.5 ${gridThemeClass} max-w-6xl lg:justify-center lg:min-h-[70vh] ${
+          isDark ? "shadow-xl" : "shadow-sm"
+        }`}
       >
         {/* Main terminal window */}
         <div
@@ -2167,7 +2169,7 @@ const App = () => {
           }}
         >
           <div
-            className={`w-full lg:w-1/2 h-[70vh] max-w-4xl max-h-[90vh] ${overlayThemeClass} rounded-xl flex flex-col shadow-2xl`}
+            className={`w-full lg:w-1/2 h-[70vh] max-w-4xl max-h-[90vh] ${overlayThemeClass} rounded-xl flex flex-col shadow-sm`}
           >
             <div
               className={`rounded-t-xl text-sm text-center relative ${headerClass(
@@ -2215,7 +2217,7 @@ const App = () => {
           }}
         >
           <div
-            className={`w-full h-[70vh] max-w-5xl max-h-[90vh] ${overlayThemeClass} rounded-xl flex flex-col shadow-2xl`}
+            className={`w-full h-[70vh] max-w-5xl max-h-[90vh] ${overlayThemeClass} rounded-xl flex flex-col shadow-sm`}
           >
             <div
               className={`rounded-t-xl text-sm text-center relative ${headerClass(
