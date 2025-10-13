@@ -3,7 +3,7 @@ import Tooltip from "./Tooltip";
 
 export const Taskbar = () => {
   return (
-    <div className="flex w-97/100 max-w-sm sm:max-w-md lg:w-fit fixed items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-2 py-1 rounded-xl justify-between px-3 lg:p-2 shadow-xl mx-2 lg:mx-0 z-50">
+    <div className="flex w-fit max-w-sm sm:max-w-md lg:w-fit fixed items-center gap-2 border border-gray-700 bottom-2 bg-gray-950 p-2 py-2 lg:py-1 rounded-xl justify-between px-3 lg:p-2 shadow-xl mx-2 lg:mx-0 z-50">
       {/* <div className="min-w-0 flex-shrink">
         
         <div className="hidden lg:flex text-gray-200 bg-gray-800 p-1 px-3 rounded-lg items-center gap-2 border border-gray-700">
@@ -27,16 +27,16 @@ export const Taskbar = () => {
       </div> */}
 
       {/* Icons section - larger touch targets on mobile */}
-      <div className="flex justify-evenly gap-3 lg:gap-2 flex-shrink-0">
+      <div className="flex gap-3 lg:gap-2 w-full justify-center">
         <Tooltip text="Media Player">
           <button
             onClick={() => {
               window.dispatchEvent(new CustomEvent("openMedia"));
             }}
-            className="border border-gray-700 rounded-lg p-2 lg:p-1 bg-white"
+            className="border border-gray-700 rounded-lg p-1 bg-white"
           >
             <Film
-              className="w-4 h-4 lg:w-7 lg:h-7 transition-all duration-300 object-contain"
+              className="w-7 h-7 transition-all duration-300 object-contain"
               color="black"
             />
           </button>
@@ -48,10 +48,10 @@ export const Taskbar = () => {
               // For now, this will just be a placeholder
               window.dispatchEvent(new CustomEvent("openTimer"));
             }}
-            className="border border-gray-700 rounded-lg p-2 lg:p-1 bg-white"
+            className="border border-gray-700 rounded-lg p-1 bg-white"
           >
             <Timer
-              className="w-4 h-4 lg:w-7 lg:h-7 transition-all duration-300 object-contain"
+              className="w-7 h-7 transition-all duration-300 object-contain"
               color="black"
             />
           </button>
@@ -62,10 +62,10 @@ export const Taskbar = () => {
             href="https://github.com/deeedaniel"
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-gray-700 rounded-lg p-2 lg:p-1 bg-white"
+            className="border border-gray-700 rounded-lg p-1 bg-white"
           >
             <Github
-              className="w-4 h-4 lg:w-7 lg:h-7 transition-all duration-300 object-contain"
+              className="w-7 h-7 transition-all duration-300 object-contain"
               color="black"
             />
           </a>
@@ -76,10 +76,10 @@ export const Taskbar = () => {
             href="https://www.linkedin.com/in/daniel-nguyenn/"
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-gray-700 rounded-lg p-2 lg:p-1 bg-white"
+            className="border border-gray-700 rounded-lg p-1 bg-white"
           >
             <Linkedin
-              className="w-4 h-4 lg:w-7 lg:h-7 transition-all duration-300 object-contain"
+              className="w-7 h-7 transition-all duration-300 object-contain"
               color="black"
             />
           </a>
@@ -90,10 +90,10 @@ export const Taskbar = () => {
             onClick={() => {
               window.dispatchEvent(new CustomEvent("openResume"));
             }}
-            className="border border-gray-700 rounded-lg p-2 lg:p-1 bg-white"
+            className="border border-gray-700 rounded-lg p-1 bg-white"
           >
             <FileUser
-              className="w-4 h-4 lg:w-7 lg:h-7 transition-all duration-300 object-contain"
+              className="w-7 h-7 transition-all duration-300 object-contain"
               color="black"
             />
           </button>

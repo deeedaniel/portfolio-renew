@@ -10,6 +10,7 @@ import { HeadphoneOff } from "lucide-react";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import LeetCodeCalendar from "./components/LeetCodeCalendar";
 import AnimatedEllipsis from "./components/AnimatedEllipsis";
+import { videos } from "./data/info";
 
 const App = () => {
   const [time, setTime] = useState(new Date());
@@ -51,6 +52,8 @@ const App = () => {
   const [isTimerOpen, setIsTimerOpen] = useState(false);
   const [selectedTimerButton, setSelectedTimerButton] = useState(0); // 0 for start/pause, 1 for reset
   const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [isMediaPlayerOpen, setIsMediaPlayerOpen] = useState(false);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
   // Add this near your other CLI state variables (around line 29)
   const [chatHistory, setChatHistory] = useState<
@@ -82,6 +85,8 @@ const App = () => {
   // handle keyboard navigation between list of exp & projs
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (isResumeOpen || isMediaPlayerOpen) return;
+
       if (selectedWindow === "me") {
         if (e.key === "Enter") {
           setExpandWindow("me");
@@ -230,6 +235,8 @@ const App = () => {
     selectedLinkIndex,
     selectExperience,
     selectedExperienceLinkIndex,
+    isResumeOpen,
+    isMediaPlayerOpen,
   ]);
 
   // Reset selected link index when project changes - default to "back" button
@@ -399,6 +406,9 @@ const App = () => {
 
   useEffect(() => {
     // keyboard navigation between for windows using < and >
+
+    if (isResumeOpen || isMediaPlayerOpen) return;
+
     const windowOrder = isTimerOpen
       ? ["me", "experience", "projects", "music", "timer", "cli"]
       : ["me", "experience", "projects", "music", "leetcode", "cli"];
@@ -427,7 +437,13 @@ const App = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [selectedWindow, expandWindow, isTimerOpen]);
+  }, [
+    selectedWindow,
+    expandWindow,
+    isTimerOpen,
+    isResumeOpen,
+    isMediaPlayerOpen,
+  ]);
 
   // Handle closing timer when it's the selected window
   useEffect(() => {
@@ -540,9 +556,21 @@ const App = () => {
     return () => window.removeEventListener("openResume", handleOpenResume);
   }, []);
 
+  // Add event listener for taskbar media player button
+  useEffect(() => {
+    const handleOpenMedia = () => {
+      setIsMediaPlayerOpen(true);
+    };
+
+    window.addEventListener("openMedia", handleOpenMedia);
+    return () => window.removeEventListener("openMedia", handleOpenMedia);
+  }, []);
+
   // Handle keyboard navigation for resume overlay
   useEffect(() => {
     if (!isResumeOpen) return;
+
+    setIsMediaPlayerOpen(false);
 
     const handleResumeKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -553,6 +581,35 @@ const App = () => {
     window.addEventListener("keydown", handleResumeKeyDown);
     return () => window.removeEventListener("keydown", handleResumeKeyDown);
   }, [isResumeOpen]);
+
+  // Handle keyboard navigation for media player overlay
+  useEffect(() => {
+    if (!isMediaPlayerOpen) return;
+
+    setIsResumeOpen(false);
+
+    const handleMediaKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMediaPlayerOpen(false);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setCurrentVideoIndex(
+          (prev) => (prev - 1 + videos.length) % videos.length
+        );
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setCurrentVideoIndex((prev) => (prev + 1) % videos.length);
+      } else if (e.key >= "1" && e.key <= "9") {
+        const index = parseInt(e.key) - 1;
+        if (index < videos.length) {
+          setCurrentVideoIndex(index);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleMediaKeyDown);
+    return () => window.removeEventListener("keydown", handleMediaKeyDown);
+  }, [isMediaPlayerOpen, videos.length]);
 
   // Prevent background scrolling when window is expanded on mobile
   useEffect(() => {
@@ -704,11 +761,14 @@ const App = () => {
               <p className="text-blue-300 text-sm lg:text-lg">
                 daniel@MacbookPro
               </p>
-              <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
-              <p className=" ml-4 text-xs lg:text-sm">CS @ SJSU</p>
-              <p className=" ml-4 text-xs lg:text-sm">
-                Expected Grad: May 2027
+              <p className="text-[9px] lg:text-sm mb-2">
+                nguyendaniel1312@gmail.com
               </p>
+              <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
+              <p className=" ml-4 text-xs lg:text-sm">Junior CS @ SJSU</p>
+              {/* <p className=" ml-4 text-xs lg:text-sm">
+                Expected Grad: May 2027
+              </p> */}
               <p className=" ml-4 text-xs lg:text-sm">San Jose, CA</p>
               <p className=" ml-4 text-xs lg:text-sm">
                 {time.toLocaleTimeString()}
@@ -1841,7 +1901,7 @@ const App = () => {
             }
           }}
         >
-          <div className="w-full h-[70vh] max-w-4xl max-h-[90vh] bg-black/90 border border-gray-700 rounded-xl flex flex-col shadow-2xl">
+          <div className="w-full lg:w-1/2 h-[70vh] max-w-4xl max-h-[90vh] bg-black/90 border border-gray-700 rounded-xl flex flex-col shadow-2xl">
             <div className="text-black bg-white rounded-t-xl text-sm text-center relative">
               daniel_nguyen_resume.pdf
               <button
@@ -1854,12 +1914,101 @@ const App = () => {
               />
               <button className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
             </div>
+            <a
+              href="/daniel_nguyen_resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-gray-400 mx-4 mt-4 underline"
+            >
+              click to view in new tab
+            </a>
             <div className="flex-1 p-4 overflow-hidden">
               <iframe
-                src="/daniel_nguyen_resume.pdf"
+                src="/daniel_nguyen_resume.pdf#view=FitH&zoom=page-fit"
                 className="w-full h-full rounded-lg border border-gray-600"
                 title="Daniel Nguyen Resume"
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Media Player overlay window */}
+      {isMediaPlayerOpen && (
+        <div
+          className="fixed inset-0 z-30 flex items-center justify-center"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsMediaPlayerOpen(false);
+            }
+          }}
+        >
+          <div className="w-full h-[80vh] max-w-5xl max-h-[90vh] bg-black/90 border border-gray-700 rounded-xl flex flex-col shadow-2xl">
+            <div className="text-black bg-white rounded-t-xl text-sm text-center relative">
+              {videos[currentVideoIndex].title} - Media Player
+              <button
+                className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer hover:bg-red-600 transition-colors"
+                onClick={() => setIsMediaPlayerOpen(false)}
+              />
+              <button
+                className="rounded-full p-1 bg-yellow-500 absolute right-6 top-1/2 -translate-y-1/2"
+                onClick={() => setIsMediaPlayerOpen(false)}
+              />
+              <button className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
+            </div>
+            <div className="flex-1 p-4 overflow-hidden flex flex-col">
+              {/* Video Player */}
+              <div className="flex-1 mb-4">
+                <iframe
+                  src={videos[currentVideoIndex].embedUrl}
+                  className="w-full h-full rounded-lg border border-gray-600"
+                  title={videos[currentVideoIndex].title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+
+              {/* Video Controls */}
+              <div className="rounded-lg p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <button
+                    onClick={() =>
+                      setCurrentVideoIndex(
+                        (prev) => (prev - 1 + videos.length) % videos.length
+                      )
+                    }
+                    className="px-4 py-2 rounded-lg text-white transition-colors"
+                  >
+                    ← previous
+                  </button>
+
+                  {/* <div className="flex gap-2">
+                    {videos.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentVideoIndex(index)}
+                        className={`w-3 h-3 rounded-full transition-colors ${
+                          index === currentVideoIndex
+                            ? "bg-white"
+                            : "bg-gray-500"
+                        }`}
+                      />
+                    ))}
+                  </div> */}
+                  {/* <div className="text-xs text-gray-400 text-center">
+                    use ← → arrow keys to switch videos, esc to close
+                  </div> */}
+
+                  <button
+                    onClick={() =>
+                      setCurrentVideoIndex((prev) => (prev + 1) % videos.length)
+                    }
+                    className="px-4 py-2 rounded-lg text-white transition-colors"
+                  >
+                    next →
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
