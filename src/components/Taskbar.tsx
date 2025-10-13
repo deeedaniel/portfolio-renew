@@ -51,13 +51,13 @@ export const Taskbar = ({ theme }: { theme: "dark" | "light" }) => {
             className={
               "border rounded-lg p-1 " +
               (theme === "dark"
-                ? "border-gray-700 bg-white"
-                : "border-gray-300")
+                ? "border-gray-700 bg-gray-900"
+                : "border-gray-300 bg-white")
             }
           >
             <Film
-              className="w-7 h-7 transition-all duration-300 object-contain"
-              color="black"
+              className="w-7 h-7 object-contain"
+              color={theme === "dark" ? "white" : "black"}
             />
           </button>
         </Tooltip>
@@ -71,13 +71,13 @@ export const Taskbar = ({ theme }: { theme: "dark" | "light" }) => {
             className={
               "border rounded-lg p-1 " +
               (theme === "dark"
-                ? "border-gray-700 bg-white"
-                : "border-gray-300")
+                ? "border-gray-700 bg-gray-900"
+                : "border-gray-300 bg-white")
             }
           >
             <Timer
-              className="w-7 h-7 transition-all duration-300 object-contain"
-              color="black"
+              className="w-7 h-7 object-contain"
+              color={theme === "dark" ? "white" : "black"}
             />
           </button>
         </Tooltip>
@@ -90,13 +90,13 @@ export const Taskbar = ({ theme }: { theme: "dark" | "light" }) => {
             className={
               "border rounded-lg p-1 " +
               (theme === "dark"
-                ? "border-gray-700 bg-white"
-                : "border-gray-300")
+                ? "border-gray-700 bg-gray-900"
+                : "border-gray-300 bg-white")
             }
           >
             <Github
-              className="w-7 h-7 transition-all duration-300 object-contain"
-              color="black"
+              className="w-7 h-7 object-contain"
+              color={theme === "dark" ? "white" : "black"}
             />
           </a>
         </Tooltip>
@@ -109,13 +109,13 @@ export const Taskbar = ({ theme }: { theme: "dark" | "light" }) => {
             className={
               "border rounded-lg p-1 " +
               (theme === "dark"
-                ? "border-gray-700 bg-white"
-                : "border-gray-300")
+                ? "border-gray-700 bg-gray-900"
+                : "border-gray-300 bg-white")
             }
           >
             <Linkedin
-              className="w-7 h-7 transition-all duration-300 object-contain"
-              color="black"
+              className="w-7 h-7 object-contain"
+              color={theme === "dark" ? "white" : "black"}
             />
           </a>
         </Tooltip>
@@ -128,13 +128,13 @@ export const Taskbar = ({ theme }: { theme: "dark" | "light" }) => {
             className={
               "border rounded-lg p-1 " +
               (theme === "dark"
-                ? "border-gray-700 bg-white"
-                : "border-gray-300")
+                ? "border-gray-700 bg-gray-900"
+                : "border-gray-300 bg-white")
             }
           >
             <FileUser
-              className="w-7 h-7 transition-all duration-300 object-contain"
-              color="black"
+              className="w-7 h-7 object-contain"
+              color={theme === "dark" ? "white" : "black"}
             />
           </button>
         </Tooltip>
@@ -145,20 +145,17 @@ export const Taskbar = ({ theme }: { theme: "dark" | "light" }) => {
               window.dispatchEvent(new CustomEvent("toggleTheme"));
             }}
             className={
-              "border rounded-lg p-1 bg-white " +
+              "border rounded-lg p-1 " +
               (theme === "dark" ? "border-gray-700" : "border-gray-300 ")
             }
           >
             {theme === "dark" ? (
               <Sun
-                className="w-7 h-7 transition-all duration-300 object-contain"
-                color="black"
+                className="w-7 h-7 object-contain"
+                color={theme === "dark" ? "white" : "black"}
               />
             ) : (
-              <Moon
-                className="w-7 h-7 transition-all duration-300 object-contain"
-                color="black"
-              />
+              <Moon className="w-7 h-7 object-contain" color="black" />
             )}
           </button>
         </Tooltip>
