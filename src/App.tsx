@@ -424,7 +424,7 @@ const App = () => {
   const isDark = theme === "dark";
   const windowThemeClass = isDark
     ? "bg-black/80 border border-gray-700"
-    : "bg-[#F6F6F6]/80 border border-gray-300";
+    : "bg-[#F6F6F6]/90 border border-gray-300";
   const gridThemeClass = isDark
     ? "bg-gray-900/40 border border-gray-700"
     : "bg-gray-100/60 border border-gray-300";
@@ -1352,6 +1352,9 @@ const App = () => {
                       } text-sm lg:text-lg`}
                     >
                       daniel@MacbookPro
+                    </p>
+                    <p className="text-[9px] lg:text-sm mb-2">
+                      nguyendaniel1312@gmail.com
                     </p>
                     <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
                     <p className=" ml-4 text-xs lg:text-sm">CS @ SJSU</p>
