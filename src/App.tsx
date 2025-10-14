@@ -1426,6 +1426,15 @@ const App = () => {
                   >
                     Welcome to my portfolio, I hope you like it!
                   </p>
+                  {/* <p
+                    className={`text-gray-200 ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
+                    It is heavily inspired by Linux customizations (ricing) and
+                    I plan on using it as a way to showcase my progress in my
+                    skills and projects.
+                  </p> */}
                   <p
                     className={`text-gray-200 ${
                       isDark ? "text-gray-200" : "text-gray-800"
@@ -1442,9 +1451,36 @@ const App = () => {
                       isDark ? "text-gray-200" : "text-gray-800"
                     }`}
                   >
+                    The summer before my first year at SJSU, I took an online
+                    coding curriculum called{" "}
+                    <a
+                      href="https://www.theodinproject.com/"
+                      className="text-blue-300 underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      theodinproject
+                    </a>
+                    . This was where I built all my fundamentals with utilizing
+                    the Terminal, Git, HTML, CSS, and JavaScript.
+                  </p>
+                  <p
+                    className={`text-gray-200 ${
+                      isDark ? "text-gray-200" : "text-gray-800"
+                    }`}
+                  >
                     I'm currently in my third year at SJSU, and I'm expected to
                     graduate in May 2027. I'm also working part-time as a
-                    full-stack developer at TwinMind.
+                    full-stack developer at{" "}
+                    <a
+                      href="https://twinmind.app/n385?pid=email&c=referral_campaign&deep_link_value=referral&deep_link_sub1=&deep_link_sub2=002f664a-1e10-4e2c-b7cc-61e820ec0081&deep_link_sub3=ios_inapp_share&af_sub1=002f664a-1e10-4e2c-b7cc-61e820ec0081&referrer_name=Daniel&af_dp=thirdear%3A%2F%2Fapp%2Freferral&af_web_dp=https%3A%2F%2Fwww.twinmind.com%2F/"
+                      className="text-blue-300 underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      TwinMind
+                    </a>
+                    .
                   </p>
                   <p
                     className={`text-gray-200 ${
