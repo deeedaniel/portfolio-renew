@@ -31,7 +31,7 @@ export const experiencesData = [
 
 export const projectsData = [
   {
-    title: "StudyBuddy | 1st @ SCE Hacks",
+    title: "StudyBuddy, 1st @ SCE",
     window: "StudyBuddy",
     date: "Sep 5, 2025",
     description:
@@ -47,7 +47,7 @@ export const projectsData = [
     ],
   },
   {
-    title: "Chillguy.ai | 2nd @ HFH, SCU",
+    title: "Chillguy.ai, 2nd @ HFH",
     window: "Chillguy.ai",
     date: "Feb 15-16, 2025",
     description:
@@ -59,7 +59,18 @@ export const projectsData = [
     ],
   },
   {
-    title: "VIVI | HackDavis",
+    title: "RememberMe, NVIDIA Hack",
+    window: "RememberMe",
+    date: "Oct 14, 2025",
+    description:
+      "At NVIDIA World's Shortest Hackathon, my team and I built RememberMe, a web-app that helps users remember information about people they have met. In just 2 hours, my team and I were able to build a live video feed that sends image data and audio transcription to our backend. Our backend will then process the data, detecting whether it was someone they knew (DeepFace + RetinaFace) and if so returning information about them. It also utilized NVIDIA's Nemotron Super 49B LLMM to extract information from the transcription to be correlated with different people.",
+    image: "/rememberme.jpg",
+    links: [
+      { name: "GitHub", url: "https://github.com/armanbance/RememberMe" },
+    ],
+  },
+  {
+    title: "VIVI, HackDavis",
     window: "VIVI",
     date: "Apr 19-20, 2025",
     description:
@@ -72,7 +83,7 @@ export const projectsData = [
     ],
   },
   {
-    title: "OfficeTracker | CS151",
+    title: "OfficeTracker, CS151",
     window: "OfficeTracker",
     date: "Apr-May, 2025",
     description:
