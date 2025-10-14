@@ -1012,11 +1012,22 @@ const App = () => {
             <div className="w-full flex flex-col items-center justify-center my-2">
               {leetCode && leetCode.totalSolved ? (
                 <div className="flex items-center gap-4">
-                  <img
-                    src="/leetcode_color.png"
-                    alt="LeetCode Logo"
-                    className="w-16 h-16 bg-gray-100 rounded-xl p-1"
-                  />
+                  <a
+                    href="https://leetcode.com/deeedaniel/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-16 h-16 rounded-xl p-1 flex items-center justify-center cursor-pointer ${
+                      isDark ? "bg-gray-100" : "bg-gray-200"
+                    }`}
+                  >
+                    <img
+                      src="/leetcode_color.png"
+                      alt="LeetCode Logo"
+                      className={`w-16 h-16 rounded-xl p-1 object-contain ${
+                        isDark ? "bg-gray-100" : "bg-gray-200"
+                      }`}
+                    />
+                  </a>
                   <div className="flex-grow">
                     <p
                       className={`text-sm font-bold ${
@@ -1935,11 +1946,23 @@ const App = () => {
                 <div className="w-full flex flex-col items-center justify-center mt-4">
                   {leetCode && leetCode.totalSolved ? (
                     <div className="flex items-center gap-4">
-                      <img
-                        src="/leetcode_color.png"
-                        alt="LeetCode Logo"
-                        className="w-16 h-16 bg-white rounded-full p-1"
-                      />
+                      <a
+                        href="https://leetcode.com/deeedaniel/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`w-16 h-16 rounded-xl p-1 flex items-center justify-center cursor-pointer ${
+                          isDark ? "bg-gray-100" : "bg-gray-200"
+                        }`}
+                      >
+                        <img
+                          src="/leetcode_color.png"
+                          alt="LeetCode Logo"
+                          className={`w-16 h-16 rounded-xl p-1 object-contain ${
+                            isDark ? "bg-gray-100" : "bg-gray-200"
+                          }`}
+                        />
+                      </a>
+
                       <div className="flex-grow">
                         <p
                           className={`text-sm font-bold ${
