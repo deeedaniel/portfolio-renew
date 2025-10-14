@@ -309,7 +309,7 @@ const App = () => {
     const interval = setInterval(async () => {
       const now = await fetchNowPlaying();
       setNowPlaying(now);
-    }, 360000); // every 6 minutes
+    }, 60000); // every minute
 
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(interval);

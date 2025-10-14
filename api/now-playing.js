@@ -10,7 +10,7 @@ let cachedNowPlaying = null;
 let lastFetched = 0;
 
 export default async function handler(req, res) {
-  const CACHE_TTL = 1000 * 60 * 5; // 5 minutes
+  const CACHE_TTL = 1000 * 60 * 1; // 5 minutes
 
   // Step 1: Serve cached data if it's still fresh
   const isCacheValid = cachedNowPlaying && Date.now() - lastFetched < CACHE_TTL;
