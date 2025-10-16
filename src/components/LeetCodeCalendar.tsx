@@ -17,17 +17,24 @@ const LeetCodeCalendar: React.FC<SubmissionCalendarProps> = ({
   const today = new Date();
 
   const getSubmissionCount = (date: Date) => {
-    const calendarDay = date.getDate();
-    const calendarMonth = date.getMonth();
-    const calendarYear = date.getFullYear();
+    // Create a normalized date string for the calendar date (YYYY-MM-DD in local timezone)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const calendarDateString = `${year}-${month}-${day}`;
 
     const matchingTimestamp = Object.keys(submissionCalendar).find((ts) => {
       const submissionDate = new Date(parseInt(ts) * 1000);
-      return (
-        submissionDate.getFullYear() === calendarYear &&
-        submissionDate.getMonth() === calendarMonth &&
-        submissionDate.getDate() === calendarDay
+      // LeetCode timestamps represent UTC dates, so use UTC methods to get the correct date
+      const subYear = submissionDate.getUTCFullYear();
+      const subMonth = String(submissionDate.getUTCMonth() + 1).padStart(
+        2,
+        "0"
       );
+      const subDay = String(submissionDate.getUTCDate()).padStart(2, "0");
+      const submissionDateString = `${subYear}-${subMonth}-${subDay}`;
+
+      return submissionDateString === calendarDateString;
     });
     return matchingTimestamp ? submissionCalendar[matchingTimestamp] : 0;
   };
