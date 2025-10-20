@@ -1926,7 +1926,9 @@ const App = () => {
               >
                 <p
                   className={`${
-                    isDark ? "text-white" : "text-gray-800"
+                    isDark
+                      ? "text-black bg-white"
+                      : "text-gray-800 bg-[#99A1AF]"
                   } rounded-t-xl text-sm text-center sticky top-0 z-10`}
                 >
                   leetcode - zsh
