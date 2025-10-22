@@ -7,7 +7,7 @@ import type {
 import { experiencesData, projectsData, asciiList } from "./data/info";
 import { Taskbar } from "./components/Taskbar";
 import { HeadphoneOff } from "lucide-react";
-import { Play, Pause, RotateCcw } from "lucide-react";
+import { Play, Pause, RotateCcw, Pencil, X } from "lucide-react";
 import LeetCodeCalendar from "./components/LeetCodeCalendar";
 import AnimatedEllipsis from "./components/AnimatedEllipsis";
 import { videos } from "./data/info";
@@ -686,7 +686,7 @@ const App = () => {
   // Add this new state variable for expanded timer navigation (near the other timer states around line 45)
   const [selectedExpandedTimerButton, setSelectedExpandedTimerButton] =
     useState(0);
-  // 0-1: start/pause and reset buttons, 2-6: custom timer buttons (5m, 15m, 30m, 45m, 60m)
+  // 0-2: start/pause, reset, and exit buttons, 3-7: custom timer buttons (5m, 15m, 30m, 45m, 60m)
 
   // Update the existing timer keyboard navigation useEffect to handle both compact and expanded modes
   useEffect(() => {
@@ -694,42 +694,42 @@ const App = () => {
 
     const handleTimerKeyDown = (e: KeyboardEvent) => {
       if (expandWindow === "timer") {
-        // Expanded timer navigation with two levels: start/reset (0-1) and custom timers (2-6)
+        // Expanded timer navigation with two levels: start/reset/exit (0-2) and custom timers (3-7)
         if (e.key === "ArrowUp") {
           e.preventDefault();
-          // Move between levels: if in custom timers (2-6), go to start/reset level
-          if (selectedExpandedTimerButton >= 2) {
+          // Move between levels: if in custom timers (3-7), go to start/reset/exit level
+          if (selectedExpandedTimerButton >= 3) {
             setSelectedExpandedTimerButton(0); // Go to start button
           } else {
-            // If in start/reset level, go to custom timers
-            setSelectedExpandedTimerButton(2); // Go to first custom timer (5m)
+            // If in start/reset/exit level, go to custom timers
+            setSelectedExpandedTimerButton(3); // Go to first custom timer (5m)
           }
         } else if (e.key === "ArrowDown") {
           e.preventDefault();
-          // Move between levels: if in start/reset (0-1), go to custom timers
-          if (selectedExpandedTimerButton <= 1) {
-            setSelectedExpandedTimerButton(2); // Go to first custom timer (5m)
+          // Move between levels: if in start/reset/exit (0-2), go to custom timers
+          if (selectedExpandedTimerButton <= 2) {
+            setSelectedExpandedTimerButton(3); // Go to first custom timer (5m)
           } else {
-            // If in custom timers, go to start/reset level
+            // If in custom timers, go to start/reset/exit level
             setSelectedExpandedTimerButton(0); // Go to start button
           }
         } else if (e.key === "ArrowLeft") {
           e.preventDefault();
-          if (selectedExpandedTimerButton <= 1) {
-            // Navigate within start/reset level (0-1)
-            setSelectedExpandedTimerButton((prev) => (prev === 0 ? 1 : 0));
+          if (selectedExpandedTimerButton <= 2) {
+            // Navigate within start/reset/exit level (0-2)
+            setSelectedExpandedTimerButton((prev) => (prev - 1 + 3) % 3);
           } else {
-            // Navigate within custom timer level (2-6)
-            setSelectedExpandedTimerButton((prev) => Math.max(2, prev - 1));
+            // Navigate within custom timer level (3-7)
+            setSelectedExpandedTimerButton((prev) => Math.max(3, prev - 1));
           }
         } else if (e.key === "ArrowRight") {
           e.preventDefault();
-          if (selectedExpandedTimerButton <= 1) {
-            // Navigate within start/reset level (0-1)
-            setSelectedExpandedTimerButton((prev) => (prev === 1 ? 0 : 1));
+          if (selectedExpandedTimerButton <= 2) {
+            // Navigate within start/reset/exit level (0-2)
+            setSelectedExpandedTimerButton((prev) => (prev + 1) % 3);
           } else {
-            // Navigate within custom timer level (2-6)
-            setSelectedExpandedTimerButton((prev) => Math.min(6, prev + 1));
+            // Navigate within custom timer level (3-7)
+            setSelectedExpandedTimerButton((prev) => Math.min(7, prev + 1));
           }
         } else if (e.key === "Enter") {
           e.preventDefault();
@@ -737,10 +737,12 @@ const App = () => {
             isTimerRunning ? pauseTimer() : startTimer();
           } else if (selectedExpandedTimerButton === 1) {
             resetTimer();
+          } else if (selectedExpandedTimerButton === 2) {
+            setExpandWindow(""); // Exit expanded view
           } else {
-            // Custom timer buttons (2-6 correspond to [5, 15, 30, 45, 60])
+            // Custom timer buttons (3-7 correspond to [5, 15, 30, 45, 60])
             const customTimes = [5, 15, 30, 45, 60];
-            const timeIndex = selectedExpandedTimerButton - 2;
+            const timeIndex = selectedExpandedTimerButton - 3;
             setCustomTimer(customTimes[timeIndex]);
           }
         }
@@ -748,16 +750,18 @@ const App = () => {
         // Compact timer navigation (existing code)
         if (e.key === "ArrowUp") {
           e.preventDefault();
-          setSelectedTimerButton((prev) => (prev === 0 ? 1 : 0));
+          setSelectedTimerButton((prev) => (prev - 1 + 3) % 3); // Navigate through 0, 1, 2
         } else if (e.key === "ArrowDown") {
           e.preventDefault();
-          setSelectedTimerButton((prev) => (prev === 1 ? 0 : 1));
+          setSelectedTimerButton((prev) => (prev + 1) % 3); // Navigate through 0, 1, 2
         } else if (e.key === "Enter") {
           e.preventDefault();
           if (selectedTimerButton === 0) {
             isTimerRunning ? pauseTimer() : startTimer();
-          } else {
+          } else if (selectedTimerButton === 1) {
             resetTimer();
+          } else if (selectedTimerButton === 2) {
+            setExpandWindow("timer"); // Open edit mode
           }
         }
       }
@@ -1345,14 +1349,14 @@ const App = () => {
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    {/* <Pencil className="w-4 h-4" />
+                    <Pencil className="w-4 h-4" />
                     <p
                       className={
                         selectedTimerButton === 2 ? "font-bold underline" : ""
                       }
                     >
                       edit
-                    </p> */}
+                    </p>
                   </div>
                 </button>
               </div>
@@ -2169,6 +2173,23 @@ const App = () => {
                         reset
                       </span>
                     </button>
+                    <button
+                      onClick={() => setExpandWindow("")}
+                      className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-colors ${
+                        selectedExpandedTimerButton === 2 ? "" : ""
+                      }`}
+                    >
+                      <X className="w-5 h-5" />
+                      <span
+                        className={
+                          selectedExpandedTimerButton === 2
+                            ? "font-bold underline"
+                            : ""
+                        }
+                      >
+                        exit
+                      </span>
+                    </button>
                   </div>
 
                   <div className=" max-w-md">
@@ -2185,12 +2206,12 @@ const App = () => {
                               ? "font-bold text-blue-300"
                               : ""
                           } ${
-                            selectedExpandedTimerButton === index + 2 ? "" : ""
+                            selectedExpandedTimerButton === index + 3 ? "" : ""
                           }`}
                         >
                           <span
                             className={
-                              selectedExpandedTimerButton === index + 2
+                              selectedExpandedTimerButton === index + 3
                                 ? "font-bold underline"
                                 : ""
                             }
