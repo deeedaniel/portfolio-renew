@@ -871,7 +871,7 @@ const App = () => {
                   setExpandWindow("me");
                 }}
               >
-                click me to read more!
+                about me!
               </button>
             </div>
           </div>
