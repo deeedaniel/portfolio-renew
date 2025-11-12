@@ -31,6 +31,22 @@ export const experiencesData = [
 
 export const projectsData = [
   {
+    title: "Fusion, CalHacks 12.0",
+    window: "Fusion",
+    date: "Oct 24-26, 2025",
+    description:
+      "At CalHacks 12.0, my group and I created Fusion. Fusion is an MCP-style all-in-one platform for project managers. We used Gemini Pro to power it and created tool calls to integrate GitHub, Jira, Slack, and Notion. With Fusion project managers can view/create/merge PRs, create Jira tasks, send/summarize Slack messages, and view/edit Notion pages.",
+    image: "/fusion.jpg",
+    links: [
+      {
+        name: "Devpost",
+        url: "https://devpost.com/software/fusion-8d6ura",
+      },
+      { name: "GitHub", url: "https://github.com/deeedaniel/fusion" },
+      // { name: "Live Demo", url: "#" },
+    ],
+  },
+  {
     title: "StudyBuddy, 1st @ SCE",
     window: "StudyBuddy",
     date: "Sep 5, 2025",
