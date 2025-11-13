@@ -914,7 +914,11 @@ const App = () => {
                 <img
                   src={nowPlaying.item.album_image}
                   alt={nowPlaying.item.album}
-                  className="w-16 h-16 rounded-md mr-4"
+                  className={`w-16 h-16 rounded-md mr-4 ${
+                    nowPlaying.item.album === "PARTYNEXTDOOR 4 (P4)"
+                      ? "blur-sm"
+                      : ""
+                  }`}
                 />
                 <div>
                   <p className="font-bold">{nowPlaying.item.name}</p>
