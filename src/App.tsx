@@ -915,7 +915,9 @@ const App = () => {
                   src={nowPlaying.item.album_image}
                   alt={nowPlaying.item.album}
                   className={`w-16 h-16 rounded-md mr-4 ${
-                    nowPlaying.item.album === "PARTYNEXTDOOR 4 (P4)"
+                    nowPlaying.item.album === "PARTYNEXTDOOR 4 (P4)" ||
+                    nowPlaying.item.album === "L o s e M y M i n d" ||
+                    nowPlaying.item.album === "VULTURES 1"
                       ? "blur-sm"
                       : ""
                   }`}
@@ -925,9 +927,9 @@ const App = () => {
                   <p className="text-sm text-gray-400">
                     {nowPlaying.item.artists.join(", ")}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  {/* <p className="text-sm text-gray-500">
                     {nowPlaying.item.album}
-                  </p>
+                  </p> */}
                 </div>
               </div>
             ) : (
