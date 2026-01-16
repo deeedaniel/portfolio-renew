@@ -26,6 +26,12 @@ npm install
 npm run dev
 ```
 
+or use this to run **API endpoints locally**
+
+```bash
+vercel dev
+```
+
 5. **Open your browser** to `http://localhost:5173`
 
 ## Customization Guide
