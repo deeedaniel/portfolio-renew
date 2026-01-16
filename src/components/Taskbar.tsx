@@ -8,6 +8,7 @@ import {
   Moon,
 } from "lucide-react";
 import Tooltip from "./Tooltip";
+import { personalInfo } from "../data/info";
 
 export const Taskbar = ({ theme }: { theme: "dark" | "light" }) => {
   return (
@@ -85,7 +86,7 @@ export const Taskbar = ({ theme }: { theme: "dark" | "light" }) => {
 
         <Tooltip text="GitHub">
           <a
-            href="https://github.com/deeedaniel"
+            href={personalInfo.socialLinks.github}
             target="_blank"
             rel="noopener noreferrer"
             className={
@@ -104,7 +105,7 @@ export const Taskbar = ({ theme }: { theme: "dark" | "light" }) => {
 
         <Tooltip text="LinkedIn">
           <a
-            href="https://www.linkedin.com/in/daniel-nguyenn/"
+            href={personalInfo.socialLinks.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className={

@@ -4,7 +4,12 @@ import type {
   TopTracksData,
   LeetCodeData,
 } from "./types/indexs";
-import { experiencesData, projectsData, asciiList } from "./data/info";
+import {
+  experiencesData,
+  projectsData,
+  asciiList,
+  personalInfo,
+} from "./data/info";
 import { Taskbar } from "./components/Taskbar";
 import { HeadphoneOff } from "lucide-react";
 import { Play, Pause, RotateCcw, Pencil, X } from "lucide-react";
@@ -851,17 +856,19 @@ const App = () => {
                   isDark ? "text-blue-300" : "text-[#2A8EE0]"
                 } text-sm lg:text-lg`}
               >
-                daniel@MacbookPro
+                {personalInfo.username}@{personalInfo.computerName}
               </p>
-              <p className="text-[9px] lg:text-sm mb-2">
-                nguyendaniel1312@gmail.com
+              <p className="text-[9px] lg:text-sm mb-2">{personalInfo.email}</p>
+              <p className=" ml-4 text-xs lg:text-sm">{personalInfo.title}</p>
+              <p className=" ml-4 text-xs lg:text-sm">
+                {personalInfo.education}
               </p>
-              <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
-              <p className=" ml-4 text-xs lg:text-sm">Junior CS @ SJSU</p>
               {/* <p className=" ml-4 text-xs lg:text-sm">
-                Expected Grad: May 2027
+                Expected Grad: {personalInfo.graduationYear}
               </p> */}
-              <p className=" ml-4 text-xs lg:text-sm">San Jose, CA</p>
+              <p className=" ml-4 text-xs lg:text-sm">
+                {personalInfo.location}
+              </p>
               <p className=" ml-4 text-xs lg:text-sm">
                 {time.toLocaleTimeString()}
               </p>
@@ -948,7 +955,7 @@ const App = () => {
                     <p className="text-xs text-gray-400">
                       visit my{" "}
                       <a
-                        href="https://open.spotify.com/user/cringedlol"
+                        href={personalInfo.socialLinks.spotify}
                         className={`${
                           isDark ? "text-blue-400" : "text-[#2A8EE0]"
                         } underline`}
@@ -1023,7 +1030,7 @@ const App = () => {
               {leetCode && leetCode.totalSolved ? (
                 <div className="flex items-center gap-4">
                   <a
-                    href="https://leetcode.com/deeedaniel/"
+                    href={personalInfo.socialLinks.leetcode}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`w-16 h-16 rounded-xl p-1 flex items-center justify-center cursor-pointer ${
@@ -1412,17 +1419,23 @@ const App = () => {
                         isDark ? "text-blue-300" : "text-[#75b8eb]"
                       } text-sm lg:text-lg`}
                     >
-                      daniel@MacbookPro
+                      {personalInfo.username}@{personalInfo.computerName}
                     </p>
                     <p className="text-[9px] lg:text-sm mb-2">
-                      nguyendaniel1312@gmail.com
+                      {personalInfo.email}
                     </p>
-                    <p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
-                    <p className=" ml-4 text-xs lg:text-sm">CS @ SJSU</p>
                     <p className=" ml-4 text-xs lg:text-sm">
-                      Expected Grad: May 2027
+                      {personalInfo.title}
                     </p>
-                    <p className=" ml-4 text-xs lg:text-sm">San Jose, CA</p>
+                    <p className=" ml-4 text-xs lg:text-sm">
+                      {personalInfo.education}
+                    </p>
+                    <p className=" ml-4 text-xs lg:text-sm">
+                      Expected Grad: {personalInfo.graduationYear}
+                    </p>
+                    <p className=" ml-4 text-xs lg:text-sm">
+                      {personalInfo.location}
+                    </p>
                     <p className=" ml-4 text-xs lg:text-sm">
                       {time.toLocaleTimeString()}
                     </p>
@@ -1433,100 +1446,15 @@ const App = () => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-5 max-w-2xl mx-auto mt-4 mb-10 px-4 ">
-                  <p
-                    className={`text-gray-200 ${
-                      isDark ? "text-gray-200" : "text-gray-800"
-                    }`}
-                  >
-                    Hello!
-                  </p>
-                  <p
-                    className={`text-gray-200 ${
-                      isDark ? "text-gray-200" : "text-gray-800"
-                    }`}
-                  >
-                    Welcome to my portfolio, I hope you like it!
-                  </p>
-                  {/* <p
-                    className={`text-gray-200 ${
-                      isDark ? "text-gray-200" : "text-gray-800"
-                    }`}
-                  >
-                    It is heavily inspired by Linux customizations (ricing) and
-                    I plan on using it as a way to showcase my progress in my
-                    skills and projects.
-                  </p> */}
-                  <p
-                    className={`text-gray-200 ${
-                      isDark ? "text-gray-200" : "text-gray-800"
-                    }`}
-                  >
-                    Back in high school, I took AP Computer Science for fun. I
-                    thought it was a really fun class, so when applying to
-                    colleges, I picked Computer Science as my major not really
-                    knowing what it was about. Since then, I have really fell in
-                    love with coding.
-                  </p>
-                  <p
-                    className={`text-gray-200 ${
-                      isDark ? "text-gray-200" : "text-gray-800"
-                    }`}
-                  >
-                    The summer before my first year at SJSU, I took an online
-                    coding curriculum called{" "}
-                    <a
-                      href="https://www.theodinproject.com/"
-                      className="text-blue-300 underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      theodinproject
-                    </a>
-                    . This was where I built all my fundamentals with utilizing
-                    the Terminal, Git, HTML, CSS, and JavaScript.
-                  </p>
-                  <p
-                    className={`text-gray-200 ${
-                      isDark ? "text-gray-200" : "text-gray-800"
-                    }`}
-                  >
-                    I'm currently in my third year at SJSU, and I'm expected to
-                    graduate in May 2027. I'm also working part-time as a
-                    full-stack developer at{" "}
-                    <a
-                      href="https://twinmind.app/n385?pid=email&c=referral_campaign&deep_link_value=referral&deep_link_sub1=&deep_link_sub2=002f664a-1e10-4e2c-b7cc-61e820ec0081&deep_link_sub3=ios_inapp_share&af_sub1=002f664a-1e10-4e2c-b7cc-61e820ec0081&referrer_name=Daniel&af_dp=thirdear%3A%2F%2Fapp%2Freferral&af_web_dp=https%3A%2F%2Fwww.twinmind.com%2F/"
-                      className="text-blue-300 underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      TwinMind
-                    </a>
-                    .
-                  </p>
-                  <p
-                    className={`text-gray-200 ${
-                      isDark ? "text-gray-200" : "text-gray-800"
-                    }`}
-                  >
-                    Outside of school, I like to film & edit videos, playing
-                    basketball, watching movies/shows/anime, and listening to
-                    music.
-                  </p>
-                  <p
-                    className={`text-gray-200 ${
-                      isDark ? "text-gray-200" : "text-gray-800"
-                    }`}
-                  >
-                    I'm currently focused on improving my engineering skills and
-                    searching for Summer 2026 internships.
-                  </p>
-                  {/* <p
-                    className={`text-gray-200 ${
-                      isDark ? "text-gray-200" : "text-gray-800"
-                    }`}
-                  >
-                    ✉︎ nguyendaniel1312@gmail.com
-                  </p> */}
+                  {personalInfo.aboutMe.map((paragraph, index) => (
+                    <p
+                      key={index}
+                      className={`text-gray-200 ${
+                        isDark ? "text-gray-200" : "text-gray-800"
+                      }`}
+                      dangerouslySetInnerHTML={{ __html: paragraph }}
+                    />
+                  ))}
                   <button
                     className="text-gray-400 text-left underline"
                     onClick={() => setExpandWindow("")}
@@ -1886,7 +1814,7 @@ const App = () => {
                           <p className="text-xs text-gray-400">
                             visit my{" "}
                             <a
-                              href="https://open.spotify.com/user/cringedlol"
+                              href={personalInfo.socialLinks.spotify}
                               className="text-blue-400 underline"
                               target="_blank"
                               rel="noopener noreferrer"
@@ -1959,7 +1887,7 @@ const App = () => {
                   {leetCode && leetCode.totalSolved ? (
                     <div className="flex items-center gap-4">
                       <a
-                        href="https://leetcode.com/deeedaniel/"
+                        href={personalInfo.socialLinks.leetcode}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`w-16 h-16 rounded-xl p-1 flex items-center justify-center cursor-pointer ${
@@ -2264,7 +2192,7 @@ const App = () => {
                 true
               )}`}
             >
-              daniel_nguyen_resume.pdf
+              {personalInfo.resumeFileName}
               <button
                 className="rounded-full p-1 bg-red-500 absolute right-10 top-1/2 -translate-y-1/2 cursor-pointer hover:bg-red-600 transition-colors"
                 onClick={() => setIsResumeOpen(false)}
@@ -2276,7 +2204,7 @@ const App = () => {
               <button className="rounded-full p-1 bg-green-500 absolute right-2 top-1/2 -translate-y-1/2" />
             </div>
             <a
-              href="/daniel_nguyen_resume.pdf"
+              href={`/${personalInfo.resumeFileName}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-gray-400 mx-4 mt-4 underline"
@@ -2285,9 +2213,9 @@ const App = () => {
             </a>
             <div className="flex-1 p-4 overflow-hidden">
               <iframe
-                src="/daniel_nguyen_resume.pdf#view=FitH&zoom=page-fit"
+                src={`/${personalInfo.resumeFileName}#view=FitH&zoom=page-fit`}
                 className="w-full h-full rounded-lg border border-gray-600"
-                title="Daniel Nguyen Resume"
+                title={`${personalInfo.name} Resume`}
               />
             </div>
           </div>

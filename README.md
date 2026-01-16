@@ -30,11 +30,48 @@ npm run dev
 
 ## Customization Guide
 
-### 1. Personal Information
+All your personal information is in ONE file: `src/data/info.ts`
 
-Edit `src/data/info.ts` to add your own information:
+### Step 1: Update Your Personal Info
 
-#### Add Your Experiences
+Open `src/data/info.ts` and update the `personalInfo` object:
+
+```typescript
+export const personalInfo = {
+  // Basic Info
+  name: "Your Name",
+  username: "yourname", // Used in terminal display (username@computer)
+  computerName: "YourComputer", // Used in terminal display
+  email: "your.email@example.com",
+  title: "Your Title",
+  education: "Your School/Program",
+  graduationYear: "Month Year",
+  location: "Your City, State",
+
+  // Resume filename (must be in /public folder)
+  resumeFileName: "your_resume.pdf",
+
+  // Social Links
+  socialLinks: {
+    github: "https://github.com/yourusername",
+    linkedin: "https://www.linkedin.com/in/yourprofile/",
+    spotify: "https://open.spotify.com/user/your-spotify-username",
+    leetcode: "https://leetcode.com/your-username/",
+  },
+
+  // About Me - Each string is a paragraph (HTML allowed)
+  aboutMe: [
+    "Hello! Welcome to my portfolio.",
+    "Tell your story here...",
+    'You can use <a href="https://example.com" class="text-blue-300 underline" target="_blank" rel="noopener noreferrer">HTML links</a> too!',
+    // Add more paragraphs...
+  ],
+};
+```
+
+### Step 2: Add Your Experiences
+
+In the same file, update `experiencesData`:
 
 ```typescript
 export const experiencesData = [
@@ -50,7 +87,7 @@ export const experiencesData = [
 ];
 ```
 
-#### Add Your Projects
+### Step 3: Add Your Projects
 
 ```typescript
 export const projectsData = [
@@ -69,7 +106,7 @@ export const projectsData = [
 ];
 ```
 
-#### Add Your Videos (Optional)
+### Step 4: Add Your Videos (Optional)
 
 ```typescript
 export const videos = [
@@ -82,76 +119,24 @@ export const videos = [
 ];
 ```
 
-### 2. Update Personal Details
-
-In `src/App.tsx`, search for these sections and update them:
-
-**Line 854**: Update your username
-
-```typescript
-daniel@MacbookPro  // Change to yourname@YourComputer
-```
-
-**Line 857**: Update your email
-
-```typescript
-nguyendaniel1312@gmail.com  // Change to your email
-```
-
-**Lines 859-864**: Update your info
-
-```typescript
-<p className=" ml-4 text-xs lg:text-sm">Full-Stack</p>
-<p className=" ml-4 text-xs lg:text-sm">Junior CS @ SJSU</p>
-<p className=" ml-4 text-xs lg:text-sm">San Jose, CA</p>
-```
-
-**Lines 1441-1522**: Update the "About Me" section with your own story
-
-### 3. Add Your Images
+### Step 5: Add Your Images
 
 Place your images in the `public/` folder:
 
 - Company logos/photos for experiences
 - Project screenshots
-- Your resume as `daniel_nguyen_resume.pdf` (or update the filename in the code)
-- Social media icons (if you want to customize)
+- Your resume PDF (filename must match `resumeFileName` in personalInfo)
+- Any other images you want to use
 
-### 4. Update Social Links
+### Step 6: Update LeetCode Username in API
 
-Edit the Taskbar component in `src/components/Taskbar.tsx` to update social media links:
-
-```typescript
-// Find and update these URLs
-href = "https://github.com/yourusername";
-href = "https://www.linkedin.com/in/yourprofile/";
-```
-
-### 5. Customize Spotify Links
-
-In `src/App.tsx`, update your Spotify profile link:
-
-**Line 951** and **Line 1889**:
-
-```typescript
-href = "https://open.spotify.com/user/your-spotify-username";
-```
-
-### 6. Update LeetCode Username
-
-In `src/App.tsx`, update your LeetCode profile link:
-
-**Line 1026** and **Line 1962**:
-
-```typescript
-href = "https://leetcode.com/your-username/";
-```
-
-In `api/leetcode.js`, update the username:
+In `api/leetcode.js`, update line 2:
 
 ```javascript
-const username = "your-username"; // Line 2
+const username = "your-leetcode-username";
 ```
+
+**That's it!** No need to edit `App.tsx` or other components. Everything else is automatic! ✨
 
 ## API Setup
 
