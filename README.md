@@ -147,7 +147,7 @@ Then in `api/leetcode.js`, update line 4 to match:
 const username = "your-leetcode-username";
 ```
 
-**That's it!** No need to edit `App.tsx` or other components. Everything else is automatic! ✨
+**That's it!** No need to edit `App.tsx` or other components.
 
 ## API Setup
 
