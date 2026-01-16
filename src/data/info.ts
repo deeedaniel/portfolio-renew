@@ -21,6 +21,9 @@ export const personalInfo = {
     leetcode: "https://leetcode.com/deeedaniel/",
   },
 
+  // Usernames for API integrations
+  leetcodeUsername: "deeedaniel", // Used in /api/leetcode to fetch your stats
+
   // About Me - Each string is a paragraph
   aboutMe: [
     "Hello!",

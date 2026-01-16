@@ -1,6 +1,9 @@
 let cachedStats = null;
 let lastFetchTime = 0;
 
+// LeetCode username - update this in src/data/info.ts
+const username = "deeedaniel";
+
 export default async function handler(req, res) {
   const CACHE_TTL = 1000 * 60 * 60; // 1 hour
 
@@ -10,7 +13,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(
-      "https://leetcode-stats.tashif.codes/deeedaniel"
+      `https://leetcode-stats.tashif.codes/${username}`
     );
 
     if (!response.ok) {

@@ -1,6 +1,5 @@
 This is my new portfolio website inspired by cool unix ricing, built with React, TypeScript, Tailwind CSS. Featuring a bento-box layout with keyboard nav, Spotify integration, LeetCode stats, and a custom AI chatbot using Gemini.
 
-
 ![Portfolio Dark Mode](https://github.com/user-attachments/assets/1a07da92-8e11-48ca-ac3d-87fcbf5722c3)
 ![Portfolio Light Mode](https://github.com/user-attachments/assets/baa7cb1e-0c06-4d42-b7aa-ebda70163d5f)
 
@@ -129,9 +128,20 @@ Place your images in the `public/` folder:
 - Your resume PDF (filename must match `resumeFileName` in personalInfo)
 - Any other images you want to use
 
-### Step 6: Update LeetCode Username in API
+### Step 6: Update LeetCode Username
 
-In `api/leetcode.js`, update line 2:
+In `src/data/info.ts`, update the `leetcodeUsername` field:
+
+```typescript
+export const personalInfo = {
+  // ... other fields
+
+  // Usernames for API integrations
+  leetcodeUsername: "your-leetcode-username",
+};
+```
+
+Then in `api/leetcode.js`, update line 4 to match:
 
 ```javascript
 const username = "your-leetcode-username";
@@ -174,9 +184,18 @@ SPOTIFY_REFRESH_TOKEN=your_refresh_token
 
 **Steps**:
 
-The LeetCode API is public, but you need to update the username:
+The LeetCode API is public, but you need to update the username in two places:
 
-In `api/leetcode.js`:
+1. In `src/data/info.ts`:
+
+```typescript
+export const personalInfo = {
+  // ... other fields
+  leetcodeUsername: "your-leetcode-username",
+};
+```
+
+2. In `api/leetcode.js`:
 
 ```javascript
 const username = "your-leetcode-username";
