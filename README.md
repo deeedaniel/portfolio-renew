@@ -1,5 +1,6 @@
 This is my new portfolio website inspired by cool unix ricing, built with React, TypeScript, Tailwind CSS. Featuring a bento-box layout with keyboard nav, Spotify integration, LeetCode stats, and a custom AI chatbot using Gemini.
 
+
 ![Portfolio Dark Mode](https://github.com/user-attachments/assets/1a07da92-8e11-48ca-ac3d-87fcbf5722c3)
 ![Portfolio Light Mode](https://github.com/user-attachments/assets/baa7cb1e-0c06-4d42-b7aa-ebda70163d5f)
 
