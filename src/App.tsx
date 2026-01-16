@@ -812,7 +812,8 @@ const App = () => {
     >
       {/* Bento box grid */}
       <div
-        className={`relative grid grid-cols-2 lg:grid-cols-4 lg:row-span-4 w-full mx-1 gap-2 rounded-2xl p-1.5 ${gridThemeClass} max-w-6xl lg:justify-center lg:min-h-[70vh] ${
+        // Line 815 - Update the className
+        className={`relative grid grid-cols-2 lg:grid-cols-4 lg:row-span-4 w-full mx-1 gap-2 rounded-2xl p-1.5 ${gridThemeClass} max-w-6xl 2xl:max-w-7xl 2xl:gap-3 ${
           isDark ? "shadow-xl" : "shadow-sm"
         }`}
       >
