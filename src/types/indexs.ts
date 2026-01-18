@@ -8,6 +8,8 @@ interface NowPlayingItem {
   album_image: string;
   artists: string[];
   name: string;
+  spotify_url: string;
+  preview_url: string | null;
 }
 
 export interface TopTracksData {
@@ -21,7 +23,7 @@ interface Track {
   album: string;
   album_image: string;
   spotify_url: string;
-  preview_url: string;
+  preview_url: string | null;
 }
 
 export interface LeetCodeData {

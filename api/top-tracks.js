@@ -8,6 +8,48 @@ import {
 let cachedTracks = null;
 let lastFetchTime = 0;
 
+// Fetch preview URL from Spotify embed page (workaround for deprecated preview_url)
+// Source - https://stackoverflow.com/a/79238027
+// Posted by Diego Perez, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-01-18, License - CC BY-SA 4.0
+async function fetchPreviewUrlFromEmbed(trackId) {
+  if (!trackId) return null;
+
+  try {
+    const embedUrl = `https://open.spotify.com/embed/track/${trackId}`;
+    const response = await fetch(embedUrl);
+
+    if (!response.ok) {
+      console.log(`Failed to fetch embed page: ${response.status}`);
+      return null;
+    }
+
+    const html = await response.text();
+
+    // Look for the audioPreview URL in the HTML
+    // It's typically embedded in a script tag with JSON data
+    const regex = /"audioPreview":\s*{\s*"url":\s*"([^"]+)"/;
+    const match = html.match(regex);
+
+    if (match && match[1]) {
+      return match[1];
+    }
+
+    // Alternative pattern - sometimes it's nested differently
+    const altRegex = /"audioPreview":\s*"([^"]+)"/;
+    const altMatch = html.match(altRegex);
+
+    if (altMatch && altMatch[1]) {
+      return altMatch[1];
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error fetching preview URL from embed:", error);
+    return null;
+  }
+}
+
 export default async function handler(req, res) {
   const CACHE_TTL = 1000 * 60 * 1440; // 1 day since this is top tracks
 
@@ -91,14 +133,29 @@ export default async function handler(req, res) {
 
     const data = await spRes.json();
 
-    const simplified = data.items.map((track) => ({
-      id: track.id,
-      name: track.name,
-      artists: track.artists.map((a) => a.name).join(", "),
-      album: track.album.name,
-      album_image: track.album.images[0]?.url,
-      spotify_url: track.external_urls.spotify,
-    }));
+    // Fetch preview URLs for each track
+    const simplified = await Promise.all(
+      data.items.map(async (track) => {
+        // Get preview URL - try API first, then fetch from embed page if not available
+        let previewUrl = track.preview_url;
+        if (!previewUrl && track.id) {
+          console.log(
+            `Preview URL not in API response, fetching from embed for track ${track.id}`
+          );
+          previewUrl = await fetchPreviewUrlFromEmbed(track.id);
+        }
+
+        return {
+          id: track.id,
+          name: track.name,
+          artists: track.artists.map((a) => a.name).join(", "),
+          album: track.album.name,
+          album_image: track.album.images[0]?.url,
+          spotify_url: track.external_urls.spotify,
+          preview_url: previewUrl,
+        };
+      })
+    );
 
     // Step 3: Save to cache
     cachedTracks = simplified;

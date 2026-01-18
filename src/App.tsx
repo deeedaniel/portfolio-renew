@@ -77,6 +77,15 @@ const App = () => {
   const [isMediaPlayerOpen, setIsMediaPlayerOpen] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
+  // audio
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
+    null
+  );
+  const [isPlayingPreview, setIsPlayingPreview] = useState(false);
+  const [currentPreviewUrl, setCurrentPreviewUrl] = useState<string | null>(
+    null
+  );
+
   // Add this near your other CLI state variables (around line 29)
   const [chatHistory, setChatHistory] = useState<
     Array<{ role: "user" | "assistant"; content: string }>
@@ -301,6 +310,41 @@ const App = () => {
     return await res.json();
   }
 
+  // Handle preview playback
+  const handlePreviewClick = (previewUrl: string | null) => {
+    if (!previewUrl) return;
+
+    // If clicking the same song that's currently playing, pause it
+    if (
+      audioElement &&
+      currentPreviewUrl === previewUrl &&
+      !audioElement.paused
+    ) {
+      audioElement.pause();
+      setIsPlayingPreview(false);
+      return;
+    }
+
+    // Stop previous audio if playing
+    if (audioElement) {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+    }
+
+    // Create and play new audio
+    const audio = new Audio(previewUrl);
+    audio.play();
+    setAudioElement(audio);
+    setIsPlayingPreview(true);
+    setCurrentPreviewUrl(previewUrl);
+
+    // Reset when audio ends
+    audio.onended = () => {
+      setIsPlayingPreview(false);
+      setCurrentPreviewUrl(null);
+    };
+  };
+
   async function fetchLeetCode() {
     const res = await fetch("/api/leetcode");
     if (!res.ok) {
@@ -319,6 +363,16 @@ const App = () => {
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(interval);
   }, []); // Empty dependency array ensures this runs only once on mount
+
+  // Cleanup audio when component unmounts
+  useEffect(() => {
+    return () => {
+      if (audioElement) {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+      }
+    };
+  }, [audioElement]);
 
   useEffect(() => {
     async function fetchTopTracks() {
@@ -919,17 +973,44 @@ const App = () => {
           <div className="mt-2 mx-4">
             {nowPlaying && nowPlaying.item ? (
               <div className="flex items-center">
-                <img
-                  src={nowPlaying.item.album_image}
-                  alt={nowPlaying.item.album}
-                  className={`w-16 h-16 rounded-md mr-4 ${
-                    nowPlaying.item.album === "PARTYNEXTDOOR 4 (P4)" ||
-                    nowPlaying.item.album === "L o s e M y M i n d" ||
-                    nowPlaying.item.album === "VULTURES 1"
-                      ? "blur-sm"
-                      : ""
-                  }`}
-                />
+                <div className="relative group mr-6">
+                  <img
+                    src={nowPlaying.item.album_image}
+                    alt={nowPlaying.item.album}
+                    className={`w-16 h-16 object-cover rounded-md ${
+                      nowPlaying.item.album === "PARTYNEXTDOOR 4 (P4)" ||
+                      nowPlaying.item.album === "L o s e M y M i n d" ||
+                      nowPlaying.item.album === "VULTURES 1"
+                        ? "blur-sm"
+                        : ""
+                    } ${
+                      nowPlaying.item.preview_url
+                        ? "cursor-pointer hover:opacity-80 transition-opacity"
+                        : ""
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (nowPlaying.item?.preview_url) {
+                        handlePreviewClick(nowPlaying.item.preview_url);
+                      }
+                    }}
+                    title={
+                      nowPlaying.item.preview_url
+                        ? "Click to play preview"
+                        : "No preview available"
+                    }
+                  />
+                  {nowPlaying.item.preview_url && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      {isPlayingPreview &&
+                      currentPreviewUrl === nowPlaying.item.preview_url ? (
+                        <Pause className="w-6 h-6 text-white drop-shadow-lg" />
+                      ) : (
+                        <Play className="w-6 h-6 text-white drop-shadow-lg transition-opacity" />
+                      )}
+                    </div>
+                  )}
+                </div>
                 <div>
                   <p className="font-bold">{nowPlaying.item.name}</p>
                   <p className="text-sm text-gray-400">
@@ -982,11 +1063,38 @@ const App = () => {
                 </p>
                 {topTracks.tracks.map((track) => (
                   <div key={track.id} className="flex items-center mt-1.5">
-                    <img
-                      src={track.album_image}
-                      alt={track.album}
-                      className="w-8 h-8 rounded-md mr-4"
-                    />
+                    <div className="relative group mr-4">
+                      <img
+                        src={track.album_image}
+                        alt={track.album}
+                        className={`w-8 h-8 object-cover rounded-md ${
+                          track.preview_url
+                            ? "cursor-pointer hover:opacity-80 transition-opacity"
+                            : ""
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (track.preview_url) {
+                            handlePreviewClick(track.preview_url);
+                          }
+                        }}
+                        title={
+                          track.preview_url
+                            ? "Click to play preview"
+                            : "No preview available"
+                        }
+                      />
+                      {track.preview_url && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          {isPlayingPreview &&
+                          currentPreviewUrl === track.preview_url ? (
+                            <Pause className="w-4 h-4 text-white drop-shadow-lg" />
+                          ) : (
+                            <Play className="w-4 h-4 text-white drop-shadow-lg transition-opacity" />
+                          )}
+                        </div>
+                      )}
+                    </div>
                     <div className="text-sm text-gray-400">{track.name}</div>
                   </div>
                 ))}
@@ -1784,11 +1892,39 @@ const App = () => {
                 <div className="mt-2 mx-4">
                   {nowPlaying && nowPlaying.item ? (
                     <div className="flex items-center">
-                      <img
-                        src={nowPlaying.item.album_image}
-                        alt={nowPlaying.item.album}
-                        className="w-16 h-16 rounded-md mr-4"
-                      />
+                      <div className="relative group mr-6">
+                        <img
+                          src={nowPlaying.item.album_image}
+                          alt={nowPlaying.item.album}
+                          className={`w-16 h-16 object-cover rounded-md ${
+                            nowPlaying.item.preview_url
+                              ? "cursor-pointer hover:opacity-80 transition-opacity"
+                              : ""
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (nowPlaying.item?.preview_url) {
+                              handlePreviewClick(nowPlaying.item.preview_url);
+                            }
+                          }}
+                          title={
+                            nowPlaying.item.preview_url
+                              ? "Click to play preview"
+                              : "No preview available"
+                          }
+                        />
+                        {nowPlaying.item.preview_url && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            {isPlayingPreview &&
+                            currentPreviewUrl ===
+                              nowPlaying.item.preview_url ? (
+                              <Pause className="w-6 h-6 text-white drop-shadow-lg" />
+                            ) : (
+                              <Play className="w-6 h-6 text-white drop-shadow-lg transition-opacity" />
+                            )}
+                          </div>
+                        )}
+                      </div>
                       <div>
                         <p className="font-bold">{nowPlaying.item.name}</p>
                         <p className="text-sm text-gray-400">
@@ -1842,11 +1978,38 @@ const App = () => {
                           key={track.id}
                           className="flex items-center mt-1.5"
                         >
-                          <img
-                            src={track.album_image}
-                            alt={track.album}
-                            className="w-8 h-8 rounded-md mr-4"
-                          />
+                          <div className="relative group mr-4">
+                            <img
+                              src={track.album_image}
+                              alt={track.album}
+                              className={`w-8 h-8 object-cover rounded-md ${
+                                track.preview_url
+                                  ? "cursor-pointer hover:opacity-80 transition-opacity"
+                                  : ""
+                              }`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (track.preview_url) {
+                                  handlePreviewClick(track.preview_url);
+                                }
+                              }}
+                              title={
+                                track.preview_url
+                                  ? "Click to play preview"
+                                  : "No preview available"
+                              }
+                            />
+                            {track.preview_url && (
+                              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                {isPlayingPreview &&
+                                currentPreviewUrl === track.preview_url ? (
+                                  <Pause className="w-4 h-4 text-white drop-shadow-lg" />
+                                ) : (
+                                  <Play className="w-4 h-4 text-white drop-shadow-lg transition-opacity" />
+                                )}
+                              </div>
+                            )}
+                          </div>
                           <div className="text-sm text-gray-400">
                             {track.name}
                           </div>
